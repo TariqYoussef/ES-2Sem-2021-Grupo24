@@ -1,14 +1,11 @@
 package readers;
 
-import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
-import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import java.awt.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -26,10 +23,10 @@ public class ExelReader {
             FileInputStream fileInputStream = new FileInputStream(file);
             XSSFWorkbook wb = new XSSFWorkbook(fileInputStream);
             XSSFSheet sheet=wb.getSheetAt(0);
-            //evaluating cell type
-            for(Row row: sheet)     //iteration over row using for each loop
+
+            for(Row row: sheet)
             {
-                for(Cell cell: row)    //iteration over cell using for each loop
+                for(Cell cell: row)
                 {
                     if(cell.getCellType() == CellType.NUMERIC){
                         System.out.println(cell.getNumericCellValue());
