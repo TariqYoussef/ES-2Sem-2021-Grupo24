@@ -18,8 +18,8 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
-     //   new JavaReader("/home/main/IdeaProjects/ES-2Sem-2021-Grupo24/src/main/java/Main.java").read();
-        new ExelReader("C:\\Users\\Rafael\\Downloads\\Inquérito.xls").read();
+        new JavaReader("Example_files/testeES.java").read();
+        new ExelReader("Example_files/testeES.xlsx").read();
 
         launch(args);
     }
