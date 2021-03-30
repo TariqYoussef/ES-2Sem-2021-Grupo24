@@ -1,6 +1,6 @@
-package MetricExtraction;
+package metrics;
 
-import Util.Pair;
+import util.Pair;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -14,20 +14,38 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class MetricExtractor {
+    Path srcpath;
 
-    public List<Pair<ClassOrInterfaceDeclaration, Integer>> NOM_class(Path filePath) throws IOException {
-        List<Pair<ClassOrInterfaceDeclaration, Integer>>pairs = new LinkedList<>();
+    public MetricExtractor(Path filepath) throws IOException {
+        srcpath = (Path) Files.find(filepath,Integer.MAX_VALUE,(path, attr)->attr.isDirectory() && path.toString().equals("src") );
+    }
 
-        //Block to create compilationUnits and store them in a list
+     //TODO Decide when/where to handle excepttion
+    public void ExtractMetrics() throws IOException {
+        List<CompilationUnit> cuList = CreateCompilationUnits();
+
+        //TODO Compile all metric calls here and merge the outputs into one to be written in the xlsx file
+        List<Pair<ClassOrInterfaceDeclaration, Integer>> nom_class = NOM_class(cuList);
+        List<Pair<MethodDeclaration, Integer>> cyclo_method = CYCLO_method(cuList);
+    }
+    /*
+    Creates all compilation units required to extract all metrics
+    metrics should use these compilation units as their arguments (List<CompilationUnit>)
+    */
+    private List<CompilationUnit> CreateCompilationUnits() throws IOException {
         List<CompilationUnit> compilationUnits = new LinkedList<>();
-        Files.find(filePath, Integer.MAX_VALUE,(path, attr)->attr.isRegularFile() && path.toString().endsWith(".java")).forEach(n-> {
+        Files.find(srcpath, Integer.MAX_VALUE,(path, attr)->attr.isRegularFile() && path.toString().endsWith(".java")).forEach(n-> {
             try {
                 compilationUnits.add(StaticJavaParser.parse(n.toAbsolutePath()));
-
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
+        return compilationUnits;
+    }
+    //Extract Number of Methods each class
+    private List<Pair<ClassOrInterfaceDeclaration, Integer>> NOM_class(List<CompilationUnit> compilationUnits){
+        List<Pair<ClassOrInterfaceDeclaration, Integer>>pairs = new LinkedList<>();
 
         //Block to traverse the compilation Units and count all the methods in each class
         for (CompilationUnit cu:compilationUnits) {
@@ -46,19 +64,9 @@ public class MetricExtractor {
         return pairs;
     }
 
-    public List<Pair<MethodDeclaration, Integer>> CYCLO_method(Path filePath) throws IOException {
+    //extract Cyclomatic complexity of each method
+    private List<Pair<MethodDeclaration, Integer>> CYCLO_method(List<CompilationUnit> compilationUnits) {
         List<Pair<MethodDeclaration, Integer>>pairs = new LinkedList<>();
-
-        //Block to create compilationUnits and store them in a list
-        List<CompilationUnit> compilationUnits = new LinkedList<>();
-        Files.find(filePath, Integer.MAX_VALUE,(path, attr)->attr.isRegularFile() && path.toString().endsWith(".java")).forEach(n-> {
-            try {
-                compilationUnits.add(StaticJavaParser.parse(n.toAbsolutePath()));
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
 
         //Block to traverse the compilation Units and count all cycle methods in each method
         for (CompilationUnit cu:compilationUnits) {

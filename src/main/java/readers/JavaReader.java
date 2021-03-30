@@ -1,9 +1,13 @@
 package readers;
 
+import org.checkerframework.framework.qual.Unused;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
+//Now MetricExtractor is being used to read and parse java files using javaparser Library
+@Deprecated
 public class JavaReader {
     private File file;
 

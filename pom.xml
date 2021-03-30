@@ -30,6 +30,12 @@
             <version>3.20.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.github.javaparser</groupId>
+            <artifactId>javaparser-symbol-solver-core</artifactId>
+            <version>LATEST</version>
+        </dependency>
+
     </dependencies>
 
 

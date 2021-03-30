@@ -1,4 +1,4 @@
-package Util;
+package util;
 
 public class Pair <A,B>{
     private A a;
