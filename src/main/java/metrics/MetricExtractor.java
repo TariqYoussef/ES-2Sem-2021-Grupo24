@@ -12,12 +12,21 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 public class MetricExtractor {
     Path srcpath;
 
     public MetricExtractor(Path filepath) throws IOException {
-        srcpath = (Path) Files.find(filepath,Integer.MAX_VALUE,(path, attr)->attr.isDirectory() && path.toString().equals("src") );
+
+        Optional<Path> optionalPath = Files.find(filepath,Integer.MAX_VALUE,(path, attr)->attr.isDirectory() && path.endsWith("src") ).findFirst();
+
+        if(optionalPath.isPresent()){
+            srcpath = optionalPath.get();
+        }else{
+            throw new IOException("src folder not found!!");
+        }
+
     }
 
      //TODO Decide when/where to handle excepttion
@@ -76,7 +85,7 @@ public class MetricExtractor {
                     for(IfStmt ifStmt: md.getChildNodesByType(IfStmt.class)) {
                         //if found
                         complexity++;
-                        System.out.println(ifStmt);
+                        //System.out.println(ifStmt);
                         if(ifStmt.getElseStmt().isPresent()) {
                             //has an else
                             Statement elseStmt = ifStmt.getElseStmt().get();
@@ -85,29 +94,29 @@ public class MetricExtractor {
                             } else {
                                 //its an else, so its added
                                 complexity++;
-                                System.out.println(elseStmt);
+                                //System.out.println(elseStmt);
                             }
                         }
                     }
                     for(ForStmt forStmt: md.getChildNodesByType(ForStmt.class)) {
                         //for found
                         complexity++;
-                        System.out.println(forStmt);
+                        //System.out.println(forStmt);
                     }
                     for(ForEachStmt forEachStmt: md.getChildNodesByType(ForEachStmt.class)) {
                         //for each found
                         complexity++;
-                        System.out.println(forEachStmt);
+                        //System.out.println(forEachStmt);
                     }
                     for(WhileStmt whileStmt: md.getChildNodesByType(WhileStmt.class)) {
                         //while found
                         complexity++;
-                        System.out.println(whileStmt);
+                        //System.out.println(whileStmt);
                     }
                     for(SwitchEntry switchEntry: md.getChildNodesByType(SwitchEntry.class)) {
                         //switch case found
                         complexity++;
-                        System.out.println(switchEntry);
+                        //System.out.println(switchEntry);
                     }
                     Pair<MethodDeclaration, Integer> p = new Pair<>(md, complexity);
                     pairs.add(p);
