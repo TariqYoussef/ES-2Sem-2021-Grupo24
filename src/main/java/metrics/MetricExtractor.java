@@ -2,10 +2,13 @@ package metrics;
 
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.stmt.*;
 import util.Pair;
+import util.Quadruple;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -60,7 +63,7 @@ public class MetricExtractor {
         List<CompilationUnit> cuList = CreateCompilationUnits(srcpath);
 
         //TODO Compile all metric calls here and merge the outputs into one to be written in the xlsx file
-        List<Pair<ClassOrInterfaceDeclaration, Integer>> nom_class = NOM_class(cuList);
+        List<Quadruple<PackageDeclaration, ClassOrInterfaceDeclaration, MethodDeclaration, Integer>> nom_class = NOM_class(cuList);
         List<Pair<MethodDeclaration, Integer>> cyclo_method = CYCLO_method(cuList);
     }
 
@@ -72,27 +75,45 @@ public class MetricExtractor {
         return CreateCompilationUnits(srcpath);
     }
 
+
+    private PackageDeclaration ConvertOptionalToActual(Optional<PackageDeclaration> packageD){
+        PackageDeclaration pack ;
+        if(packageD.isPresent()){
+            return packageD.get();
+        }else{
+           return new PackageDeclaration(new Name("none"));
+        }
+    }
+
     //Extract Number of Methods each class
-    public List<Pair<ClassOrInterfaceDeclaration, Integer>> NOM_class(List<CompilationUnit> compilationUnits) {
-        List<Pair<ClassOrInterfaceDeclaration, Integer>> pairs = new LinkedList<>();
+    public List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>> NOM_class(List<CompilationUnit> compilationUnits) {
+        List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>> quadruples = new LinkedList<>();
 
         //Block to traverse the compilation Units and count all the methods in each class
         for (CompilationUnit cu : compilationUnits) {
             for (ClassOrInterfaceDeclaration cla : cu.findAll(ClassOrInterfaceDeclaration.class)) {
-                Pair<ClassOrInterfaceDeclaration, Integer> p = new Pair<>(cla, cla.getMethods().size());
-                pairs.add(p);
+                for (MethodDeclaration md : cla.getMethods()) {
+                    Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer> q =
+                            new Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>(
+                                    ConvertOptionalToActual(cu.getPackageDeclaration()),
+                                    cla,
+                                    md,
+                                    cla.getMethods().size());
+                    quadruples.add(q);
+               }
             }
         }
 
         //Print block
-        for (Pair<ClassOrInterfaceDeclaration, Integer> pair : pairs) {
-            System.out.println("Number of methods in " + pair.getA().getNameAsString() + "=" + pair.getB());
+        for (Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer> quadruple : quadruples) {
+            System.out.println("Package:"+quadruple.getA().getNameAsString()+";Class:"+quadruple.getB().getNameAsString()+";Method:"+quadruple.getC().getNameAsString()+";NOM_class:"+quadruple.getD());
             System.out.println("=================");
         }
 
-        return pairs;
+        return quadruples;
     }
 
+    //TODO change Pair<MethodDeclaration, Integer> to Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>
     //extract Cyclomatic complexity of each method
     public List<Pair<MethodDeclaration, Integer>> CYCLO_method(List<CompilationUnit> compilationUnits) {
         List<Pair<MethodDeclaration, Integer>> pairs = new LinkedList<>();
@@ -118,22 +139,22 @@ public class MetricExtractor {
                             }
                         }
                     }
-                    for (ForStmt forStmt : md.getChildNodesByType(ForStmt.class)) {
+                    for (ForStmt forStmt : md.findAll(ForStmt.class)) {
                         //for found
                         complexity++;
                         //System.out.println(forStmt);
                     }
-                    for (ForEachStmt forEachStmt : md.getChildNodesByType(ForEachStmt.class)) {
+                    for (ForEachStmt forEachStmt : md.findAll(ForEachStmt.class)) {
                         //for each found
                         complexity++;
                         //System.out.println(forEachStmt);
                     }
-                    for (WhileStmt whileStmt : md.getChildNodesByType(WhileStmt.class)) {
+                    for (WhileStmt whileStmt : md.findAll(WhileStmt.class)) {
                         //while found
                         complexity++;
                         //System.out.println(whileStmt);
                     }
-                    for (SwitchEntry switchEntry : md.getChildNodesByType(SwitchEntry.class)) {
+                    for (SwitchEntry switchEntry : md.findAll(SwitchEntry.class)) {
                         //switch case found
                         complexity++;
                         //System.out.println(switchEntry);
