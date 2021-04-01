@@ -30,7 +30,9 @@ public class MetricExtractor {
         }
 
     }
-
+    /**
+     * Used for junit testing
+     * */
     public MetricExtractor() {}
 
     public static List<CompilationUnit> CreateCompilationUnits(Path dirPath) throws IOException {
@@ -150,5 +152,26 @@ public class MetricExtractor {
 
         return pairs;
     }
+    /*
+
+        //TODO preencham com todos os metodos da classe especifica para o excel poder criar uma linha do tipo:
+        methodid ; package; class; method; NOM_class; LOC_class; WMC_class; is_God_Class; LOC_method; CYCLO_method; is_long_method
+            ou seja, exemplo uma metrica que corresponda a uma classe, metam o resultado da metrica para todos os metodos da classe
+            tipo classe A tem 100 LOC então para cada metodo existente nessa classe criem um Quadruple para cada metodo, todos com o 100 no fim
+            espero que percebam o que eu quero dizer, qualquer coisa perguntem
+
+        //TODO
+    public List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>> WMC_class(List<CompilationUnit> compilationUnits) {
+    }
+
+        //TODO
+    public List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>> LOC_class(List<CompilationUnit> compilationUnits) {
+    }
+
+        //TODO
+    public List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>> LOC_method(List<CompilationUnit> compilationUnits) {
+    }
+
+    */
 
 }
