@@ -7,6 +7,7 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.stmt.*;
+import org.apache.xmlgraphics.image.loader.impl.imageio.ImageIOUtil;
 import util.Pair;
 import util.Quadruple;
 
@@ -65,6 +66,7 @@ public class MetricExtractor {
         //TODO Compile all metric calls here and merge the outputs into one to be written in the xlsx file
         List<Quadruple<PackageDeclaration, ClassOrInterfaceDeclaration, MethodDeclaration, Integer>> nom_class = NOM_class(cuList);
         List<Pair<MethodDeclaration, Integer>> cyclo_method = CYCLO_method(cuList);
+        List<Quadruple<PackageDeclaration, ClassOrInterfaceDeclaration, MethodDeclaration, Integer>> LOC_method = LOC_method(cuList);
     }
 
     /*
@@ -172,7 +174,43 @@ public class MetricExtractor {
         }
 
         return pairs;
+
+
+
     }
+
+    public List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>> LOC_method(List<CompilationUnit> compilationUnits) {
+        List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>> quadruples = new LinkedList<>();
+        int lines = 0;
+        for (CompilationUnit cu : compilationUnits) {
+            for (ClassOrInterfaceDeclaration cla : cu.findAll(ClassOrInterfaceDeclaration.class)) {
+                for (MethodDeclaration md : cla.getMethods()) {
+                    String body = md.getBody().toString();
+                    String comments = md.getAllContainedComments().toString();
+//                    System.out.println(code);
+//                    System.out.println(comments);
+                    lines = (1+countLines(body)-countLines(comments));
+                    quadruples.add(new Quadruple(cu.getPackageDeclaration(), cla, md, lines));
+                    System.out.println("Lines of "+md.getNameAsString()+" in "+cla.getNameAsString()+": "+lines);
+                    System.out.println("=================");
+                }
+            }
+        }
+
+
+
+        return quadruples;
+    }
+
+    private int countLines(String s){
+        int n = 0;
+        for(int i = 0; i < s.length(); i++) {
+            if(s.charAt(i) == '\n')
+                n++;
+        }
+        return n;
+    }
+
     /*
 
         //TODO preencham com todos os metodos da classe especifica para o excel poder criar uma linha do tipo:
@@ -189,9 +227,7 @@ public class MetricExtractor {
     public List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>> LOC_class(List<CompilationUnit> compilationUnits) {
     }
 
-        //TODO
-    public List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>> LOC_method(List<CompilationUnit> compilationUnits) {
-    }
+
 
     */
 
