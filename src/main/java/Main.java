@@ -23,7 +23,7 @@ public class Main extends Application {
     public static void main(String[] args) {
         //new JavaReader("Example_files/testeES.java").read();
         //new ExelReader("Example_files/testeES.xlsx").read();
-        Path testpath = Paths.get("D:\\Joao\\escola\\UNI\\Lei3ano\\2semestre\\ES\\Pratica\\ES-2Sem-2021-Grupo24");
+        Path testpath = Paths.get("");
 
 
         try {
