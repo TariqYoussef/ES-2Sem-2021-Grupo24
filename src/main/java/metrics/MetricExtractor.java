@@ -66,6 +66,7 @@ public class MetricExtractor {
         List<Quadruple<PackageDeclaration, ClassOrInterfaceDeclaration, MethodDeclaration, Integer>> nom_class = NOM_class(cuList);
         List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>> cyclo_method = CYCLO_method(cuList);
         List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>> loc_method = LOC_method(cuList);
+        List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>> loc_class = LOC_method(cuList);
     }
 
     /*
@@ -207,6 +208,25 @@ public class MetricExtractor {
         return n;
     }
 
+
+    //LOC_Class
+    public List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>> LOC_class(List<CompilationUnit> compilationUnits) {
+        List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>> quadruples = new LinkedList<>();
+        for (CompilationUnit cu : compilationUnits) {
+            for (ClassOrInterfaceDeclaration cla : cu.findAll(ClassOrInterfaceDeclaration.class)) {
+                int classLength = cla.getRange().map(range -> range.end.line - range.begin.line).orElse(0);
+
+                for (MethodDeclaration md : cla.getMethods()) {
+                    quadruples.add(new Quadruple(cu.getPackageDeclaration(), cla, md, classLength));
+                }
+
+                System.out.println("Lines in "+cla.getNameAsString()+": "+classLength);
+                System.out.println("=================");
+            }
+        }
+        return quadruples;
+    }
+
     /*
 
         //TODO preencham com todos os metodos da classe especifica para o excel poder criar uma linha do tipo:
@@ -217,10 +237,6 @@ public class MetricExtractor {
 
         //TODO
     public List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>> WMC_class(List<CompilationUnit> compilationUnits) {
-    }
-
-        //TODO
-    public List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>> LOC_class(List<CompilationUnit> compilationUnits) {
     }
 
         //TODO
