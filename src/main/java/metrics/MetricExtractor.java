@@ -115,7 +115,6 @@ public class MetricExtractor {
         return quadruples;
     }
 
-    //TODO change Pair<MethodDeclaration, Integer> to Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>
     //extract Cyclomatic complexity of each method
     public List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>> CYCLO_method(List<CompilationUnit> compilationUnits) {
         List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>> quads = new LinkedList<>();
