@@ -7,7 +7,6 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.stmt.*;
-import org.apache.xmlgraphics.image.loader.impl.imageio.ImageIOUtil;
 import util.Pair;
 import util.Quadruple;
 
@@ -65,8 +64,7 @@ public class MetricExtractor {
 
         //TODO Compile all metric calls here and merge the outputs into one to be written in the xlsx file
         List<Quadruple<PackageDeclaration, ClassOrInterfaceDeclaration, MethodDeclaration, Integer>> nom_class = NOM_class(cuList);
-        List<Pair<MethodDeclaration, Integer>> cyclo_method = CYCLO_method(cuList);
-        List<Quadruple<PackageDeclaration, ClassOrInterfaceDeclaration, MethodDeclaration, Integer>> LOC_method = LOC_method(cuList);
+        List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>> cyclo_method = CYCLO_method(cuList);
     }
 
     /*
@@ -117,8 +115,8 @@ public class MetricExtractor {
 
     //TODO change Pair<MethodDeclaration, Integer> to Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>
     //extract Cyclomatic complexity of each method
-    public List<Pair<MethodDeclaration, Integer>> CYCLO_method(List<CompilationUnit> compilationUnits) {
-        List<Pair<MethodDeclaration, Integer>> pairs = new LinkedList<>();
+    public List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>> CYCLO_method(List<CompilationUnit> compilationUnits) {
+        List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>> quads = new LinkedList<>();
 
         //Block to traverse the compilation Units and count all cycle methods in each method
         for (CompilationUnit cu : compilationUnits) {
@@ -161,22 +159,19 @@ public class MetricExtractor {
                         complexity++;
                         //System.out.println(switchEntry);
                     }
-                    Pair<MethodDeclaration, Integer> p = new Pair<>(md, complexity);
-                    pairs.add(p);
+                    Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer> p = new Quadruple<>(ConvertOptionalToActual(cu.getPackageDeclaration()),cla,md, complexity);
+                    quads.add(p);
                 }
             }
         }
 
         //Print block
-        for (Pair<MethodDeclaration, Integer> pair : pairs) {
-            System.out.println("Number of cycles in " + pair.getA().getNameAsString() + "=" + pair.getB());
+        for (Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer> quad : quads) {
+            System.out.println("Package:"+quad.getA().getNameAsString()+";Class:"+quad.getB().getNameAsString()+";Method:"+quad.getC().getNameAsString()+";CYCLO_method:"+quad.getD());
             System.out.println("=================");
         }
 
-        return pairs;
-
-
-
+        return quads;
     }
 
     public List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>> LOC_method(List<CompilationUnit> compilationUnits) {
@@ -227,7 +222,9 @@ public class MetricExtractor {
     public List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>> LOC_class(List<CompilationUnit> compilationUnits) {
     }
 
-
+        //TODO
+    public List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>> LOC_method(List<CompilationUnit> compilationUnits) {
+    }
 
     */
 
