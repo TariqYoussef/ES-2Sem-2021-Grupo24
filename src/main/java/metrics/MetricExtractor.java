@@ -176,6 +176,62 @@ public class MetricExtractor {
         return quads;
     }
 
+    public List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>> WMC_class(List<CompilationUnit> compilationUnits) {
+        List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>> quads = new LinkedList<>();
+
+        //Block to traverse the compilation Units and count all cycle methods in each method
+        for (CompilationUnit cu : compilationUnits) {
+            for (ClassOrInterfaceDeclaration cla : cu.findAll(ClassOrInterfaceDeclaration.class)) {
+                int classComplexity = 0;
+                for (MethodDeclaration md : cla.getMethods()) {
+                    for (IfStmt ifStmt : md.getChildNodesByType(IfStmt.class)) {
+                        //if found
+                        classComplexity++;
+                        if (ifStmt.getElseStmt().isPresent()) {
+                            //has an else
+                            Statement elseStmt = ifStmt.getElseStmt().get();
+                            if (elseStmt instanceof IfStmt) {
+                                //its an else-if. its already counted by counting the if above
+                            } else {
+                                //its an else, so its added
+                                classComplexity++;
+                            }
+                        }
+                    }
+                    for (ForStmt forStmt : md.findAll(ForStmt.class)) {
+                        //for found
+                        classComplexity++;
+                    }
+                    for (ForEachStmt forEachStmt : md.findAll(ForEachStmt.class)) {
+                        //for each found
+                        classComplexity++;
+                    }
+                    for (WhileStmt whileStmt : md.findAll(WhileStmt.class)) {
+                        //while found
+                        classComplexity++;
+                    }
+                    for (SwitchEntry switchEntry : md.findAll(SwitchEntry.class)) {
+                        //switch case found
+                        classComplexity++;
+                    }
+
+                }
+                for (MethodDeclaration md : cla.getMethods()) {
+                    Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer> p = new Quadruple<>(ConvertOptionalToActual(cu.getPackageDeclaration()),cla,md, classComplexity);
+                    quads.add(p);
+                }
+            }
+        }
+
+        //Print block
+        for (Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer> quad : quads) {
+            System.out.println("Package:"+quad.getA().getNameAsString()+";Class:"+quad.getB().getNameAsString()+";Method:"+quad.getC().getNameAsString()+";WMC_class:"+quad.getD());
+            System.out.println("=================");
+        }
+
+        return quads;
+    }
+
     public List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>> LOC_method(List<CompilationUnit> compilationUnits) {
         List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>> quadruples = new LinkedList<>();
         int lines = 0;
