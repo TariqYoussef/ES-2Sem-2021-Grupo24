@@ -65,6 +65,7 @@ public class MetricExtractor {
         //TODO Compile all metric calls here and merge the outputs into one to be written in the xlsx file
         List<Quadruple<PackageDeclaration, ClassOrInterfaceDeclaration, MethodDeclaration, Integer>> nom_class = NOM_class(cuList);
         List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>> cyclo_method = CYCLO_method(cuList);
+        List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>> loc_method = LOC_method(cuList);
     }
 
     /*
