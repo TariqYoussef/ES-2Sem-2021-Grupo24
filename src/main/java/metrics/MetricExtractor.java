@@ -242,7 +242,7 @@ public class MetricExtractor {
 //                    System.out.println(code);
 //                    System.out.println(comments);
                     lines = (1+countLines(body)-countLines(comments));
-                    quadruples.add(new Quadruple(cu.getPackageDeclaration(), cla, md, lines));
+                    quadruples.add(new Quadruple(ConvertOptionalToActual(cu.getPackageDeclaration()), cla, md, lines));
                     System.out.println("Lines of "+md.getNameAsString()+" in "+cla.getNameAsString()+": "+lines);
                     System.out.println("=================");
                 }
@@ -272,7 +272,7 @@ public class MetricExtractor {
                 int classLength = cla.getRange().map(range -> range.end.line - range.begin.line).orElse(0);
 
                 for (MethodDeclaration md : cla.getMethods()) {
-                    quadruples.add(new Quadruple(cu.getPackageDeclaration(), cla, md, classLength));
+                    quadruples.add(new Quadruple(ConvertOptionalToActual(cu.getPackageDeclaration()), cla, md, classLength));
                 }
 
                 System.out.println("Lines in "+cla.getNameAsString()+": "+classLength);
