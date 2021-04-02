@@ -49,6 +49,20 @@ class MetricExtractorTest {
 
     }
 
+    /**
+     * Test method for {@link MetricExtractor#CYCLO_method(List)} ()}.
+     * @throws java.io.IOException
+     */
+    @Test
+    void testCYCLO_method() throws IOException {
+        List<CompilationUnit> compilationUnits = extractor.CreateCompilationUnits();
+        int actual1 = extractor.CYCLO_method(compilationUnits).get(0).getD();
+        assertEquals(2,actual1);
+        int actual2 = extractor.CYCLO_method(compilationUnits).get(1).getD();
+        assertEquals(1,actual2);
+        int actual3 = extractor.CYCLO_method(compilationUnits).get(2).getD();
+        assertEquals(0,actual3);
 
+    }
 
 }
