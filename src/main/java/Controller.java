@@ -60,7 +60,7 @@ public class Controller {
 
             // guardar code smells
             codeSmells.addCodeSmellsToXlsx(new File(pathSave));
-
+            createButton.setText("Atualizar Code Smells");
         }catch (NullPointerException e){
             showInformationMessage("Informação","Por favor selecione a pasta do projeto.", Alert.AlertType.INFORMATION);
         }
