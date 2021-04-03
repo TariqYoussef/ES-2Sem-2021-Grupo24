@@ -1,5 +1,6 @@
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
@@ -17,6 +18,7 @@ public class Controller {
     private File codeSmells; // CodeSmell selecionado
 
     @FXML private Text path; // Path que aparece o GUI após a seleção da pasta
+    @FXML private Button createButton;
 
     @FXML private void initialize(){
         //Para quando o programa inicia
@@ -33,6 +35,8 @@ public class Controller {
         File dir = directoryChooser.showDialog(stage);
         projectDir = dir;
         path.setText(dir.getAbsolutePath());
+        String pathSave = projectDir.getAbsolutePath() + "/" + projectDir.getName() + "_metrics/" + projectDir.getName() + "_metrics.xlsx";
+        if(Files.exists(new File(pathSave).toPath())) createButton.setText("Atualizar Code Smells");
     }
 
     // Função que será executada para criar o code smell excutada através do botão para tal
@@ -51,6 +55,7 @@ public class Controller {
                 codeSmells.createCodeSmellsXlsxFile(new File(pathSave));
             }catch (FileAlreadyExistsException e){
                 System.out.println("A pasta já existe");
+                createButton.setText("Atualizar Code Smells");
             }
 
             // guardar code smells
