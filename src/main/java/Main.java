@@ -3,11 +3,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import metrics.MetricExtractor;
-
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class Main extends Application {
 
@@ -21,17 +16,6 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
-        //new JavaReader("Example_files/testeES.java").read();
-        //new ExelReader("Example_files/testeES.xlsx").read();
-        Path testpath = Paths.get("");
-
-
-        try {
-            MetricExtractor extractor = new MetricExtractor(testpath);
-            extractor.ExtractMetrics();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         launch(args);
     }
 

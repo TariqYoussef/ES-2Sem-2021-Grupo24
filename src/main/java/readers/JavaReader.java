@@ -15,7 +15,7 @@ import java.util.Scanner;
  * Use Metric extractor instead {@link MetricExtractor }
  */
 @Deprecated
-public class JavaReader {
+public class JavaReader{
     private File file;
 
     public JavaReader(String path){
