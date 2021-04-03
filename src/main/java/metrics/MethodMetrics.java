@@ -54,7 +54,7 @@ public class MethodMetrics {
                 setWmc_class(metric);
                 break;
             case "loc_method":
-                setLoc_class(metric);
+                setLoc_method(metric);
                 break;
             case "cyclo_method":
                 setCyclo_method(metric);
@@ -70,7 +70,7 @@ public class MethodMetrics {
         return nom_class;
     }
 
-    public void setNom_class(int nom_class) {
+    private void setNom_class(int nom_class) {
         this.nom_class = nom_class;
     }
 
@@ -78,7 +78,7 @@ public class MethodMetrics {
         return loc_class;
     }
 
-    public void setLoc_class(int loc_class) {
+    private void setLoc_class(int loc_class) {
         this.loc_class = loc_class;
     }
 
@@ -86,7 +86,7 @@ public class MethodMetrics {
         return wmc_class;
     }
 
-    public void setWmc_class(int wmc_class) {
+    private void setWmc_class(int wmc_class) {
         this.wmc_class = wmc_class;
     }
 
@@ -94,7 +94,7 @@ public class MethodMetrics {
         return loc_method;
     }
 
-    public void setLoc_method(int loc_method) {
+    private void setLoc_method(int loc_method) {
         this.loc_method = loc_method;
     }
 
@@ -102,7 +102,7 @@ public class MethodMetrics {
         return cyclo_method;
     }
 
-    public void setCyclo_method(int cyclo_method) {
+    private void setCyclo_method(int cyclo_method) {
         this.cyclo_method = cyclo_method;
     }
 }

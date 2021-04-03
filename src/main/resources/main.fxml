@@ -38,6 +38,6 @@
             <Text fx:id="path" strokeType="OUTSIDE" strokeWidth="0.0" text="Nenhuma pasta selecionada." GridPane.columnIndex="1" />
          </children>
       </GridPane>
-      <Button mnemonicParsing="false" onAction="#createCodeSmell" text="Criar Code Smells" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
+      <Button fx:id="createButton" mnemonicParsing="false" onAction="#createCodeSmell" text="Criar Code Smells" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
    </children>
 </GridPane>
