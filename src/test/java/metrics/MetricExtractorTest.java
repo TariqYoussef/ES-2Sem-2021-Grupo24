@@ -65,4 +65,16 @@ class MetricExtractorTest {
 
     }
 
+    /**
+     * Test method for {@link MetricExtractor#LOC_class(List)} ()}.
+     * @throws java.io.IOException
+     */
+    @Test
+    void testLOC_class() throws IOException {
+        List<CompilationUnit> compilationUnits = extractor.CreateCompilationUnits();
+        int actual = extractor.LOC_class(compilationUnits).get(1).getD();
+        assertEquals(59,actual);
+    }
+
+
 }
