@@ -1,5 +1,6 @@
 package util;
 
+@Deprecated
 public class Pair <A,B>{
     private A a;
     private B b;
@@ -8,17 +9,7 @@ public class Pair <A,B>{
         this.a=a;
         this.b=b;
     }
-    /*
-    public Pair(B b){
-        a=null;
-        b=this.b;
-    }
 
-    public Pair(){
-        a=null;
-        b=null;
-    }
-*/
     public A getA() {
         return a;
     }

@@ -5,6 +5,7 @@ import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.checkerframework.framework.qual.Unused;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -37,6 +38,7 @@ public class ExelReader {
                 }
                 System.out.println();
             }
+            wb.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {

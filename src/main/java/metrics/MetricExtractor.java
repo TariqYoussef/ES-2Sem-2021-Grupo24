@@ -7,20 +7,20 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.stmt.*;
-import util.Pair;
 import util.Quadruple;
 
 import java.io.IOException;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
 public class MetricExtractor {
-    Path srcpath;
 
-
+    private Path srcpath;
 
     public MetricExtractor(Path filepath) throws IOException {
 
@@ -59,14 +59,48 @@ public class MetricExtractor {
     }
 
     //TODO Decide when/where to handle excepttion
-    public void ExtractMetrics() throws IOException {
+    public List<MethodMetrics> ExtractMetrics() throws IOException {
         List<CompilationUnit> cuList = CreateCompilationUnits(srcpath);
 
-        //TODO Compile all metric calls here and merge the outputs into one to be written in the xlsx file
         List<Quadruple<PackageDeclaration, ClassOrInterfaceDeclaration, MethodDeclaration, Integer>> nom_class = NOM_class(cuList);
-        List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>> cyclo_method = CYCLO_method(cuList);
-        List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>> loc_method = LOC_method(cuList);
-        List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>> loc_class = LOC_method(cuList);
+        List<Quadruple<PackageDeclaration, ClassOrInterfaceDeclaration, MethodDeclaration, Integer>> cyclo_method = CYCLO_method(cuList);
+        List<Quadruple<PackageDeclaration, ClassOrInterfaceDeclaration, MethodDeclaration, Integer>> loc_method = LOC_method(cuList);
+        List<Quadruple<PackageDeclaration, ClassOrInterfaceDeclaration, MethodDeclaration, Integer>> loc_class = LOC_class(cuList);
+        List<Quadruple<PackageDeclaration, ClassOrInterfaceDeclaration, MethodDeclaration, Integer>> wmc_class = WMC_class(cuList);
+
+        List<MethodMetrics> methodMetrics = new ArrayList<>();
+
+        joinMetrics(methodMetrics, nom_class,"nom_class");
+        joinMetrics(methodMetrics, cyclo_method, "cyclo_method");
+        joinMetrics(methodMetrics, loc_method, "loc_method");
+        joinMetrics(methodMetrics, loc_class, "loc_class");
+        joinMetrics(methodMetrics, wmc_class, "wmc_class");
+
+        return methodMetrics;
+
+    }
+
+    // joins the metrics for xlsx file
+    public void joinMetrics(List<MethodMetrics> methodMetrics, List<Quadruple<PackageDeclaration, ClassOrInterfaceDeclaration, MethodDeclaration, Integer>> metrics, String name){
+        int id=1;
+        for(Quadruple<PackageDeclaration, ClassOrInterfaceDeclaration, MethodDeclaration, Integer> metric : metrics){
+            boolean exists= false;
+            for(MethodMetrics method:methodMetrics){
+                // If the method already exists set the metric in its line
+                if(method.getPackageOfMethod().equals(metric.getA()) && method.getClassOfMethod().equals(metric.getB())
+                && method.getMethod().equals(metric.getC())){
+                    method.setMetric(name,metric.getD());
+                    exists= true;
+                    break;
+                }
+            }
+            if(!exists){
+                MethodMetrics method = new MethodMetrics(id, metric.getA(), metric.getB(), metric.getC());
+                method.setMetric(name,metric.getD());
+                methodMetrics.add(method);
+                id++;
+            }
+        }
     }
 
     /*
@@ -254,17 +288,6 @@ public class MetricExtractor {
         return quadruples;
     }
 
-    private int countLines(String s){
-        int n = 0;
-        for(int i = 0; i < s.length(); i++) {
-            if(s.charAt(i) == '\n')
-                n++;
-        }
-        return n;
-    }
-
-
-    //LOC_Class
     public List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>> LOC_class(List<CompilationUnit> compilationUnits) {
         List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>> quadruples = new LinkedList<>();
         for (CompilationUnit cu : compilationUnits) {
@@ -282,22 +305,12 @@ public class MetricExtractor {
         return quadruples;
     }
 
-    /*
-
-        //TODO preencham com todos os metodos da classe especifica para o excel poder criar uma linha do tipo:
-        methodid ; package; class; method; NOM_class; LOC_class; WMC_class; is_God_Class; LOC_method; CYCLO_method; is_long_method
-            ou seja, exemplo uma metrica que corresponda a uma classe, metam o resultado da metrica para todos os metodos da classe
-            tipo classe A tem 100 LOC então para cada metodo existente nessa classe criem um Quadruple para cada metodo, todos com o 100 no fim
-            espero que percebam o que eu quero dizer, qualquer coisa perguntem
-
-        //TODO
-    public List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>> WMC_class(List<CompilationUnit> compilationUnits) {
+    private int countLines(String s){
+        int n = 0;
+        for(int i = 0; i < s.length(); i++) {
+            if(s.charAt(i) == '\n')
+                n++;
+        }
+        return n;
     }
-
-        //TODO
-    public List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>> LOC_method(List<CompilationUnit> compilationUnits) {
-    }
-
-    */
-
 }

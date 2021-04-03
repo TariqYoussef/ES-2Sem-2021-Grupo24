@@ -4,10 +4,10 @@ import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 
-public class Method {
+public class MethodMetrics {
     private int id;
-    private ClassOrInterfaceDeclaration classOfMethod;
     private PackageDeclaration packageOfMethod;
+    private ClassOrInterfaceDeclaration classOfMethod;
     private MethodDeclaration method;
 
 
@@ -18,12 +18,53 @@ public class Method {
     private int loc_method;
     private int cyclo_method;
 
-    public Method(int id, ClassOrInterfaceDeclaration classOfMethod, PackageDeclaration packageOfMethod, MethodDeclaration method) {
+    public MethodMetrics(int id, PackageDeclaration packageOfMethod, ClassOrInterfaceDeclaration classOfMethod, MethodDeclaration method) {
         this.id = id;
-        this.classOfMethod = classOfMethod;
         this.packageOfMethod = packageOfMethod;
+        this.classOfMethod = classOfMethod;
         this.method = method;
     }
+
+    public ClassOrInterfaceDeclaration getClassOfMethod() {
+        return classOfMethod;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public PackageDeclaration getPackageOfMethod() {
+        return packageOfMethod;
+    }
+
+    public MethodDeclaration getMethod() {
+        return method;
+    }
+
+    public void setMetric(String name, int metric){
+        switch(name)
+        {
+            case "nom_class":
+                setNom_class(metric);
+                break;
+            case "loc_class":
+                setLoc_class(metric);
+                break;
+            case "wmc_class":
+                setWmc_class(metric);
+                break;
+            case "loc_method":
+                setLoc_class(metric);
+                break;
+            case "cyclo_method":
+                setCyclo_method(metric);
+                break;
+            default:
+                System.out.println("no match");
+        }
+    }
+
+
 
     public int getNom_class() {
         return nom_class;
