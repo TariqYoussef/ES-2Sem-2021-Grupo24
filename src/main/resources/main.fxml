@@ -12,6 +12,7 @@
   <rowConstraints>
     <RowConstraints maxHeight="50.0" minHeight="50.0" prefHeight="50.0" vgrow="SOMETIMES" />
     <RowConstraints maxHeight="50.0" minHeight="50.0" prefHeight="50.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="25.0" vgrow="SOMETIMES" />
     <RowConstraints vgrow="SOMETIMES" />
       <RowConstraints maxHeight="50.0" minHeight="50.0" prefHeight="50.0" vgrow="SOMETIMES" />
   </rowConstraints>
@@ -38,6 +39,29 @@
             <Text fx:id="path" strokeType="OUTSIDE" strokeWidth="0.0" text="Nenhuma pasta selecionada." GridPane.columnIndex="1" />
          </children>
       </GridPane>
-      <Button fx:id="createButton" mnemonicParsing="false" onAction="#createCodeSmell" text="Criar Code Smells" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
+      <Button fx:id="createButton" mnemonicParsing="false" onAction="#createCodeSmell" text="Criar Code Smells" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
+      <GridPane GridPane.rowIndex="2">
+        <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" />
+          <ColumnConstraints hgrow="SOMETIMES" />
+          <ColumnConstraints hgrow="SOMETIMES" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Text fx:id="packNum" strokeType="OUTSIDE" strokeWidth="0.0" text="XX Packages" GridPane.halignment="CENTER">
+               <GridPane.margin>
+                  <Insets />
+               </GridPane.margin>
+            </Text>
+            <Text fx:id="classNum" strokeType="OUTSIDE" strokeWidth="0.0" text="XX Classes" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
+            <Text fx:id="methodNum" strokeType="OUTSIDE" strokeWidth="0.0" text="XX Métodos" GridPane.columnIndex="2" GridPane.halignment="CENTER">
+               <GridPane.margin>
+                  <Insets />
+               </GridPane.margin>
+            </Text>
+         </children>
+      </GridPane>
    </children>
 </GridPane>
