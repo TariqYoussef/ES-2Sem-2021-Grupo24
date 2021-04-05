@@ -20,6 +20,15 @@ public class Controller {
     @FXML private Text path; // Path que aparece o GUI após a seleção da pasta
     @FXML private Button createButton;
 
+
+    /**
+     Usar o método setText(String text) para mudar o texto no GUI
+     EX, para mudar o número de packages para 15: packNum.setText("15 packages");
+     */
+    @FXML private Text packNum;
+    @FXML private Text classNum;
+    @FXML private Text methodNum;
+
     @FXML private void initialize(){
         //Para quando o programa inicia
     }
@@ -61,6 +70,7 @@ public class Controller {
             // guardar code smells
             codeSmells.addCodeSmellsToXlsx(new File(pathSave));
             createButton.setText("Atualizar Code Smells");
+
         }catch (NullPointerException e){
             showInformationMessage("Informação","Por favor selecione a pasta do projeto.", Alert.AlertType.INFORMATION);
         }
