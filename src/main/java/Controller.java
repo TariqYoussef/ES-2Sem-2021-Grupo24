@@ -5,12 +5,15 @@ import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import metrics.MetricExtractor;
+import readers.ExelReader;
 
+import javax.swing.plaf.synth.SynthTextAreaUI;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 
 public class Controller {
 
@@ -37,21 +40,37 @@ public class Controller {
         Função a executar quando se clica no botão "selecionar pasta" que abre um directory chooser e após seleção
         atualiza da variável "projectDir" e o valor "path" do GUI
     */
-    @FXML private void selectDir(){
+    @FXML private void openProject(){
         DirectoryChooser directoryChooser = new DirectoryChooser();
         Stage stage = new Stage();
         directoryChooser.setTitle("Escolher pasta do projeto");
         File dir = directoryChooser.showDialog(stage);
+
         projectDir = dir;
         path.setText(dir.getAbsolutePath());
-        String pathSave = projectDir.getAbsolutePath() + "/" + projectDir.getName() + "_metrics/" + projectDir.getName() + "_metrics.xlsx";
-        if(Files.exists(new File(pathSave).toPath())) createButton.setText("Atualizar Code Smells");
+
+        //If there is code smells in project
+        String pathCodeSmell = projectDir.getAbsolutePath() + "/" + projectDir.getName() + "_metrics/" + projectDir.getName() + "_metrics.xlsx";
+        if(Files.exists(new File(pathCodeSmell).toPath())) {
+            ExelReader exelReader = new ExelReader(pathCodeSmell);
+            ArrayList<String> lines = exelReader.read();
+            /*
+            * TODO
+            *   -Usar o ArrayList lines num método separado para obter as caracteristicas
+            * */
+
+
+            writeCodeSmells(pathCodeSmell, lines);
+
+            createButton.setText("Atualizar Code Smells");
+        }
     }
 
     // Função que será executada para criar o code smell excutada através do botão para tal
     @FXML private void createCodeSmell() throws IOException {
         try {
             String pathSave = projectDir.getAbsolutePath() + "/" + projectDir.getName() + "_metrics/";
+
             // retirar criar um objeto para retirar as métricas
             MetricExtractor metrics = new MetricExtractor(projectDir.toPath());
 
@@ -64,16 +83,21 @@ public class Controller {
                 codeSmells.createCodeSmellsXlsxFile(new File(pathSave));
             }catch (FileAlreadyExistsException e){
                 System.out.println("A pasta já existe");
-                createButton.setText("Atualizar Code Smells");
+                if(!createButton.getText().equals("Atualizar Code Smells")) createButton.setText("Atualizar Code Smells");
             }
 
             // guardar code smells
             codeSmells.addCodeSmellsToXlsx(new File(pathSave));
-            createButton.setText("Atualizar Code Smells");
+            if(!createButton.getText().equals("Atualizar Code Smells")) createButton.setText("Atualizar Code Smells");
 
         }catch (NullPointerException e){
             showInformationMessage("Informação","Por favor selecione a pasta do projeto.", Alert.AlertType.INFORMATION);
         }
+
+    }
+
+    public static void writeCodeSmells(String pathCodeSmell, ArrayList<String> lines){
+        // TODO -Função para escrever exel no GUI
 
     }
 
