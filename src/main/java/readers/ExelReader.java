@@ -5,12 +5,13 @@ import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.checkerframework.framework.qual.Unused;
+import org.checkerframework.checker.units.qual.A;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class ExelReader {
     private File file;
@@ -19,7 +20,8 @@ public class ExelReader {
         file= new File(path);
     }
 
-    public void read(){
+    public ArrayList<String> read(){
+        ArrayList<String> lines = new ArrayList<>();
         try {
             FileInputStream fileInputStream = new FileInputStream(file);
             XSSFWorkbook wb = new XSSFWorkbook(fileInputStream);
@@ -27,24 +29,27 @@ public class ExelReader {
 
             for(Row row: sheet)
             {
+                String line = "";
                 for(Cell cell: row)
                 {
                     if(cell.getCellType() == CellType.NUMERIC){
-                        System.out.println(cell.getNumericCellValue());
+                        line += cell.getNumericCellValue()+";";
                     }
                     if(cell.getCellType() == CellType.STRING){
-                        System.out.println(cell.getStringCellValue());
+                        line += cell.getStringCellValue()+";";
                     }
                 }
+                lines.add(line.substring(0,line.length()-1));
                 System.out.println();
             }
             wb.close();
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        return  lines;
     }
 
 }

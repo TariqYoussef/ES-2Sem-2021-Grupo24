@@ -31,7 +31,7 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Button mnemonicParsing="false" onAction="#selectDir" text="Selecionar Projeto">
+            <Button mnemonicParsing="false" onAction="#openProject" text="Selecionar Projeto">
                <GridPane.margin>
                   <Insets left="25.0" right="25.0" />
                </GridPane.margin>
