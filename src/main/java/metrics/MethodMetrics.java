@@ -1,11 +1,14 @@
 package metrics;
 
+import Rules.Metric;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 
+import java.util.NoSuchElementException;
+
 public class MethodMetrics {
-    private int id;
+    private final int id;
     private PackageDeclaration packageOfMethod;
     private ClassOrInterfaceDeclaration classOfMethod;
     private MethodDeclaration method;
@@ -41,32 +44,50 @@ public class MethodMetrics {
         return method;
     }
 
-    public void setMetric(String name, int metric){
-        switch(name)
+    public void setMetric(Metric metric, int value)throws NoSuchElementException{
+        switch(metric)
         {
-            case "nom_class":
-                setNom_class(metric);
+            case NOM_class:
+                setNom_class(value);
                 break;
-            case "loc_class":
-                setLoc_class(metric);
+            case LOC_class:
+                setLoc_class(value);
                 break;
-            case "wmc_class":
-                setWmc_class(metric);
+            case WMC_class:
+                setWmc_class(value);
                 break;
-            case "loc_method":
-                setLoc_method(metric);
+            case LOC_method:
+                setLoc_method(value);
                 break;
-            case "cyclo_method":
-                setCyclo_method(metric);
+            case CYCLO_method:
+                setCyclo_method(value);
                 break;
             default:
-                System.out.println("no match");
+                throw new NoSuchElementException("Non existant metric enum");
+        }
+    }
+
+    public int getMetric(Metric metric) throws NoSuchElementException{
+        switch(metric)
+        {
+            case NOM_class:
+                return getNom_class();
+            case LOC_class:
+                return getLoc_class();
+            case WMC_class:
+                return getWmc_class();
+            case LOC_method:
+                return getLoc_method();
+            case CYCLO_method:
+                return getCyclo_method();
+            default:
+                throw new NoSuchElementException("Non existant metric enum");
         }
     }
 
 
 
-    public int getNom_class() {
+    private int getNom_class() {
         return nom_class;
     }
 
@@ -74,7 +95,7 @@ public class MethodMetrics {
         this.nom_class = nom_class;
     }
 
-    public int getLoc_class() {
+    private int getLoc_class() {
         return loc_class;
     }
 
@@ -82,7 +103,7 @@ public class MethodMetrics {
         this.loc_class = loc_class;
     }
 
-    public int getWmc_class() {
+    private int getWmc_class() {
         return wmc_class;
     }
 
@@ -90,7 +111,7 @@ public class MethodMetrics {
         this.wmc_class = wmc_class;
     }
 
-    public int getLoc_method() {
+    private int getLoc_method() {
         return loc_method;
     }
 
@@ -98,7 +119,7 @@ public class MethodMetrics {
         this.loc_method = loc_method;
     }
 
-    public int getCyclo_method() {
+    private int getCyclo_method() {
         return cyclo_method;
     }
 

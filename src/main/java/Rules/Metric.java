@@ -6,6 +6,6 @@ public enum Metric {
     LOC_class,
     WMC_class,
 
-    lOC_method,
+    LOC_method,
     CYCLO_method,
 }
