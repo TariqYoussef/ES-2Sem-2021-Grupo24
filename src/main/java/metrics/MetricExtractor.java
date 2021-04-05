@@ -1,5 +1,6 @@
 package metrics;
 
+import Rules.Metric;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.PackageDeclaration;
@@ -70,18 +71,18 @@ public class MetricExtractor {
 
         List<MethodMetrics> methodMetrics = new ArrayList<>();
 
-        joinMetrics(methodMetrics, nom_class,"nom_class");
-        joinMetrics(methodMetrics, cyclo_method, "cyclo_method");
-        joinMetrics(methodMetrics, loc_method, "loc_method");
-        joinMetrics(methodMetrics, loc_class, "loc_class");
-        joinMetrics(methodMetrics, wmc_class, "wmc_class");
+        joinMetrics(methodMetrics, nom_class,Metric.NOM_class);
+        joinMetrics(methodMetrics, cyclo_method, Metric.CYCLO_method);
+        joinMetrics(methodMetrics, loc_method, Metric.LOC_method);
+        joinMetrics(methodMetrics, loc_class, Metric.LOC_class);
+        joinMetrics(methodMetrics, wmc_class, Metric.WMC_class);
 
         return methodMetrics;
 
     }
 
     // joins the metrics for xlsx file
-    public void joinMetrics(List<MethodMetrics> methodMetrics, List<Quadruple<PackageDeclaration, ClassOrInterfaceDeclaration, MethodDeclaration, Integer>> metrics, String name){
+    public void joinMetrics(List<MethodMetrics> methodMetrics, List<Quadruple<PackageDeclaration, ClassOrInterfaceDeclaration, MethodDeclaration, Integer>> metrics, Metric metricEnum){
         int id=1;
         for(Quadruple<PackageDeclaration, ClassOrInterfaceDeclaration, MethodDeclaration, Integer> metric : metrics){
             boolean exists= false;
@@ -89,14 +90,14 @@ public class MetricExtractor {
                 // If the method already exists set the metric in its line
                 if(method.getPackageOfMethod().equals(metric.getA()) && method.getClassOfMethod().equals(metric.getB())
                 && method.getMethod().equals(metric.getC())){
-                    method.setMetric(name,metric.getD());
+                    method.setMetric(metricEnum,metric.getD());
                     exists= true;
                     break;
                 }
             }
             if(!exists){
                 MethodMetrics method = new MethodMetrics(id, metric.getA(), metric.getB(), metric.getC());
-                method.setMetric(name,metric.getD());
+                method.setMetric(metricEnum,metric.getD());
                 methodMetrics.add(method);
                 id++;
             }
