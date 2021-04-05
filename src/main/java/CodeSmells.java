@@ -37,8 +37,6 @@ public class CodeSmells {
 
         List<MethodMetrics> methodMetrics = metrics.ExtractMetrics();
 
-        //TODO Criar caracteristicas depois de dar call ao Extract metrics e mudar o extract metrics para o Controller.selectDir() method
-
         int rowNumber = 1;
         for (MethodMetrics method: methodMetrics) {
             XSSFRow row = sheet.createRow((short)rowNumber);
