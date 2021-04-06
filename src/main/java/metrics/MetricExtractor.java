@@ -14,8 +14,8 @@ import java.io.IOException;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -213,7 +213,7 @@ public class MetricExtractor {
     public List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>> WMC_class(List<CompilationUnit> compilationUnits) {
         List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>> quads = new LinkedList<>();
 
-        //Block to traverse the compilation Units and count all cycle methods in each method
+        //Block to traverse the compilation Units and count all cycle methods in class
         for (CompilationUnit cu : compilationUnits) {
             for (ClassOrInterfaceDeclaration cla : cu.findAll(ClassOrInterfaceDeclaration.class)) {
                 int classComplexity = 0;
@@ -314,4 +314,21 @@ public class MetricExtractor {
         }
         return n;
     }
+
+    public Quadruple<Integer, Integer, Integer, Integer> Characteristics(List<CompilationUnit> compilationUnits){
+        int a = 0, b = 0, c = 0, d = 0;
+
+        for (CompilationUnit cu : compilationUnits) {
+            a++;
+            for (ClassOrInterfaceDeclaration cla : cu.findAll(ClassOrInterfaceDeclaration.class)) {
+                b++;
+                d += (cla.getRange().map(range -> range.end.line - range.begin.line).orElse(0));
+                for (MethodDeclaration md : cla.getMethods()) {
+                    c++;
+                }
+            }
+        }
+        return new Quadruple<Integer, Integer, Integer, Integer>(a, b, c, d);
+    }
+
 }
