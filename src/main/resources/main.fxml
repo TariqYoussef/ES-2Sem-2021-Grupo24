@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.10-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/11.0.10-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
   </columnConstraints>
@@ -17,9 +17,27 @@
       <RowConstraints maxHeight="50.0" minHeight="50.0" prefHeight="50.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
+      <ScrollPane GridPane.rowIndex="3">
+         <content>
+            <GridPane fx:id="excelBox" hgap="15.0" vgap="5.0">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" />
+                <ColumnConstraints hgrow="SOMETIMES" />
+                <ColumnConstraints hgrow="SOMETIMES" />
+                <ColumnConstraints hgrow="SOMETIMES" />
+                <ColumnConstraints hgrow="SOMETIMES" />
+                <ColumnConstraints hgrow="SOMETIMES" />
+                <ColumnConstraints hgrow="SOMETIMES" />
+                <ColumnConstraints hgrow="SOMETIMES" />
+                <ColumnConstraints hgrow="SOMETIMES" />
+                <ColumnConstraints hgrow="SOMETIMES" />
+                <ColumnConstraints hgrow="SOMETIMES" />
+              </columnConstraints>
+            </GridPane>
+         </content></ScrollPane>
       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Painel de Utilização" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
          <font>
-            <Font name="System Bold" size="15.0" />
+            <Font name="System Bold" size="20.0" />
          </font>
       </Text>
       <GridPane GridPane.rowIndex="1">
@@ -54,12 +72,21 @@
                <GridPane.margin>
                   <Insets />
                </GridPane.margin>
+               <font>
+                  <Font size="15.0" />
+               </font>
             </Text>
-            <Text fx:id="classNum" strokeType="OUTSIDE" strokeWidth="0.0" text="XX Classes" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
+            <Text fx:id="classNum" strokeType="OUTSIDE" strokeWidth="0.0" text="XX Classes" GridPane.columnIndex="1" GridPane.halignment="CENTER">
+               <font>
+                  <Font size="15.0" />
+               </font></Text>
             <Text fx:id="methodNum" strokeType="OUTSIDE" strokeWidth="0.0" text="XX Métodos" GridPane.columnIndex="2" GridPane.halignment="CENTER">
                <GridPane.margin>
                   <Insets />
                </GridPane.margin>
+               <font>
+                  <Font size="15.0" />
+               </font>
             </Text>
          </children>
       </GridPane>

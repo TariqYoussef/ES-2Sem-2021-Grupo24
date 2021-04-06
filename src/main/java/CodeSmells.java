@@ -1,5 +1,5 @@
 
-import Rules.Metric;
+import rules.Metric;
 import javafx.scene.control.Alert;
 import metrics.MethodMetrics;
 import metrics.MetricExtractor;
@@ -51,7 +51,6 @@ public class CodeSmells {
 
         System.out.println("Code smells escritos");
 
-        Controller.showInformationMessage("Informação","Os code smells foram criados com sucesso.", Alert.AlertType.INFORMATION);
     }
 
     private void createHeaderCodeSmellsXlsx(XSSFRow rowhead){

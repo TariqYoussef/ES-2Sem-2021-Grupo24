@@ -1,4 +1,4 @@
-package Rules;
+package rules;
 
 import metrics.MethodMetrics;
 

@@ -33,7 +33,7 @@ public class ExelReader {
                 for(Cell cell: row)
                 {
                     if(cell.getCellType() == CellType.NUMERIC){
-                        line += cell.getNumericCellValue()+";";
+                        line += (int)cell.getNumericCellValue()+";";
                     }
                     if(cell.getCellType() == CellType.STRING){
                         line += cell.getStringCellValue()+";";

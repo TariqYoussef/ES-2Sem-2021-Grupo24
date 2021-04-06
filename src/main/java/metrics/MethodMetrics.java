@@ -1,6 +1,6 @@
 package metrics;
 
-import Rules.Metric;
+import rules.Metric;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
