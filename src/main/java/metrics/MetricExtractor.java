@@ -315,20 +315,4 @@ public class MetricExtractor {
         return n;
     }
 
-    public Quadruple<Integer, Integer, Integer, Integer> Characteristics(List<CompilationUnit> compilationUnits){
-        int a = 0, b = 0, c = 0, d = 0;
-
-        for (CompilationUnit cu : compilationUnits) {
-            a++;
-            for (ClassOrInterfaceDeclaration cla : cu.findAll(ClassOrInterfaceDeclaration.class)) {
-                b++;
-                d += (cla.getRange().map(range -> range.end.line - range.begin.line).orElse(0));
-                for (MethodDeclaration md : cla.getMethods()) {
-                    c++;
-                }
-            }
-        }
-        return new Quadruple<Integer, Integer, Integer, Integer>(a, b, c, d);
-    }
-
 }
