@@ -4,13 +4,11 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import metrics.MetricExtractor;
 import readers.ExelReader;
 
-import javax.swing.plaf.synth.SynthEditorPaneUI;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
@@ -34,9 +32,11 @@ public class Controller {
     @FXML private Text packNum;
     @FXML private Text classNum;
     @FXML private Text methodNum;
+    @FXML private Text locNum;
 
     @FXML private void initialize(){
         //Para quando o programa inicia
+        clearGUIElements();
     }
 
     /*
@@ -102,6 +102,7 @@ public class Controller {
         packNum.setText("");
         classNum.setText("");
         methodNum.setText("");
+        locNum.setText("");
     }
 
     private void updateGUIElements(String pathCodeSmell){
