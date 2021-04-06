@@ -121,7 +121,7 @@ public class Controller {
 
     private void writeCharacteristicsGUI(ArrayList<String> lines) {
         int packNum = 0, classNum = 0, methodNum = 0, locNum = 0;
-        String packName = "";
+        ArrayList<String> packNames = new ArrayList<String>();
         String className = "";
 
         for(String l : lines){
@@ -132,9 +132,10 @@ public class Controller {
 
                 methodNum++; //Adiciona sempre
 
-                if(!line[1].equals(packName) && !line[1].equals("none")){ //Se for um package novo e não for o 'none'
+                if(!packNames.contains(line[1]) && !line[1].equals("none")){ //Se for um package novo e não for o 'none'
                     packNum++;
-                    packName = line[1];
+                    packNames.add(line[1]);
+
                 }
 
                 if(!line[2].equals(className)) {//Se for uma classe nova
