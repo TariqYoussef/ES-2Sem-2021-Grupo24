@@ -63,6 +63,7 @@
             <ColumnConstraints hgrow="SOMETIMES" />
           <ColumnConstraints hgrow="SOMETIMES" />
           <ColumnConstraints hgrow="SOMETIMES" />
+            <ColumnConstraints hgrow="SOMETIMES" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints vgrow="SOMETIMES" />
@@ -84,6 +85,11 @@
                <GridPane.margin>
                   <Insets />
                </GridPane.margin>
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Text>
+            <Text fx:id="locNum" strokeType="OUTSIDE" strokeWidth="0.0" text="XXXX  Linhas de Código" GridPane.columnIndex="3" GridPane.halignment="CENTER">
                <font>
                   <Font size="15.0" />
                </font>
