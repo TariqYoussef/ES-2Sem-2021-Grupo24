@@ -113,39 +113,41 @@ public class Controller {
          * TODO
          *   -Usar o ArrayList lines num método separado para obter as caracteristicas
          */
-        Quadruple<Integer, Integer, Integer, Integer> quad = characteristics(lines);
-
+        writeCharacteristicsGUI(lines);
         writeCodeSmellsGUI(lines);
 
         createButton.setText("Atualizar Code Smells");
     }
 
-    private Quadruple<Integer, Integer, Integer, Integer> characteristics(ArrayList<String> lines) {
+    private void writeCharacteristicsGUI(ArrayList<String> lines) {
         int packNum = 0, classNum = 0, methodNum = 0, locNum = 0;
         String packName = "";
         String className = "";
 
         for(String l : lines){
 
-                String[] line = l.split(";");
+            String[] line = l.split(";");
 
-                if(!line[0].equals("MethodID")){
+            if(!line[0].equals("MethodID")){
 
-                    methodNum++; //Adiciona sempre
+                methodNum++; //Adiciona sempre
 
-                    if(!line[1].equals(packName) && !line[1].equals("none")){ //Se for um package novo e não for o 'none'
-                        packNum++;
-                        packName = line[1];
-                    }
+                if(!line[1].equals(packName) && !line[1].equals("none")){ //Se for um package novo e não for o 'none'
+                    packNum++;
+                    packName = line[1];
+                }
 
-                    if(!line[2].equals(className)) {//Se for uma classe nova
-                        classNum++;
-                        className = line[2];
-                        locNum += Integer.parseInt(line[5]); //Vai buscar o valor do LOC_class
-                    }
+                if(!line[2].equals(className)) {//Se for uma classe nova
+                    classNum++;
+                    className = line[2];
+                    locNum += Integer.parseInt(line[5]); //Vai buscar o valor do LOC_class
                 }
             }
-        return new Quadruple<Integer, Integer, Integer, Integer>(packNum, classNum, methodNum, locNum);
+        }
+        this.packNum.setText(packNum+" Packages");
+        this.classNum.setText(classNum + " Classes");
+        this.methodNum.setText(methodNum+ " Métodos");
+        this.locNum.setText(locNum+ " Linhas de Código");
     }
 
 
