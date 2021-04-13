@@ -2,26 +2,28 @@ package rules;
 
 import metrics.MethodMetrics;
 
+import java.io.*;
+import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
-public class Rule {
+public class Rule implements java.io.Serializable{
     /*Example
     SE (LOC_method > 50 E CYCLO_method >10) ENTÃO A regra identificou o code smell Long Method
     neste método SENÃO A regra indica que o code smell Long Method não está presente neste método.LOC_class
         */
 
-    enum Operation{
+    public enum Operation{
         BiggerThan,SmallerThan,Equal,Different,
         BiggerThanEqual,SmallerThanEqual,
     }
-    enum LogicOp {
+    public enum LogicOp {
         AND,OR,XOR,
     }
-    enum Smell{
+    public enum Smell{
         Long_Method, God_Class
     }
 
-    private static class SubRule {
+    private static class SubRule implements java.io.Serializable{
         private final Metric metric;
         private final Operation operation;
         private final Integer value;
@@ -126,7 +128,64 @@ public class Rule {
         }
     }
 
+    public static void SerializeRule(ArrayList<Rule> rules) {
+        try {
+            FileOutputStream fileOut = new FileOutputStream("src/main/java/rules/rulehistory.ser");
+            ObjectOutputStream out = new ObjectOutputStream(fileOut);
+            out.writeObject(rules);
+            out.close();
+            fileOut.close();
+            System.out.println("Serialized data is saved in rulehistory.ser");
+        } catch (IOException i) {
+            i.printStackTrace();
+        }
+    }
 
+    public static ArrayList<Rule> DeserializedRule() {
+        ArrayList<Rule> rules = new ArrayList<Rule>();
+        try {
+            FileInputStream fileIn = new FileInputStream("src/main/java/rules/rulehistory.ser");
+            ObjectInputStream in = new ObjectInputStream(fileIn);
+            rules = (ArrayList<Rule>) in.readObject();
+            in.close();
+            fileIn.close();
+        } catch (IOException i) {
+            i.printStackTrace();
+        } catch (ClassNotFoundException c) {
+            System.out.println("Rule class not found");
+            c.printStackTrace();
+        }
+        return rules;
+    }
 
+    //Only show the rules in rulehistory.ser
+    public static void checkRulesInHistory() {
+        ArrayList<Rule> rules = new ArrayList<Rule>();
+        try {
+            FileInputStream fileIn = new FileInputStream("src/main/java/rules/rulehistory.ser");
+            ObjectInputStream in = new ObjectInputStream(fileIn);
+            rules = (ArrayList<Rule>) in.readObject();
+            in.close();
+            fileIn.close();
+        } catch (IOException i) {
+            i.printStackTrace();
+        } catch (ClassNotFoundException c) {
+            System.out.println("Rule class not found");
+            c.printStackTrace();
+        }
+        for (Rule r : rules) {
+            System.out.println("Deserialized Rule...");
+            System.out.println(r.toString());
+            System.out.println("=================");
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "Metric 1: " + rule1.metric + ", Operation: " + rule1.operation + ", Value: " + rule1.value +
+                "\nMetric 2: " + rule2.metric + ", Operation: " + rule2.operation + ", Value: " + rule2.value +
+                "\nOperation: " + operation +
+                "\nSmell: " + smell;
+    }
 
 }
