@@ -24,6 +24,8 @@ public class Rule implements java.io.Serializable{
     }
 
     private static class SubRule implements java.io.Serializable{
+        private static final long serialVersionUID = 6529385098262757690L;
+
         private final Metric metric;
         private final Operation operation;
         private final Integer value;
@@ -88,6 +90,18 @@ public class Rule implements java.io.Serializable{
 
     public Smell getSmell() {
         return smell;
+    }
+
+    public Metric getMetric(SubRule sr) {
+        return sr.metric;
+    }
+
+    public Operation getMetricOperation(SubRule sr) {
+        return sr.operation;
+    }
+
+    public Integer getMetricValue(SubRule sr) {
+        return sr.value;
     }
 
     public boolean passesRule(MethodMetrics method) throws NoSuchElementException{
