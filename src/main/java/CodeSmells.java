@@ -3,11 +3,13 @@ import rules.Metric;
 import javafx.scene.control.Alert;
 import metrics.MethodMetrics;
 import metrics.MetricExtractor;
+import rules.Rule;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CodeSmells {
@@ -75,11 +77,44 @@ public class CodeSmells {
         row.createCell(4).setCellValue(method.getMetric(Metric.NOM_class));//getNom_class());
         row.createCell(5).setCellValue(method.getMetric(Metric.LOC_class));//getLoc_class());
         row.createCell(6).setCellValue(method.getMetric(Metric.WMC_class));//getWmc_class());
-        row.createCell(7).setCellValue("TODO");
+        row.createCell(7).setCellValue(isGodClass(method));
         row.createCell(8).setCellValue(method.getMetric(Metric.LOC_method));//getLoc_method());
         row.createCell(9).setCellValue(method.getMetric(Metric.CYCLO_method));//getCyclo_method());
         row.createCell(10).setCellValue("TODO");
     }
 
+
+
+    public String isGodClass(MethodMetrics method) {
+        ArrayList<Rule> rules = new ArrayList<Rule>();
+        int count= 0;
+        try {
+            FileInputStream fileIn = new FileInputStream("src/main/java/rules/rulehistory.ser");
+            ObjectInputStream in = new ObjectInputStream(fileIn);
+            rules = (ArrayList<Rule>) in.readObject();
+            in.close();
+            fileIn.close();
+        } catch (IOException i) {
+            i.printStackTrace();
+        } catch (ClassNotFoundException c) {
+            System.out.println("Rule class not found");
+            c.printStackTrace();
+        }
+
+        for (Rule r : rules) {
+            if (r.getSmell().equals(Rule.Smell.God_Class)){
+                if (!r.passesRule(method)) {
+                    return "False";
+                }else{
+                    count++;
+                }
+            }
+        }
+        if(count >0){
+            return "True";
+        }else{
+            return " - - - ";
+        }
+    }
 
 }

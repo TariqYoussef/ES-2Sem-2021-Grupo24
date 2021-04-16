@@ -6,24 +6,26 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
-public class Rule implements java.io.Serializable{
+public class Rule implements java.io.Serializable {
     /*Example
     SE (LOC_method > 50 E CYCLO_method >10) ENTÃO A regra identificou o code smell Long Method
     neste método SENÃO A regra indica que o code smell Long Method não está presente neste método.LOC_class
         */
 
-    public enum Operation{
-        BiggerThan,SmallerThan,Equal,Different,
-        BiggerThanEqual,SmallerThanEqual,
+    public enum Operation {
+        BiggerThan, SmallerThan, Equal, Different,
+        BiggerThanEqual, SmallerThanEqual,
     }
+
     public enum LogicOp {
-        AND,OR,XOR,
+        AND, OR, XOR,
     }
-    public enum Smell{
+
+    public enum Smell {
         Long_Method, God_Class
     }
 
-    private static class SubRule implements java.io.Serializable{
+    private static class SubRule implements java.io.Serializable {
         private static final long serialVersionUID = 6529385098262757690L;
 
         private final Metric metric;
@@ -48,7 +50,7 @@ public class Rule implements java.io.Serializable{
             return value;
         }
 
-        private boolean passesSubRule(MethodMetrics method){
+        private boolean passesSubRule(MethodMetrics method) {
             int metricValue = method.getMetric(metric);
             return Operation(metricValue, operation, value);
         }
@@ -104,26 +106,26 @@ public class Rule implements java.io.Serializable{
         return sr.value;
     }
 
-    public boolean passesRule(MethodMetrics method) throws NoSuchElementException{
+    public boolean passesRule(MethodMetrics method) throws NoSuchElementException {
 
-        boolean passesrule1= rule1.passesSubRule(method);
-        boolean passesrule2= rule2.passesSubRule(method);
+        boolean passesrule1 = rule1.passesSubRule(method);
+        boolean passesrule2 = rule2.passesSubRule(method);
 
-        switch (operation){
+        switch (operation) {
             case AND:
                 return passesrule1 && passesrule2;
             case OR:
                 return passesrule1 || passesrule2;
             case XOR:
                 //(car.isDiesel() && !car.isManual()) || (!car.isDiesel() && car.isManual())
-                return ( (passesrule1 && !passesrule2) || (!passesrule1 && passesrule2));
+                return ((passesrule1 && !passesrule2) || (!passesrule1 && passesrule2));
             default:
                 throw new NoSuchElementException("Non existant Logical Operation for rule passing, passesRule function");
         }
     }
 
-    private static boolean Operation(int value1, Operation op, int value2) throws NoSuchElementException{
-        switch (op){
+    private static boolean Operation(int value1, Operation op, int value2) throws NoSuchElementException {
+        switch (op) {
             case BiggerThan:
                 return value1 > value2;
             case BiggerThanEqual:
@@ -201,5 +203,6 @@ public class Rule implements java.io.Serializable{
                 "\nOperation: " + operation +
                 "\nSmell: " + smell;
     }
+
 
 }
