@@ -61,7 +61,14 @@ public class Controller {
         metric2op.getItems().setAll(Rule.Operation.values());
         rulelogic.getItems().setAll(Rule.LogicOp.values());
         rulesmell.getItems().setAll(Rule.Smell.values());
-        ObservableList<Rule> regras = FXCollections.observableArrayList(Rule.DeserializedRule());
+        ObservableList<Rule> regras = null;
+        try {
+            regras = FXCollections.observableArrayList(Rule.DeserializedRule());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         listrules.setItems(regras);
 
        // /*
@@ -141,7 +148,7 @@ public class Controller {
 
     }
 
-    @FXML private void AddRuleToHistory(){
+    @FXML private void AddRuleToHistory() throws IOException, ClassNotFoundException {
         if(metric1.getValue() == null || metric1op.getValue() == null || metric1value.getText().isEmpty() ||
                 metric2.getValue() == null || metric2op.getValue() == null || metric2value.getText().isEmpty() ||
                 rulelogic.getValue() == null || rulesmell.getValue() == null){
@@ -155,8 +162,6 @@ public class Controller {
             ArrayList<Rule> rules2add = Rule.DeserializedRule();
             rules2add.add(rule);
             Rule.SerializeRule(rules2add);
-
-            Rule.checkRulesInHistory();
 
             ObservableList<Rule> regras = FXCollections.observableArrayList(Rule.DeserializedRule());
             listrules.setItems(regras);
