@@ -154,7 +154,7 @@ public class Rule implements java.io.Serializable {
             out.writeObject(rules);
             out.close();
             fileOut.close();
-            System.out.println("Serialized data is saved in rulehistory.ser");
+      //    System.out.println("Serialized data is saved in rulehistory.ser");
     }
 
     public static ArrayList<Rule> deserializedRule() throws IOException, ClassNotFoundException {
@@ -179,7 +179,14 @@ public class Rule implements java.io.Serializable {
         }
     }
 
-
+    public static void deleteRule(Rule r) throws IOException, ClassNotFoundException {
+        ArrayList<Rule> newRules = new ArrayList<>();
+        for (Rule rule:deserializedRule()){
+            if(!rule.toString().equals(r.toString()))
+                newRules.add(rule);
+        }
+        serializeRule(newRules);
+    }
 
     @Override
     public String toString() {
