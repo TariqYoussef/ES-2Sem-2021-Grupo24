@@ -88,7 +88,14 @@ public class CodeSmells {
     }
 
     public String isLongMethod(MethodMetrics method) {
-        ArrayList<Rule> rules = Rule.DeserializedRule();
+        ArrayList<Rule> rules = null;
+        try {
+            rules = Rule.DeserializedRule();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
 
         if(rules.size()==0){
             return "NA";
@@ -106,7 +113,14 @@ public class CodeSmells {
     }
 
     public String isGodClass(MethodMetrics method) {
-        ArrayList<Rule> rules = Rule.DeserializedRule();
+        ArrayList<Rule> rules = null;
+        try {
+            rules = Rule.DeserializedRule();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         int count= 0;
         for (Rule r : rules) {
             if (r.getSmell().equals(Rule.Smell.God_Class)){

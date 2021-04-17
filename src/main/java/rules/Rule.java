@@ -144,56 +144,23 @@ public class Rule implements java.io.Serializable {
         }
     }
 
-    public static void SerializeRule(ArrayList<Rule> rules) {
-        try {
+    public static void SerializeRule(ArrayList<Rule> rules) throws IOException {
             FileOutputStream fileOut = new FileOutputStream("src/main/java/rules/rulehistory.ser");
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
             out.writeObject(rules);
             out.close();
             fileOut.close();
             System.out.println("Serialized data is saved in rulehistory.ser");
-        } catch (IOException i) {
-            i.printStackTrace();
-        }
     }
 
-    public static ArrayList<Rule> DeserializedRule() {
+    public static ArrayList<Rule> DeserializedRule() throws IOException, ClassNotFoundException {
         ArrayList<Rule> rules = new ArrayList<Rule>();
-        try {
-            FileInputStream fileIn = new FileInputStream("src/main/java/rules/rulehistory.ser");
-            ObjectInputStream in = new ObjectInputStream(fileIn);
-            rules = (ArrayList<Rule>) in.readObject();
-            in.close();
-            fileIn.close();
-        } catch (IOException i) {
-            i.printStackTrace();
-        } catch (ClassNotFoundException c) {
-            System.out.println("Rule class not found");
-            c.printStackTrace();
-        }
+        FileInputStream fileIn = new FileInputStream("src/main/java/rules/rulehistory.ser");
+        ObjectInputStream in = new ObjectInputStream(fileIn);
+        rules = (ArrayList<Rule>) in.readObject();
+        in.close();
+        fileIn.close();
         return rules;
-    }
-
-    //Only show the rules in rulehistory.ser
-    public static void checkRulesInHistory() {
-        ArrayList<Rule> rules = new ArrayList<Rule>();
-        try {
-            FileInputStream fileIn = new FileInputStream("src/main/java/rules/rulehistory.ser");
-            ObjectInputStream in = new ObjectInputStream(fileIn);
-            rules = (ArrayList<Rule>) in.readObject();
-            in.close();
-            fileIn.close();
-        } catch (IOException i) {
-            i.printStackTrace();
-        } catch (ClassNotFoundException c) {
-            System.out.println("Rule class not found");
-            c.printStackTrace();
-        }
-        for (Rule r : rules) {
-            System.out.println("Deserialized Rule...");
-            System.out.println(r.toString());
-            System.out.println("=================");
-        }
     }
 
     @Override
