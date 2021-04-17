@@ -61,18 +61,21 @@ public class Controller {
         try {
             ObservableList<Rule> regras = FXCollections.observableArrayList(Rule.deserializedRule());
             listrules.setItems(regras);
-            listrules.setOnMouseClicked(mouseEvent -> {
-                Rule ruleSelected = listrules.getSelectionModel().getSelectedItem();
-                metric1.setValue(ruleSelected.getMetric(ruleSelected.getRule1()));
-                metric1op.setValue(ruleSelected.getMetricOperation(ruleSelected.getRule1()));
-                metric1value.setText(ruleSelected.getMetricValue(ruleSelected.getRule1()).toString());
-                metric2.setValue(ruleSelected.getMetric(ruleSelected.getRule2()));
-                metric2op.setValue(ruleSelected.getMetricOperation(ruleSelected.getRule2()));
-                metric2value.setText(ruleSelected.getMetricValue(ruleSelected.getRule2()).toString());
 
-                rulelogic.setValue(ruleSelected.getOperation());
-                rulesmell.setValue(ruleSelected.getSmell());
-            });
+                listrules.setOnMouseClicked(mouseEvent -> {
+                    if(listrules.getSelectionModel().getSelectedItem()!=null){
+                        Rule ruleSelected = listrules.getSelectionModel().getSelectedItem();
+                        metric1.setValue(ruleSelected.getMetric(ruleSelected.getRule1()));
+                        metric1op.setValue(ruleSelected.getMetricOperation(ruleSelected.getRule1()));
+                        metric1value.setText(ruleSelected.getMetricValue(ruleSelected.getRule1()).toString());
+                        metric2.setValue(ruleSelected.getMetric(ruleSelected.getRule2()));
+                        metric2op.setValue(ruleSelected.getMetricOperation(ruleSelected.getRule2()));
+                        metric2value.setText(ruleSelected.getMetricValue(ruleSelected.getRule2()).toString());
+
+                        rulelogic.setValue(ruleSelected.getOperation());
+                        rulesmell.setValue(ruleSelected.getSmell());
+                    }
+                });
         } catch (IOException e) {
             e.printStackTrace();
 
@@ -146,24 +149,44 @@ public class Controller {
 
     }
 
-    @FXML private void AddRuleToHistory() throws IOException, ClassNotFoundException {
+    @FXML private void addRuleToHistory() throws IOException, ClassNotFoundException {
         if(metric1.getValue() == null || metric1op.getValue() == null || metric1value.getText().isEmpty() ||
                 metric2.getValue() == null || metric2op.getValue() == null || metric2value.getText().isEmpty() ||
                 rulelogic.getValue() == null || rulesmell.getValue() == null){
 
-            showInformationMessage("Informação", "Certifique-se que todos os valores estão preenchidos", Alert.AlertType.INFORMATION);
+            showInformationMessage("Informação", "Certifique-se que todos os valores estão preenchidos.", Alert.AlertType.INFORMATION);
         } else {
             Rule rule = new Rule(metric1.getValue(), metric1op.getValue(), Integer.parseInt(metric1value.getText()),
                     metric2.getValue(), metric2op.getValue(), Integer.parseInt(metric2value.getText()),
                     rulelogic.getValue(), rulesmell.getValue());
 
             ArrayList<Rule> rules2add = Rule.deserializedRule();
-            rules2add.add(rule);
-            Rule.serializeRule(rules2add);
+            boolean addRule=true;
+            for (Rule rule2Compare:rules2add) {
+                if(rule2Compare.toString().equals(rule.toString()))
+                    addRule=false;
+                //Dar break era o ideal
+            }
+            if(addRule) {
+                rules2add.add(rule);
+                Rule.serializeRule(rules2add);
+                ObservableList<Rule> regras = FXCollections.observableArrayList(Rule.deserializedRule());
+                listrules.setItems(regras);
+                showInformationMessage("Informação", "A regra foi adicionada com sucesso.", Alert.AlertType.INFORMATION);
+            } else {
+                showInformationMessage("Informação", "Já existe essa regra.", Alert.AlertType.INFORMATION);
+            }
+        }
+    }
 
+    @FXML private void removeRuleFromHistory() throws IOException, ClassNotFoundException {
+        if(listrules.getSelectionModel().getSelectedItems().isEmpty())
+            showInformationMessage("Informação", "Nenhuma regra selecionada.", Alert.AlertType.INFORMATION);
+        else {
+            Rule.deleteRule(listrules.getSelectionModel().getSelectedItem());
             ObservableList<Rule> regras = FXCollections.observableArrayList(Rule.deserializedRule());
             listrules.setItems(regras);
-            showInformationMessage("Informação", "A regra foi adicionada com sucesso.", Alert.AlertType.INFORMATION);
+            showInformationMessage("Informação", "A regra foi eliminada com sucesso.", Alert.AlertType.INFORMATION);
         }
     }
 
