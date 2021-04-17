@@ -1,6 +1,5 @@
 
 import rules.Metric;
-import javafx.scene.control.Alert;
 import metrics.MethodMetrics;
 import metrics.MetricExtractor;
 import rules.Rule;
@@ -12,9 +11,6 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
-
-import static java.lang.Boolean.FALSE;
-import static java.lang.Boolean.TRUE;
 
 public class CodeSmells {
 
@@ -90,7 +86,7 @@ public class CodeSmells {
     public String isLongMethod(MethodMetrics method) {
         ArrayList<Rule> rules = null;
         try {
-            rules = Rule.DeserializedRule();
+            rules = Rule.deserializedRule();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -115,7 +111,7 @@ public class CodeSmells {
     public String isGodClass(MethodMetrics method) {
         ArrayList<Rule> rules = null;
         try {
-            rules = Rule.DeserializedRule();
+            rules = Rule.deserializedRule();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
