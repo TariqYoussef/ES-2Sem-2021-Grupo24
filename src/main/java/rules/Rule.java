@@ -3,10 +3,14 @@ package rules;
 import metrics.MethodMetrics;
 
 import java.io.*;
+import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
 public class Rule implements java.io.Serializable {
+    public static final String pathSeries = "rules/rulehistory.ser";
     /*Example
     SE (LOC_method > 50 E CYCLO_method >10) ENTÃO A regra identificou o code smell Long Method
     neste método SENÃO A regra indica que o code smell Long Method não está presente neste método.LOC_class
@@ -144,8 +148,8 @@ public class Rule implements java.io.Serializable {
         }
     }
 
-    public static void SerializeRule(ArrayList<Rule> rules) throws IOException {
-            FileOutputStream fileOut = new FileOutputStream("src/main/java/rules/rulehistory.ser");
+    public static void serializeRule(ArrayList<Rule> rules) throws IOException {
+            FileOutputStream fileOut = new FileOutputStream(pathSeries);
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
             out.writeObject(rules);
             out.close();
@@ -153,15 +157,29 @@ public class Rule implements java.io.Serializable {
             System.out.println("Serialized data is saved in rulehistory.ser");
     }
 
-    public static ArrayList<Rule> DeserializedRule() throws IOException, ClassNotFoundException {
-        ArrayList<Rule> rules = new ArrayList<Rule>();
-        FileInputStream fileIn = new FileInputStream("src/main/java/rules/rulehistory.ser");
-        ObjectInputStream in = new ObjectInputStream(fileIn);
-        rules = (ArrayList<Rule>) in.readObject();
-        in.close();
-        fileIn.close();
-        return rules;
+    public static ArrayList<Rule> deserializedRule() throws IOException, ClassNotFoundException {
+        try {
+            FileInputStream fileIn = new FileInputStream(pathSeries);
+            ObjectInputStream in = new ObjectInputStream(fileIn);
+            ArrayList<Rule> rules = (ArrayList<Rule>) in.readObject();
+
+            in.close();
+            fileIn.close();
+            return rules;
+        }catch (FileNotFoundException e){
+            try{
+                Files.createDirectory(Paths.get("rules"));
+            }catch (FileAlreadyExistsException fileAlreadyExistsException){
+
+            }
+            FileOutputStream fileOut = new FileOutputStream(pathSeries);
+            serializeRule(new ArrayList<>());
+            fileOut.close();
+            return new ArrayList<>();
+        }
     }
+
+
 
     @Override
     public String toString() {

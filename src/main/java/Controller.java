@@ -27,10 +27,6 @@ public class Controller {
     @FXML private Button createButton;
     @FXML private GridPane excelBox;
 
-    /**
-     Usar o método setText(String text) para mudar o texto no GUI
-     EX, para mudar o número de packages para 15: packNum.setText("15 packages");
-     */
     @FXML private Text packNum;
     @FXML private Text classNum;
     @FXML private Text methodNum;
@@ -61,32 +57,32 @@ public class Controller {
         metric2op.getItems().setAll(Rule.Operation.values());
         rulelogic.getItems().setAll(Rule.LogicOp.values());
         rulesmell.getItems().setAll(Rule.Smell.values());
-        ObservableList<Rule> regras = null;
+
         try {
-            regras = FXCollections.observableArrayList(Rule.DeserializedRule());
+            ObservableList<Rule> regras = FXCollections.observableArrayList(Rule.deserializedRule());
+            listrules.setItems(regras);
+            listrules.setOnMouseClicked(mouseEvent -> {
+                Rule ruleSelected = listrules.getSelectionModel().getSelectedItem();
+                metric1.setValue(ruleSelected.getMetric(ruleSelected.getRule1()));
+                metric1op.setValue(ruleSelected.getMetricOperation(ruleSelected.getRule1()));
+                metric1value.setText(ruleSelected.getMetricValue(ruleSelected.getRule1()).toString());
+                metric2.setValue(ruleSelected.getMetric(ruleSelected.getRule2()));
+                metric2op.setValue(ruleSelected.getMetricOperation(ruleSelected.getRule2()));
+                metric2value.setText(ruleSelected.getMetricValue(ruleSelected.getRule2()).toString());
+
+                rulelogic.setValue(ruleSelected.getOperation());
+                rulesmell.setValue(ruleSelected.getSmell());
+            });
         } catch (IOException e) {
             e.printStackTrace();
+
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
+
+        } catch (Exception e){
+            e.printStackTrace();
+
         }
-        listrules.setItems(regras);
-
-       // /*
-        //for updating rules when listview is clicked
-        listrules.setOnMouseClicked(mouseEvent -> {
-            Rule ruleSelected = listrules.getSelectionModel().getSelectedItem();
-            metric1.setValue(ruleSelected.getMetric(ruleSelected.getRule1()));
-            metric1op.setValue(ruleSelected.getMetricOperation(ruleSelected.getRule1()));
-            metric1value.setText(ruleSelected.getMetricValue(ruleSelected.getRule1()).toString());
-
-            metric2.setValue(ruleSelected.getMetric(ruleSelected.getRule2()));
-            metric2op.setValue(ruleSelected.getMetricOperation(ruleSelected.getRule2()));
-            metric2value.setText(ruleSelected.getMetricValue(ruleSelected.getRule2()).toString());
-
-            rulelogic.setValue(ruleSelected.getOperation());
-            rulesmell.setValue(ruleSelected.getSmell());
-        });
-      //   */
 
     }
 
@@ -144,6 +140,8 @@ public class Controller {
 
         }catch (NullPointerException e){
             showInformationMessage("Informação","Por favor selecione a pasta do projeto.", Alert.AlertType.INFORMATION);
+        }catch (Exception e){
+            showInformationMessage("Erro", "Erro inesperado.", Alert.AlertType.ERROR);
         }
 
     }
@@ -159,11 +157,11 @@ public class Controller {
                     metric2.getValue(), metric2op.getValue(), Integer.parseInt(metric2value.getText()),
                     rulelogic.getValue(), rulesmell.getValue());
 
-            ArrayList<Rule> rules2add = Rule.DeserializedRule();
+            ArrayList<Rule> rules2add = Rule.deserializedRule();
             rules2add.add(rule);
-            Rule.SerializeRule(rules2add);
+            Rule.serializeRule(rules2add);
 
-            ObservableList<Rule> regras = FXCollections.observableArrayList(Rule.DeserializedRule());
+            ObservableList<Rule> regras = FXCollections.observableArrayList(Rule.deserializedRule());
             listrules.setItems(regras);
             showInformationMessage("Informação", "A regra foi adicionada com sucesso.", Alert.AlertType.INFORMATION);
         }
