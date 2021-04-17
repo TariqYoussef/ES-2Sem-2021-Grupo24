@@ -11,6 +11,10 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
+
+import static java.lang.Boolean.FALSE;
+import static java.lang.Boolean.TRUE;
 
 public class CodeSmells {
 
@@ -80,10 +84,26 @@ public class CodeSmells {
         row.createCell(7).setCellValue(isGodClass(method));
         row.createCell(8).setCellValue(method.getMetric(Metric.LOC_method));//getLoc_method());
         row.createCell(9).setCellValue(method.getMetric(Metric.CYCLO_method));//getCyclo_method());
-        row.createCell(10).setCellValue("TODO");
+        row.createCell(10).setCellValue(isLongMethod(method));
     }
 
+    public String isLongMethod(MethodMetrics method) {
+        ArrayList<Rule> rules = Rule.DeserializedRule();
 
+        if(rules.size()==0){
+            return "NA";
+        }
+
+        Predicate<Rule> pr = (Rule r) -> (r.getSmell().equals(Rule.Smell.Long_Method));
+        rules.removeIf(pr.negate());
+
+        for(Rule r: rules) {
+            if (!r.passesRule(method)){
+                return "False";
+            }
+        }
+        return "True";
+    }
 
     public String isGodClass(MethodMetrics method) {
         ArrayList<Rule> rules = Rule.DeserializedRule();
