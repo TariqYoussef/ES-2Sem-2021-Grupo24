@@ -76,5 +76,15 @@ class MetricExtractorTest {
         assertEquals(59,actual);
     }
 
+    /**
+     * Test method for {@link MetricExtractor#LOC_method(List)} ()}.
+     * @throws java.io.IOException
+     */
+    @Test
+    void testLOC_method() throws IOException {
+        List<CompilationUnit> compilationUnits = extractor.CreateCompilationUnits();
+        int actual = extractor.LOC_class(compilationUnits).get(12).getD();
+        assertEquals(8,actual);
+    }
 
 }

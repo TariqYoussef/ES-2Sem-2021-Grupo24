@@ -274,7 +274,7 @@ public class MetricExtractor {
                 for (MethodDeclaration md : cla.getMethods()) {
                     String body = md.getBody().toString();
                     String comments = md.getAllContainedComments().toString();
-//                    System.out.println(code);
+//                    System.out.println(body);
 //                    System.out.println(comments);
                     lines = (1+countLines(body)-countLines(comments));
                     quadruples.add(new Quadruple(ConvertOptionalToActual(cu.getPackageDeclaration()), cla, md, lines));
