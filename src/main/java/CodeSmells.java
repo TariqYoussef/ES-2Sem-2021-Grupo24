@@ -86,21 +86,8 @@ public class CodeSmells {
 
 
     public String isGodClass(MethodMetrics method) {
-        ArrayList<Rule> rules = new ArrayList<Rule>();
+        ArrayList<Rule> rules = Rule.DeserializedRule();
         int count= 0;
-        try {
-            FileInputStream fileIn = new FileInputStream("src/main/java/rules/rulehistory.ser");
-            ObjectInputStream in = new ObjectInputStream(fileIn);
-            rules = (ArrayList<Rule>) in.readObject();
-            in.close();
-            fileIn.close();
-        } catch (IOException i) {
-            i.printStackTrace();
-        } catch (ClassNotFoundException c) {
-            System.out.println("Rule class not found");
-            c.printStackTrace();
-        }
-
         for (Rule r : rules) {
             if (r.getSmell().equals(Rule.Smell.God_Class)){
                 if (!r.passesRule(method)) {
