@@ -17,6 +17,8 @@ import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
 
 /**
  *
@@ -139,8 +141,14 @@ public class Controller {
             // retirar criar um objeto para retirar as métricas
             MetricExtractor metrics = new MetricExtractor(projectDir.toPath());
 
+            // filtrar as rules
+            Predicate<Rule> pr1 = (Rule r) -> (r.getSmell().equals(Rule.Smell.God_Class));
+            List<Rule> godRules = getRegras().filtered(pr1);
+            Predicate<Rule> pr2 = (Rule r) -> (r.getSmell().equals(Rule.Smell.Long_Method));
+            List<Rule> longRules = getRegras().filtered(pr2);
+
             // criar code smells
-            CodeSmells codeSmells = new CodeSmells(metrics, projectDir.getName());
+            CodeSmells codeSmells = new CodeSmells(metrics, projectDir.getName(), godRules, longRules);
 
             // criar a pasta onde se vai guardar o ficheiro xlsx
             try{
