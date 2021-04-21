@@ -4,7 +4,10 @@ import rules.Metric;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import rules.Rule;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 /**
@@ -107,7 +110,17 @@ public class MethodMetrics {
         }
     }
 
-
+    public String verifyRuleset(List<Rule> rules){
+        if(rules.size()==0){
+            return "NA";
+        }
+        for(Rule r: rules) {
+            if (!r.passesRule(this)){
+                return "False";
+            }
+        }
+        return "True";
+    }
 
     private int getNom_class() {
         return nom_class;
