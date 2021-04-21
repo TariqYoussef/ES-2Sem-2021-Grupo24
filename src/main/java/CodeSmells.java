@@ -80,11 +80,12 @@ public class CodeSmells {
         row.createCell(7).setCellValue(isGodClass(method));
         row.createCell(8).setCellValue(method.getMetric(Metric.LOC_method));//getLoc_method());
         row.createCell(9).setCellValue(method.getMetric(Metric.CYCLO_method));//getCyclo_method());
-        row.createCell(10).setCellValue(isLongMethod(method));
+        row.createCell(10).setCellValue(isLongMethod(Controller.regras,method));
     }
 
-    public String isLongMethod(MethodMetrics method) {
-        ArrayList<Rule> rules = null;
+    public String isLongMethod(List<Rule> rules, MethodMetrics method) {
+        //ArrayList<Rule> rules = null;
+        /*
         try {
             rules = Rule.deserializedRule();
         } catch (IOException e) {
@@ -92,7 +93,7 @@ public class CodeSmells {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-
+        */
         if(rules.size()==0){
             return "NA";
         }

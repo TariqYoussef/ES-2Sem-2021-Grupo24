@@ -73,7 +73,7 @@ class MetricExtractorTest {
     void testLOC_class() throws IOException {
         List<CompilationUnit> compilationUnits = extractor.CreateCompilationUnits();
         int actual = extractor.LOC_class(compilationUnits).get(1).getD();
-        assertEquals(59,actual);
+        assertEquals(35,actual);
     }
 
     /**

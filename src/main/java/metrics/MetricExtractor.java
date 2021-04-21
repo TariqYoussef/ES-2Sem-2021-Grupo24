@@ -22,6 +22,11 @@ import java.util.Optional;
 public class MetricExtractor {
 
     private Path srcpath;
+//Constructors----------
+    /**
+     * Used for junit testing
+     * */
+    public MetricExtractor() {    }
 
     public MetricExtractor(Path filepath) throws IOException {
 
@@ -34,23 +39,8 @@ public class MetricExtractor {
         }
 
     }
-    /**
-     * Used for junit testing
-     * */
-    public MetricExtractor() {}
 
-    public static List<CompilationUnit> CreateCompilationUnits(Path dirPath) throws IOException {
-        List<CompilationUnit> compilationUnits = new LinkedList<>();
-        Files.find(dirPath, Integer.MAX_VALUE, (path, attr) -> attr.isRegularFile() && path.toString().endsWith(".java")).forEach(n -> {
-            try {
-                compilationUnits.add(StaticJavaParser.parse(n.toAbsolutePath()));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-        return compilationUnits;
-    }
-
+//Getter-Setter----------
     public Path getSrcpath() {
         return srcpath;
     }
@@ -59,6 +49,7 @@ public class MetricExtractor {
         this.srcpath = srcpath;
     }
 
+//Main execution method----------
     //TODO Decide when/where to handle excepttion
     public List<MethodMetrics> ExtractMetrics() throws IOException {
         List<CompilationUnit> cuList = CreateCompilationUnits(srcpath);
@@ -104,16 +95,32 @@ public class MetricExtractor {
         }
     }
 
+//Main execution method----------
+
+
     /*
     Creates all compilation units required to extract all metrics
     metrics should use these compilation units as their arguments (List<CompilationUnit>)
     */
+    public static List<CompilationUnit> CreateCompilationUnits(Path dirPath) throws IOException {
+        List<CompilationUnit> compilationUnits = new LinkedList<>();
+        Files.find(dirPath, Integer.MAX_VALUE, (path, attr) -> attr.isRegularFile() && path.toString().endsWith(".java")).forEach(n -> {
+            try {
+                compilationUnits.add(StaticJavaParser.parse(n.toAbsolutePath()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+        return compilationUnits;
+    }
+
+
     public List<CompilationUnit> CreateCompilationUnits() throws IOException {
         return CreateCompilationUnits(srcpath);
     }
 
 
-    private PackageDeclaration ConvertOptionalToActual(Optional<PackageDeclaration> packageD){
+    private static PackageDeclaration ConvertOptionalToActual(Optional<PackageDeclaration> packageD){
         PackageDeclaration pack ;
         if(packageD.isPresent()){
             return packageD.get();
@@ -121,6 +128,16 @@ public class MetricExtractor {
            return new PackageDeclaration(new Name("none"));
         }
     }
+
+    //Print function
+    //TODO move this to Quadruple.toString
+    private static void PrintQuad(Iterable<? extends Quadruple<PackageDeclaration, ClassOrInterfaceDeclaration, MethodDeclaration, Integer>> quadruples) {
+        for (Quadruple<PackageDeclaration, ClassOrInterfaceDeclaration, MethodDeclaration, Integer> quadruple : quadruples) {
+            System.out.println("Package:" + quadruple.getA().getNameAsString() + ";Class:" + quadruple.getB().getNameAsString() + ";Method:" + quadruple.getC().getNameAsString() + ";NOM_class:" + quadruple.getD());
+            System.out.println("=================");
+        }
+    }
+
 
     //Extract Number of Methods each class
     public List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>> NOM_class(List<CompilationUnit> compilationUnits) {
@@ -132,20 +149,13 @@ public class MetricExtractor {
                 for (MethodDeclaration md : cla.getMethods()) {
                     Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer> q =
                             new Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>(
-                                    ConvertOptionalToActual(cu.getPackageDeclaration()),
-                                    cla,
-                                    md,
-                                    cla.getMethods().size());
+                                    ConvertOptionalToActual(cu.getPackageDeclaration()),cla, md, cla.getMethods().size());
                     quadruples.add(q);
                }
             }
         }
 
-        //Print block
-        for (Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer> quadruple : quadruples) {
-            System.out.println("Package:"+quadruple.getA().getNameAsString()+";Class:"+quadruple.getB().getNameAsString()+";Method:"+quadruple.getC().getNameAsString()+";NOM_class:"+quadruple.getD());
-            System.out.println("=================");
-        }
+        PrintQuad(quadruples);
 
         return quadruples;
     }
@@ -294,7 +304,7 @@ public class MetricExtractor {
         for (CompilationUnit cu : compilationUnits) {
             for (ClassOrInterfaceDeclaration cla : cu.findAll(ClassOrInterfaceDeclaration.class)) {
                 int classLength = cla.getRange().map(range -> range.end.line - range.begin.line).orElse(0);
-
+                //TODO change getRange to countlines(body da class) - countLines(getcomments)
                 for (MethodDeclaration md : cla.getMethods()) {
                     quadruples.add(new Quadruple(ConvertOptionalToActual(cu.getPackageDeclaration()), cla, md, classLength));
                 }

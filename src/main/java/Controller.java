@@ -46,6 +46,12 @@ public class Controller {
 
     @FXML private ListView<Rule> listrules;
 
+    public static ObservableList<Rule> regras;
+
+    public ObservableList<Rule> getRegras() {
+        return regras;
+    }
+
     @FXML private void initialize(){
         //Para quando o programa inicia
         clearGUIElements();
@@ -59,7 +65,7 @@ public class Controller {
         rulesmell.getItems().setAll(Rule.Smell.values());
 
         try {
-            ObservableList<Rule> regras = FXCollections.observableArrayList(Rule.deserializedRule());
+            regras = FXCollections.observableArrayList(Rule.deserializedRule());
             listrules.setItems(regras);
 
                 listrules.setOnMouseClicked(mouseEvent -> {
