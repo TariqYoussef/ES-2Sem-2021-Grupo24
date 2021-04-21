@@ -1,5 +1,8 @@
 package rules;
 
+/**
+ *
+ */
 public enum Metric {
 
     NOM_class,

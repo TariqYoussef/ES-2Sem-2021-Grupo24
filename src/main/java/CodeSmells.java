@@ -12,11 +12,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
+/**
+ *
+ */
 public class CodeSmells {
 
     private MetricExtractor metrics;
     private String name;
 
+    /**
+     * @param metrics
+     * @param name
+     */
     public CodeSmells(MetricExtractor metrics, String name){
 
         this.metrics = metrics;
@@ -24,11 +31,19 @@ public class CodeSmells {
 
     }
 
+    /**
+     * @param dir
+     * @throws IOException
+     */
     public void createCodeSmellsXlsxFile(File dir) throws IOException {
         FileOutputStream fileOut = new FileOutputStream(dir.getAbsolutePath()+"/"+name);
         fileOut.close();
     }
 
+    /**
+     * @param dir
+     * @throws IOException
+     */
     public void addCodeSmellsToXlsx(File dir) throws IOException {
 
         XSSFWorkbook wb = new XSSFWorkbook();
@@ -55,6 +70,9 @@ public class CodeSmells {
 
     }
 
+    /**
+     * @param rowhead
+     */
     private void createHeaderCodeSmellsXlsx(XSSFRow rowhead){
         rowhead.createCell(0).setCellValue("MethodID");
         rowhead.createCell(1).setCellValue("package");
@@ -69,6 +87,10 @@ public class CodeSmells {
         rowhead.createCell(10).setCellValue("is_Long_Method");
     }
 
+    /**
+     * @param row
+     * @param method
+     */
     private void addRowCodeSmellsXlsx(XSSFRow row, MethodMetrics method){
         row.createCell(0).setCellValue(method.getId());
         row.createCell(1).setCellValue(method.getPackageOfMethod().getNameAsString());
@@ -83,6 +105,11 @@ public class CodeSmells {
         row.createCell(10).setCellValue(isLongMethod(Controller.regras,method));
     }
 
+    /**
+     * @param rules
+     * @param method
+     * @return
+     */
     public String isLongMethod(List<Rule> rules, MethodMetrics method) {
         //ArrayList<Rule> rules = null;
         /*
@@ -109,6 +136,10 @@ public class CodeSmells {
         return "True";
     }
 
+    /**
+     * @param method
+     * @return
+     */
     public String isGodClass(MethodMetrics method) {
         ArrayList<Rule> rules = null;
         try {

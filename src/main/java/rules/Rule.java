@@ -9,6 +9,9 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
+/**
+ *
+ */
 public class Rule implements java.io.Serializable {
     public static final String pathSeries = "rules/rulehistory.ser";
     /*Example
@@ -28,6 +31,9 @@ public class Rule implements java.io.Serializable {
         Long_Method, God_Class
     }
 
+    /**
+     *
+     */
     private static class SubRule implements java.io.Serializable {
         private static final long serialVersionUID = 6529385098262757690L;
 
@@ -54,6 +60,17 @@ public class Rule implements java.io.Serializable {
             return Operation(metricValue, operation, value);
         }
     }
+
+    /**
+     * @param metric1
+     * @param operation1
+     * @param value1
+     * @param metric2
+     * @param operation2
+     * @param value2
+     * @param logicoperation
+     * @param smell
+     */
     /*
     public Rule(SubRule rule1, SubRule rule2, LogicOp logicoperation, Smell smell) {
         this.rule1 = rule1;
@@ -86,18 +103,35 @@ public class Rule implements java.io.Serializable {
         return smell;
     }
 
+    /**
+     * @param sr
+     * @return
+     */
     public Metric getMetric(SubRule sr) {
         return sr.metric;
     }
 
+    /**
+     * @param sr
+     * @return
+     */
     public Operation getMetricOperation(SubRule sr) {
         return sr.operation;
     }
 
+    /**
+     * @param sr
+     * @return
+     */
     public Integer getMetricValue(SubRule sr) {
         return sr.value;
     }
 
+    /**
+     * @param method
+     * @return
+     * @throws NoSuchElementException
+     */
     public boolean passesRule(MethodMetrics method) throws NoSuchElementException {
 
         boolean passesrule1 = rule1.passesSubRule(method);
@@ -116,6 +150,13 @@ public class Rule implements java.io.Serializable {
         }
     }
 
+    /**
+     * @param value1
+     * @param op
+     * @param value2
+     * @return
+     * @throws NoSuchElementException
+     */
     private static boolean Operation(int value1, Operation op, int value2) throws NoSuchElementException {
         switch (op) {
             case BiggerThan:
@@ -136,6 +177,10 @@ public class Rule implements java.io.Serializable {
         }
     }
 
+    /**
+     * @param rules
+     * @throws IOException
+     */
     public static void serializeRule(ArrayList<Rule> rules) throws IOException {
             FileOutputStream fileOut = new FileOutputStream(pathSeries);
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
@@ -145,7 +190,13 @@ public class Rule implements java.io.Serializable {
       //    System.out.println("Serialized data is saved in rulehistory.ser");
     }
 
+    /**
+     * @return
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
     public static ArrayList<Rule> deserializedRule() throws IOException, ClassNotFoundException {
+        ArrayList<Rule> result;
         try {
             FileInputStream fileIn = new FileInputStream(pathSeries);
             ObjectInputStream in = new ObjectInputStream(fileIn);
@@ -153,20 +204,26 @@ public class Rule implements java.io.Serializable {
 
             in.close();
             fileIn.close();
-            return rules;
-        }catch (FileNotFoundException e){
-            try{
+            result = rules;
+        } catch (FileNotFoundException e) {
+            try {
                 Files.createDirectory(Paths.get("rules"));
-            }catch (FileAlreadyExistsException fileAlreadyExistsException){
+            } catch (FileAlreadyExistsException fileAlreadyExistsException) {
 
             }
             FileOutputStream fileOut = new FileOutputStream(pathSeries);
             serializeRule(new ArrayList<>());
             fileOut.close();
-            return new ArrayList<>();
+            result = new ArrayList<>();
         }
+        return result;
     }
 
+    /**
+     * @param r
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
     public static void deleteRule(Rule r) throws IOException, ClassNotFoundException {
         ArrayList<Rule> newRules = new ArrayList<>();
         for (Rule rule:deserializedRule()){
@@ -176,6 +233,9 @@ public class Rule implements java.io.Serializable {
         serializeRule(newRules);
     }
 
+    /**
+     * @return
+     */
     @Override
     public String toString() {
         return "Metric 1: " + rule1.metric + ", Operation: " + rule1.operation + ", Value: " + rule1.value +

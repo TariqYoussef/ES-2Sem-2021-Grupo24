@@ -18,6 +18,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
+/**
+ *
+ */
 public class Controller {
 
     private File projectDir; // Pasta do projeto java
@@ -52,6 +55,9 @@ public class Controller {
         return regras;
     }
 
+    /**
+     *
+     */
     @FXML private void initialize(){
         //Para quando o programa inicia
         clearGUIElements();
@@ -95,6 +101,9 @@ public class Controller {
 
     }
 
+    /**
+     *
+     */
     /*
         Função a executar quando se clica no botão "selecionar pasta" que abre um directory chooser e após seleção
         atualiza da variável "projectDir" e o valor "path" do GUI
@@ -118,6 +127,9 @@ public class Controller {
         }
     }
 
+    /**
+     * @throws IOException
+     */
     // Função que será executada para criar o code smell excutada através do botão para tal
     @FXML private void createCodeSmell() throws IOException {
         try {
@@ -155,6 +167,10 @@ public class Controller {
 
     }
 
+    /**
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
     @FXML private void addRuleToHistory() throws IOException, ClassNotFoundException {
         if(metric1.getValue() == null || metric1op.getValue() == null || metric1value.getText().isEmpty() ||
                 metric2.getValue() == null || metric2op.getValue() == null || metric2value.getText().isEmpty() ||
@@ -185,6 +201,10 @@ public class Controller {
         }
     }
 
+    /**
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
     @FXML private void removeRuleFromHistory() throws IOException, ClassNotFoundException {
         if(listrules.getSelectionModel().getSelectedItems().isEmpty())
             showInformationMessage("Informação", "Nenhuma regra selecionada.", Alert.AlertType.INFORMATION);
@@ -196,6 +216,9 @@ public class Controller {
         }
     }
 
+    /**
+     *
+     */
     private void clearGUIElements(){
         excelBox.getChildren().clear();
         packNum.setText("");
@@ -204,6 +227,9 @@ public class Controller {
         locNum.setText("");
     }
 
+    /**
+     * @param pathCodeSmell
+     */
     private void updateGUIElements(String pathCodeSmell){
         ExelReader exelReader = new ExelReader(pathCodeSmell);
         ArrayList<String> lines = exelReader.read();
@@ -217,6 +243,9 @@ public class Controller {
         createButton.setText("Atualizar Code Smells");
     }
 
+    /**
+     * @param lines
+     */
     private void writeCharacteristicsGUI(ArrayList<String> lines) {
         int packNum = 0, classNum = 0, methodNum = 0, locNum = 0;
         ArrayList<String> packNames = new ArrayList<String>();
@@ -250,6 +279,9 @@ public class Controller {
     }
 
 
+    /**
+     * @param lines
+     */
     private void writeCodeSmellsGUI(ArrayList<String> lines){
         excelBox.getChildren().clear();
 
@@ -271,6 +303,11 @@ public class Controller {
 
     }
 
+    /**
+     * @param title
+     * @param content
+     * @param alertType
+     */
     public static void showInformationMessage(String title, String content, Alert.AlertType alertType){
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
