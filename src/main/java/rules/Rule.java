@@ -16,13 +16,12 @@ public class Rule implements java.io.Serializable {
     neste método SENÃO A regra indica que o code smell Long Method não está presente neste método.LOC_class
         */
 
-    public enum Operation {
-        BiggerThan, SmallerThan, Equal, Different,
-        BiggerThanEqual, SmallerThanEqual,
+    public enum Operation{
+        BiggerThan,SmallerThan,Equal,Different,
+        BiggerThanEqual,SmallerThanEqual,
     }
-
     public enum LogicOp {
-        AND, OR, XOR,
+        AND,OR,XOR,
     }
 
     public enum Smell {
@@ -35,21 +34,17 @@ public class Rule implements java.io.Serializable {
         private final Metric metric;
         private final Operation operation;
         private final Integer value;
-
         public SubRule(Metric metric, Operation operation, Integer value) {
             this.metric = metric;
             this.operation = operation;
             this.value = value;
         }
-
         public Metric getMetric() {
             return metric;
         }
-
         public Operation getOperation() {
             return operation;
         }
-
         public Integer getValue() {
             return value;
         }
@@ -67,7 +62,6 @@ public class Rule implements java.io.Serializable {
         this.smell = smell;
     }
     */
-
     public Rule(Metric metric1, Operation operation1, Integer value1, Metric metric2,
                 Operation operation2, Integer value2, LogicOp logicoperation, Smell smell) {
         this.rule1 = new SubRule(metric1, operation1, value1);
@@ -75,25 +69,19 @@ public class Rule implements java.io.Serializable {
         this.operation = logicoperation;
         this.smell = smell;
     }
-
     private final SubRule rule1;
     private final SubRule rule2;
     private final LogicOp operation;
     private final Smell smell;
-
-
     public SubRule getRule1() {
         return rule1;
     }
-
     public SubRule getRule2() {
         return rule2;
     }
-
     public LogicOp getOperation() {
         return operation;
     }
-
     public Smell getSmell() {
         return smell;
     }
@@ -195,6 +183,5 @@ public class Rule implements java.io.Serializable {
                 "\nOperation: " + operation +
                 "\nSmell: " + smell;
     }
-
 
 }
