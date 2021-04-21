@@ -13,13 +13,22 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ *
+ */
 public class ExelReader {
     private File file;
 
+    /**
+     * @param path
+     */
     public ExelReader(String path){
         file= new File(path);
     }
 
+    /**
+     * @return
+     */
     public ArrayList<String> read(){
         ArrayList<String> lines = new ArrayList<>();
         try {

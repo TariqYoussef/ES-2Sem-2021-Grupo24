@@ -49,6 +49,10 @@ public class MetricExtractor {
         this.srcpath = srcpath;
     }
 
+    /**
+     * @return
+     * @throws IOException
+     */
 //Main execution method----------
     //TODO Decide when/where to handle excepttion
     public List<MethodMetrics> ExtractMetrics() throws IOException {
@@ -72,6 +76,11 @@ public class MetricExtractor {
 
     }
 
+    /**
+     * @param methodMetrics
+     * @param metrics
+     * @param metricEnum
+     */
     // joins the metrics for xlsx file
     public void joinMetrics(List<MethodMetrics> methodMetrics, List<Quadruple<PackageDeclaration, ClassOrInterfaceDeclaration, MethodDeclaration, Integer>> metrics, Metric metricEnum){
         int id=1;
@@ -98,6 +107,11 @@ public class MetricExtractor {
 //Main execution method----------
 
 
+    /**
+     * @param dirPath
+     * @return
+     * @throws IOException
+     */
     /*
     Creates all compilation units required to extract all metrics
     metrics should use these compilation units as their arguments (List<CompilationUnit>)
@@ -115,11 +129,19 @@ public class MetricExtractor {
     }
 
 
+    /**
+     * @return
+     * @throws IOException
+     */
     public List<CompilationUnit> CreateCompilationUnits() throws IOException {
         return CreateCompilationUnits(srcpath);
     }
 
 
+    /**
+     * @param packageD
+     * @return
+     */
     private static PackageDeclaration ConvertOptionalToActual(Optional<PackageDeclaration> packageD){
         PackageDeclaration pack ;
         if(packageD.isPresent()){
@@ -129,6 +151,9 @@ public class MetricExtractor {
         }
     }
 
+    /**
+     * @param quadruples
+     */
     //Print function
     //TODO move this to Quadruple.toString
     private static void PrintQuad(Iterable<? extends Quadruple<PackageDeclaration, ClassOrInterfaceDeclaration, MethodDeclaration, Integer>> quadruples) {
@@ -139,6 +164,10 @@ public class MetricExtractor {
     }
 
 
+    /**
+     * @param compilationUnits
+     * @return
+     */
     //Extract Number of Methods each class
     public List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>> NOM_class(List<CompilationUnit> compilationUnits) {
         List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>> quadruples = new LinkedList<>();
@@ -160,6 +189,10 @@ public class MetricExtractor {
         return quadruples;
     }
 
+    /**
+     * @param compilationUnits
+     * @return
+     */
     //extract Cyclomatic complexity of each method
     public List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>> CYCLO_method(List<CompilationUnit> compilationUnits) {
         List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>> quads = new LinkedList<>();
@@ -220,6 +253,10 @@ public class MetricExtractor {
         return quads;
     }
 
+    /**
+     * @param compilationUnits
+     * @return
+     */
     public List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>> WMC_class(List<CompilationUnit> compilationUnits) {
         List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>> quads = new LinkedList<>();
 
@@ -276,6 +313,10 @@ public class MetricExtractor {
         return quads;
     }
 
+    /**
+     * @param compilationUnits
+     * @return
+     */
     public List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>> LOC_method(List<CompilationUnit> compilationUnits) {
         List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>> quadruples = new LinkedList<>();
         int lines = 0;
@@ -299,6 +340,10 @@ public class MetricExtractor {
         return quadruples;
     }
 
+    /**
+     * @param compilationUnits
+     * @return
+     */
     public List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>> LOC_class(List<CompilationUnit> compilationUnits) {
         List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>> quadruples = new LinkedList<>();
         for (CompilationUnit cu : compilationUnits) {
@@ -316,6 +361,10 @@ public class MetricExtractor {
         return quadruples;
     }
 
+    /**
+     * @param s
+     * @return
+     */
     private int countLines(String s){
         int n = 0;
         for(int i = 0; i < s.length(); i++) {

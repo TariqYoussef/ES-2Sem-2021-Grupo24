@@ -7,6 +7,9 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 
 import java.util.NoSuchElementException;
 
+/**
+ *
+ */
 public class MethodMetrics {
     private final int id;
     private PackageDeclaration packageOfMethod;
@@ -21,6 +24,12 @@ public class MethodMetrics {
     private int loc_method;
     private int cyclo_method;
 
+    /**
+     * @param id
+     * @param packageOfMethod
+     * @param classOfMethod
+     * @param method
+     */
     public MethodMetrics(int id, PackageDeclaration packageOfMethod, ClassOrInterfaceDeclaration classOfMethod, MethodDeclaration method) {
         this.id = id;
         this.packageOfMethod = packageOfMethod;
@@ -28,6 +37,9 @@ public class MethodMetrics {
         this.method = method;
     }
 
+    /**
+     * @return
+     */
     public ClassOrInterfaceDeclaration getClassOfMethod() {
         return classOfMethod;
     }
@@ -44,6 +56,11 @@ public class MethodMetrics {
         return method;
     }
 
+    /**
+     * @param metric
+     * @param value
+     * @throws NoSuchElementException
+     */
     public void setMetric(Metric metric, int value)throws NoSuchElementException{
         switch(metric)
         {
@@ -67,6 +84,11 @@ public class MethodMetrics {
         }
     }
 
+    /**
+     * @param metric
+     * @return
+     * @throws NoSuchElementException
+     */
     public int getMetric(Metric metric) throws NoSuchElementException{
         switch(metric)
         {

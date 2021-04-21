@@ -4,8 +4,15 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+/**
+ *
+ */
 public class Main extends Application {
 
+    /**
+     * @param primaryStage
+     * @throws Exception
+     */
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("main.fxml"));
         primaryStage.setTitle("Painel de utilização");
@@ -14,6 +21,9 @@ public class Main extends Application {
         primaryStage.show();
     }
 
+    /**
+     * @param args
+     */
     public static void main(String[] args) {
         launch(args);
     }
