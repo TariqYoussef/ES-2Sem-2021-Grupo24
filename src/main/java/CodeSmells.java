@@ -99,7 +99,7 @@ public class CodeSmells {
         row.createCell(0).setCellValue(method.getId());
         row.createCell(1).setCellValue(method.getPackageOfMethod().getNameAsString());
         row.createCell(2).setCellValue(method.getClassOfMethod().getNameAsString());
-        row.createCell(3).setCellValue(method.getMethod().getNameAsString());
+        row.createCell(3).setCellValue(method.getMethod().getDeclarationAsString(false,false,false));
         row.createCell(4).setCellValue(method.getMetric(Metric.NOM_class));//getNom_class());
         row.createCell(5).setCellValue(method.getMetric(Metric.LOC_class));//getLoc_class());
         row.createCell(6).setCellValue(method.getMetric(Metric.WMC_class));//getWmc_class());

@@ -185,28 +185,32 @@ public class Controller {
                 rulelogic.getValue() == null || rulesmell.getValue() == null){
 
             showInformationMessage("Informação", "Certifique-se que todos os valores estão preenchidos.", Alert.AlertType.INFORMATION);
-        } else {
-            Rule rule = new Rule(metric1.getValue(), metric1op.getValue(), Integer.parseInt(metric1value.getText()),
-                    metric2.getValue(), metric2op.getValue(), Integer.parseInt(metric2value.getText()),
-                    rulelogic.getValue(), rulesmell.getValue());
+            return;
+        }
+        Rule rule = new Rule(metric1.getValue(), metric1op.getValue(), Integer.parseInt(metric1value.getText()),
+                metric2.getValue(), metric2op.getValue(), Integer.parseInt(metric2value.getText()),
+                rulelogic.getValue(), rulesmell.getValue());
 
-            ArrayList<Rule> rules2add = Rule.deserializedRule();
-            boolean addRule=true;
-            for (Rule rule2Compare:rules2add) {
-                if(rule2Compare.toString().equals(rule.toString()))
-                    addRule=false;
-                //Dar break era o ideal
-            }
-            if(addRule) {
-                rules2add.add(rule);
-                Rule.serializeRule(rules2add);
-                ObservableList<Rule> regras = FXCollections.observableArrayList(Rule.deserializedRule());
-                listrules.setItems(regras);
-                showInformationMessage("Informação", "A regra foi adicionada com sucesso.", Alert.AlertType.INFORMATION);
-            } else {
-                showInformationMessage("Informação", "Já existe essa regra.", Alert.AlertType.INFORMATION);
+        ArrayList<Rule> rules2add = Rule.deserializedRule();
+        boolean addRule=true;
+        for (Rule rule2Compare:rules2add) {
+            System.out.println(rule2Compare);
+            if(rule2Compare.toString().equals(rule.toString())){
+                addRule=false;
+                break;
             }
         }
+
+        if(addRule) {
+            rules2add.add(rule);
+            Rule.serializeRule(rules2add);
+            ObservableList<Rule> regras = FXCollections.observableArrayList(Rule.deserializedRule());
+            listrules.setItems(regras);
+            showInformationMessage("Informação", "A regra foi adicionada com sucesso.", Alert.AlertType.INFORMATION);
+        } else {
+            showInformationMessage("Informação", "Já existe essa regra.", Alert.AlertType.INFORMATION);
+        }
+
     }
 
     /**
