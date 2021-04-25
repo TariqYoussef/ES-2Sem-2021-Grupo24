@@ -1,3 +1,4 @@
+import codeSmells.CodeSmellsCreator;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -148,18 +149,18 @@ public class Controller {
             List<Rule> longRules = getRegras().filtered(pr2);
 
             // criar code smells
-            CodeSmells codeSmells = new CodeSmells(metrics, projectDir.getName(), godRules, longRules);
+            CodeSmellsCreator codeSmellsCreator = new CodeSmellsCreator(metrics, projectDir.getName(), godRules, longRules);
 
             // criar a pasta onde se vai guardar o ficheiro xlsx
             try{
                 Files.createDirectory(Paths.get(pathSave));
-                codeSmells.createCodeSmellsXlsxFile(new File(pathSave));
+                codeSmellsCreator.createCodeSmellsXlsxFile(new File(pathSave));
             }catch (FileAlreadyExistsException e){
                 System.out.println("A pasta já existe");
             }
 
             // guardar code smells
-            codeSmells.addCodeSmellsToXlsx(new File(pathSave));
+            codeSmellsCreator.addCodeSmellsToXlsx(new File(pathSave));
 
             updateGUIElements(pathCodeSmell);
 

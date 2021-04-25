@@ -1,3 +1,4 @@
+package codeSmells;
 
 import rules.Metric;
 import metrics.MethodMetrics;
@@ -15,7 +16,7 @@ import java.util.function.Predicate;
 /**
  *
  */
-public class CodeSmells {
+public class CodeSmellsCreator {
 
     private MetricExtractor metrics;
     private String name;
@@ -27,7 +28,7 @@ public class CodeSmells {
      * @param metrics
      * @param name
      */
-    public CodeSmells(MetricExtractor metrics, String name, List<Rule> godRules, List<Rule> longRules){
+    public CodeSmellsCreator(MetricExtractor metrics, String name, List<Rule> godRules, List<Rule> longRules){
 
         this.metrics = metrics;
         this.name = name + "_metrics.xlsx";
