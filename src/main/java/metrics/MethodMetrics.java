@@ -19,7 +19,11 @@ public class MethodMetrics {
     private ClassOrInterfaceDeclaration classOfMethod;
     private MethodDeclaration method;
 
-
+/*
+ TODO maybe alterar comportamento das metricas para usarem herança, haver uma class abstrata Metric que estas implementavam
+        MethodMetrics armazenaria uma lista de Metrics que dps poderia ser iterada
+        problema: como temos a certeza que cada objeto tem todas as metyricas calculadas?
+*/
     private int nom_class;
     private int loc_class;
     private int wmc_class;

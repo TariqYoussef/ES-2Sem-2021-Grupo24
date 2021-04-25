@@ -26,6 +26,7 @@ public class ExelReader {
         file= new File(path);
     }
 
+    //TODO static
     /**
      * @return
      */

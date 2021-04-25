@@ -1,5 +1,9 @@
 package util;
 
+import com.github.javaparser.ast.PackageDeclaration;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.MethodDeclaration;
+
 /**
  * @param <A>
  * @param <B>
