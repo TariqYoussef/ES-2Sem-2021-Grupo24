@@ -52,14 +52,24 @@ public class Controller {
 
     @FXML private ListView<Rule> listrules;
 
+    @FXML private Button removerule;
+    @FXML private Button changerule;
+    @FXML private Button donerulebtn;
+
     public static ObservableList<Rule> regras;
+
+    private Rule oldRule;
 
     public ObservableList<Rule> getRegras() {
         return regras;
     }
 
     /**
+     *(Explicaçao do clearGUIElements)
      *
+     * The FXML when initializing fills the choiceboxes with the corresponding values
+     * Once started the FXML will be observing the clicks the user does
+     * Once the user clicks in a rule from the rule history table the choiceboxes will fill with the values from the rule clicked
      */
     @FXML private void initialize(){
         //Para quando o programa inicia
@@ -177,32 +187,21 @@ public class Controller {
     }
 
     /**
-     * @throws IOException
-     * @throws ClassNotFoundException
+     *  Once all the values from the choiceboxes are filled a new rule with those values is created
+     *  The program checks if the rule created already exists in the set of rules, if it doesn't exist then it proceeds
+     *  That rule is then added to the current set of rules and sent back to the serialized file with the serializeRule method
+     * @throws IOException IO operation failed
+     * @throws ClassNotFoundException Class Rule doesn't exist
      */
     @FXML private void addRuleToHistory() throws IOException, ClassNotFoundException {
-        if(metric1.getValue() == null || metric1op.getValue() == null || metric1value.getText().isEmpty() ||
-                metric2.getValue() == null || metric2op.getValue() == null || metric2value.getText().isEmpty() ||
-                rulelogic.getValue() == null || rulesmell.getValue() == null){
-
-            showInformationMessage("Informação", "Certifique-se que todos os valores estão preenchidos.", Alert.AlertType.INFORMATION);
+        Rule rule = getRule();
+        if(rule==null)
             return;
-        }
-        Rule rule = new Rule(metric1.getValue(), metric1op.getValue(), Integer.parseInt(metric1value.getText()),
-                metric2.getValue(), metric2op.getValue(), Integer.parseInt(metric2value.getText()),
-                rulelogic.getValue(), rulesmell.getValue());
 
+        boolean addRule = Rule.doesRuleExist(rule);
         ArrayList<Rule> rules2add = Rule.deserializedRule();
-        boolean addRule=true;
-        for (Rule rule2Compare:rules2add) {
-            System.out.println(rule2Compare);
-            if(rule2Compare.toString().equals(rule.toString())){
-                addRule=false;
-                break;
-            }
-        }
 
-        if(addRule) {
+        if(!addRule) {
             rules2add.add(rule);
             Rule.serializeRule(rules2add);
             ObservableList<Rule> regras = FXCollections.observableArrayList(Rule.deserializedRule());
@@ -211,12 +210,12 @@ public class Controller {
         } else {
             showInformationMessage("Informação", "Já existe essa regra.", Alert.AlertType.INFORMATION);
         }
-
     }
 
     /**
-     * @throws IOException
-     * @throws ClassNotFoundException
+     *  The program calls the static method from Rule class to delete the rule selected by the user
+     * @throws IOException IO operation failed
+     * @throws ClassNotFoundException Class Rule doesn't exist
      */
     @FXML private void removeRuleFromHistory() throws IOException, ClassNotFoundException {
         if(listrules.getSelectionModel().getSelectedItems().isEmpty())
@@ -227,6 +226,80 @@ public class Controller {
             listrules.setItems(regras);
             showInformationMessage("Informação", "A regra foi eliminada com sucesso.", Alert.AlertType.INFORMATION);
         }
+    }
+
+    /**
+     * The user chooses the rule he wants to edit
+     * The program hides the remove and edit button and swaps for a done button
+     * The follow up to this method is finishChangeRuleFromHistory().
+     */
+    @FXML private void changeRuleFromHistory(){
+        if(listrules.getSelectionModel().getSelectedItems().isEmpty())
+            showInformationMessage("Informação", "Nenhuma regra selecionada.", Alert.AlertType.INFORMATION);
+        else {
+            this.oldRule =listrules.getSelectionModel().getSelectedItem();
+            removerule.setVisible(false);
+            removerule.setDisable(true);
+
+            changerule.setVisible(false);
+            changerule.setDisable(true);
+
+            donerulebtn.setVisible(true);
+            donerulebtn.setDisable(false);
+
+            showInformationMessage("Informação", "Preencha com os valores que deseja alterar", Alert.AlertType.INFORMATION);
+        }
+    }
+
+    /**
+     * After selecting the rule to be edited and changing the button layout from changeRuleFromHistory()
+     * The program check if the updated rule already exists and if not it updates the rule set
+     * Once it updates the remove and edit button reappear and the done button goes hidden again
+     */
+    @FXML private void finishChangeRuleFromHistory() {
+        Rule newRule = getRule();
+        if(newRule==null)
+            return;
+
+        try {
+            boolean addRule = Rule.doesRuleExist(newRule);
+            if(!addRule) {
+                Rule.changeRule(this.oldRule,newRule);
+                ObservableList<Rule> regras = FXCollections.observableArrayList(Rule.deserializedRule());
+                listrules.setItems(regras);
+                showInformationMessage("Informação", "A regra foi alterada com sucesso.", Alert.AlertType.INFORMATION);
+            } else {
+                showInformationMessage("Informação", "Já existe essa regra.", Alert.AlertType.INFORMATION);
+            }
+        } catch (IOException | ClassNotFoundException ioException) {
+            ioException.printStackTrace();
+        }
+        donerulebtn.setDisable(true);
+        donerulebtn.setVisible(false);
+
+        removerule.setDisable(false);
+        removerule.setVisible(true);
+
+        changerule.setDisable(false);
+        changerule.setVisible(true);
+        this.oldRule=null;
+    }
+
+    /**
+     * The program gets the values selected from header and creates a new rule with those values
+     * @return Rule selected for removal or editing
+     */
+    private Rule getRule(){
+        if(metric1.getValue() == null || metric1op.getValue() == null || metric1value.getText().isEmpty() ||
+                metric2.getValue() == null || metric2op.getValue() == null || metric2value.getText().isEmpty() ||
+                rulelogic.getValue() == null || rulesmell.getValue() == null){
+
+            showInformationMessage("Informação", "Certifique-se que todos os valores estão preenchidos.", Alert.AlertType.INFORMATION);
+            return null;
+        }
+        return new Rule(metric1.getValue(), metric1op.getValue(), Integer.parseInt(metric1value.getText()),
+                metric2.getValue(), metric2op.getValue(), Integer.parseInt(metric2value.getText()),
+                rulelogic.getValue(), rulesmell.getValue());
     }
 
     /**
