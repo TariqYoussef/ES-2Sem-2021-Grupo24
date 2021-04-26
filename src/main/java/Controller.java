@@ -52,16 +52,15 @@ public class Controller {
 
     @FXML private ListView<Rule> listrules;
 
+    @FXML private Button addrule;
     @FXML private Button removerule;
     @FXML private Button changerule;
     @FXML private Button donerulebtn;
 
-    public static ObservableList<Rule> regras;
-
     private Rule oldRule;
 
     public ObservableList<Rule> getRegras() {
-        return regras;
+        return listrules.getItems();
     }
 
     /**
@@ -84,8 +83,7 @@ public class Controller {
         rulesmell.getItems().setAll(Rule.Smell.values());
 
         try {
-            regras = FXCollections.observableArrayList(Rule.deserializedRule());
-            listrules.setItems(regras);
+            listrules.setItems(FXCollections.observableArrayList(Rule.deserializedRule()));
 
                 listrules.setOnMouseClicked(mouseEvent -> {
                     if(listrules.getSelectionModel().getSelectedItem()!=null){
@@ -199,12 +197,12 @@ public class Controller {
             return;
 
         boolean addRule = Rule.doesRuleExist(rule);
-        ArrayList<Rule> rules2add = Rule.deserializedRule();
+        ArrayList<Rule> rules2add = new ArrayList<>(getRegras());
 
         if(!addRule) {
             rules2add.add(rule);
             Rule.serializeRule(rules2add);
-            ObservableList<Rule> regras = FXCollections.observableArrayList(Rule.deserializedRule());
+            ObservableList<Rule> regras = FXCollections.observableArrayList(rules2add);
             listrules.setItems(regras);
             showInformationMessage("Informação", "A regra foi adicionada com sucesso.", Alert.AlertType.INFORMATION);
         } else {
@@ -244,6 +242,9 @@ public class Controller {
             changerule.setVisible(false);
             changerule.setDisable(true);
 
+            addrule.setVisible(false);
+            addrule.setDisable(true);
+
             donerulebtn.setVisible(true);
             donerulebtn.setDisable(false);
 
@@ -282,6 +283,9 @@ public class Controller {
 
         changerule.setDisable(false);
         changerule.setVisible(true);
+
+        addrule.setDisable(false);
+        addrule.setVisible(true);
         this.oldRule=null;
     }
 
