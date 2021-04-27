@@ -104,24 +104,24 @@ public class Rule implements java.io.Serializable {
     }
 
     /**
-     * @param sr
-     * @return
+     * @param sr SubRule given
+     * @return returns the metric of the subrule
      */
     public Metric getMetric(SubRule sr) {
         return sr.metric;
     }
 
     /**
-     * @param sr
-     * @return
+     * @param sr SubRule given
+     * @return returns the metric operation of the subrule
      */
     public Operation getMetricOperation(SubRule sr) {
         return sr.operation;
     }
 
     /**
-     * @param sr
-     * @return
+     * @param sr SubRule given
+     * @return returns the metric value of the subrule
      */
     public Integer getMetricValue(SubRule sr) {
         return sr.value;
@@ -178,8 +178,9 @@ public class Rule implements java.io.Serializable {
     }
 
     /**
-     * @param rules
-     * @throws IOException
+     * Method to store an ArrayList of rules to rules/rulehistory.ser, replacing the old set of rules
+     * @param rules ArrayList of rules to be stored
+     * @throws IOException IO operation failed
      */
     public static void serializeRule(ArrayList<Rule> rules) throws IOException {
             FileOutputStream fileOut = new FileOutputStream(pathSeries);
@@ -187,13 +188,14 @@ public class Rule implements java.io.Serializable {
             out.writeObject(rules);
             out.close();
             fileOut.close();
-      //    System.out.println("Serialized data is saved in rulehistory.ser");
     }
 
     /**
-     * @return
-     * @throws IOException
-     * @throws ClassNotFoundException
+     * Method do get the current set of rules stored in rules/rulehistory.ser
+     * In case the file rulehistory.ser is not found, it's created and added an empty ArrayList of rules
+     * @return An ArrayList with a set of rules
+     * @throws IOException IO operation failed
+     * @throws ClassNotFoundException Class Rule doesn't exist
      */
     public static ArrayList<Rule> deserializedRule() throws IOException, ClassNotFoundException {
         ArrayList<Rule> result;
@@ -220,9 +222,13 @@ public class Rule implements java.io.Serializable {
     }
 
     /**
-     * @param r
-     * @throws IOException
-     * @throws ClassNotFoundException
+     * A new ArrayList of Rule is created, the current rules are obtained from the deserializeRule method.
+     * All the rules from the current rule list are passed to the new ArrayList,
+     * unless the rule is equal to the rule we want to delete, in this case the for each loop skips it,
+     * finally the new ArrayList is serialized and it replaces the current set of rules.
+     * @param r Rule to be deleted
+     * @throws IOException IO operation failed
+     * @throws ClassNotFoundException Class Rule doesn't exist.
      */
     public static void deleteRule(Rule r) throws IOException, ClassNotFoundException {
         ArrayList<Rule> newRules = new ArrayList<>();
@@ -234,7 +240,47 @@ public class Rule implements java.io.Serializable {
     }
 
     /**
-     * @return
+     *  A new ArrayList of Rule is created, the current rules are obtained from the deserializeRule method.
+     *  All the rules from the current rule list are passed to the new ArrayList,
+     *  unless the rule is equal to the rule we want to update, in this case that rule is swapped with the new Rule.
+     *  finally the new ArrayList is serialized and it replaces the current set of rules.
+     * @param oldRule Rule to be changed
+     * @param newRule Rule updated
+     * @throws IOException IO operation failed
+     * @throws ClassNotFoundException Class Rule doesn't exist.
+     */
+    public static void changeRule(Rule oldRule, Rule newRule) throws IOException, ClassNotFoundException {
+        ArrayList<Rule> newRules = new ArrayList<>();
+        for (Rule rule:deserializedRule()){
+            if(!rule.toString().equals(oldRule.toString()))
+                newRules.add(rule);
+            else {
+                newRules.add(newRule);
+            }
+        }
+        serializeRule(newRules);
+    }
+
+    /**
+     * The rule given enters a for each loop and is compared to all the rules in the rulehistory.ser file
+     * @param rule rule to be checked
+     * @return true if rule already exists and false if not
+     * @throws IOException IO operation failed
+     * @throws ClassNotFoundException Class Rule doesn't exist
+     */
+    public static boolean doesRuleExist(Rule rule) throws IOException, ClassNotFoundException {
+        ArrayList<Rule> rules2add = Rule.deserializedRule();
+        for (Rule rule2Compare:rules2add) {
+            System.out.println(rule2Compare);
+            if(rule2Compare.toString().equals(rule.toString())){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @return A detailed way to see the rule selected.
      */
     @Override
     public String toString() {

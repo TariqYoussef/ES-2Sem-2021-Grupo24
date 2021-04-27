@@ -278,7 +278,15 @@
                            </rowConstraints>
                            <children>
                               <ListView fx:id="listrules" prefHeight="350.0" prefWidth="855.0" GridPane.columnIndex="1" />
-                              <Button fx:id="removerule" mnemonicParsing="false" onAction="#removeRuleFromHistory" text="Remover" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                              <Button fx:id="removerule" mnemonicParsing="false" onAction="#removeRuleFromHistory" text="Remover" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                                 <GridPane.margin>
+                                    <Insets top="100.0" />
+                                 </GridPane.margin></Button>
+                              <Button fx:id="changerule" mnemonicParsing="false" onAction="#changeRuleFromHistory" text="Editar" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                                 <GridPane.margin>
+                                    <Insets bottom="100.0" />
+                                 </GridPane.margin></Button>
+                              <Button fx:id="donerulebtn" disable="true" mnemonicParsing="false" onAction="#finishChangeRuleFromHistory" text="Done" visible="false" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
                            </children>
                         </GridPane>
                      </children>
