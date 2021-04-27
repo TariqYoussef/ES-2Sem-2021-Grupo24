@@ -20,7 +20,7 @@ public class ExelReader {
     private File file;
 
     /**
-     * @param path
+     * @param path path to exel file
      */
     public ExelReader(String path){
         file= new File(path);
@@ -28,7 +28,7 @@ public class ExelReader {
 
     //TODO static
     /**
-     * @return
+     * @return return the exel file as a list of string
      */
     public ArrayList<String> read(){
         ArrayList<String> lines = new ArrayList<>();

@@ -25,8 +25,10 @@ public class CodeSmellsCreator {
     private List<Rule> longRules;
 
     /**
-     * @param metrics
-     * @param name
+     * @param metrics MetricExtractor object that will be used to get the metrics
+     * @param name name of the excel file
+     * @param godRules //TODO david
+     * @param longRules //TODO david
      */
     public CodeSmellsCreator(MetricExtractor metrics, String name, List<Rule> godRules, List<Rule> longRules){
 
@@ -37,7 +39,9 @@ public class CodeSmellsCreator {
     }
 
     /**
-     * @param dir
+     * This method creates an empty excel file in which will be written the code smells and metrics.
+     * This method should only be executed whenever the file doesn't exist.
+     * @param dir dir where the excel file will be placed
      * @throws IOException
      */
     public void createCodeSmellsXlsxFile(File dir) throws IOException {
@@ -46,7 +50,8 @@ public class CodeSmellsCreator {
     }
 
     /**
-     * @param dir
+     * This method is used to add/replace the content of the code smells excel file.
+     * @param dir dir where the excel file is placed
      * @throws IOException
      */
     public void addCodeSmellsToXlsx(File dir) throws IOException {
@@ -76,25 +81,27 @@ public class CodeSmellsCreator {
     }
 
     /**
-     * @param rowhead
+     * This method is used to create the header of the table in the excel file.
+     * @param rowHead object that specifies in which row of the excel file the header will be written
      */
-    private void createHeaderCodeSmellsXlsx(XSSFRow rowhead){
-        rowhead.createCell(0).setCellValue("MethodID");
-        rowhead.createCell(1).setCellValue("package");
-        rowhead.createCell(2).setCellValue("class");
-        rowhead.createCell(3).setCellValue("method");
-        rowhead.createCell(4).setCellValue("NOM_class");
-        rowhead.createCell(5).setCellValue("LOC_class");
-        rowhead.createCell(6).setCellValue("WMC_class");
-        rowhead.createCell(7).setCellValue("is_God_Class");
-        rowhead.createCell(8).setCellValue("LOC_method");
-        rowhead.createCell(9).setCellValue("CYCLO_method");
-        rowhead.createCell(10).setCellValue("is_Long_Method");
+    private void createHeaderCodeSmellsXlsx(XSSFRow rowHead){
+        rowHead.createCell(0).setCellValue("MethodID");
+        rowHead.createCell(1).setCellValue("package");
+        rowHead.createCell(2).setCellValue("class");
+        rowHead.createCell(3).setCellValue("method");
+        rowHead.createCell(4).setCellValue("NOM_class");
+        rowHead.createCell(5).setCellValue("LOC_class");
+        rowHead.createCell(6).setCellValue("WMC_class");
+        rowHead.createCell(7).setCellValue("is_God_Class");
+        rowHead.createCell(8).setCellValue("LOC_method");
+        rowHead.createCell(9).setCellValue("CYCLO_method");
+        rowHead.createCell(10).setCellValue("is_Long_Method");
     }
 
     /**
-     * @param row
-     * @param method
+     * This method is used to write in the excel file the metrics and code smells of a given method.
+     * @param row object that specifies in which row of the excel file the line will be written
+     * @param method object that will be used to get the values of the cells
      */
     private void addRowCodeSmellsXlsx(XSSFRow row, MethodMetrics method){
         row.createCell(0).setCellValue(method.getId());
