@@ -64,8 +64,6 @@ public class Controller {
     }
 
     /**
-     *(Explicaçao do clearGUIElements)
-     *
      * The FXML when initializing fills the choiceboxes with the corresponding values
      * Once started the FXML will be observing the clicks the user does
      * Once the user clicks in a rule from the rule history table the choiceboxes will fill with the values from the rule clicked
@@ -113,12 +111,9 @@ public class Controller {
     }
 
     /**
-     *
+     *  This method starts when select project button is clicked.
+     *  It checks if a code smells file exists in the selected project to update GUI.
      */
-    /*
-        Função a executar quando se clica no botão "selecionar pasta" que abre um directory chooser e após seleção
-        atualiza da variável "projectDir" e o valor "path" do GUI
-    */
     @FXML private void openProject(){
         DirectoryChooser directoryChooser = new DirectoryChooser();
         Stage stage = new Stage();
@@ -139,10 +134,15 @@ public class Controller {
     }
 
     /**
-     * @throws IOException
+     * Used to launch the creation of the code smells excel file.
+     * This method starts when create code smells button is clicked.
+     * It creates a MetricExtractor object that will be used to extract the metrics needed to create the code smells file
+     * then it filters the rules.
+     * After this, it creates a codeSmellsCreator object that will be responsible to create the excel file. This object will
+     * be used to call different functions responsible of the creation of the excel file.
      */
     // Função que será executada para criar o code smell excutada através do botão para tal
-    @FXML private void createCodeSmell() throws IOException {
+    @FXML private void createCodeSmell(){
         try {
             String pathSave = projectDir.getAbsolutePath() + "/" + projectDir.getName() + "_metrics/";
             String pathCodeSmell = pathSave + projectDir.getName() + "_metrics.xlsx";
@@ -307,7 +307,7 @@ public class Controller {
     }
 
     /**
-     *
+     * Method used to clear all GUI elements of a project in the program.
      */
     private void clearGUIElements(){
         excelBox.getChildren().clear();
@@ -318,7 +318,8 @@ public class Controller {
     }
 
     /**
-     * @param pathCodeSmell
+     * Method used to update GUI elements of a project in the program.
+     * @param pathCodeSmell path to code smells excel file
      */
     private void updateGUIElements(String pathCodeSmell){
         ExelReader exelReader = new ExelReader(pathCodeSmell);
@@ -370,7 +371,8 @@ public class Controller {
 
 
     /**
-     * @param lines
+     * This method is used to write the code smells excel file in the GUI of the program
+     * @param lines each line represents a row in the excel file
      */
     private void writeCodeSmellsGUI(ArrayList<String> lines){
         excelBox.getChildren().clear();
@@ -394,9 +396,10 @@ public class Controller {
     }
 
     /**
-     * @param title
-     * @param content
-     * @param alertType
+     * This method is used to show a informative popup message
+     * @param title title of the window
+     * @param content content of the message
+     * @param alertType alert type EX: ERROR, INFORMATION, etc
      */
     public static void showInformationMessage(String title, String content, Alert.AlertType alertType){
         Alert alert = new Alert(alertType);
