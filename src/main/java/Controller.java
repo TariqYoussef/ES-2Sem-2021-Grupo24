@@ -57,6 +57,16 @@ public class Controller {
     @FXML private Button changerule;
     @FXML private Button donerulebtn;
 
+    //Confusion matrix
+    private File excelToCompare; //Excel for confusion matrix
+
+    @FXML private Text path2; // Path of Excel file
+    @FXML private Label totalnumber;
+    @FXML private Label tpnumber;
+    @FXML private Label fpnumber;
+    @FXML private Label fnnumber;
+    @FXML private Label tnnumber;
+
     private Rule oldRule;
 
     public ObservableList<Rule> getRegras() {

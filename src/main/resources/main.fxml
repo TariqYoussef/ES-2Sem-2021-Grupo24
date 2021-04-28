@@ -44,8 +44,8 @@
                         </ScrollPane>
                         <GridPane>
                           <columnConstraints>
-                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="157.0" minWidth="157.0" prefWidth="157.0" />
-                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="449.0" minWidth="433.0" prefWidth="443.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="191.0" minWidth="157.0" prefWidth="191.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="449.0" minWidth="415.0" prefWidth="415.0" />
                           </columnConstraints>
                           <rowConstraints>
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -293,6 +293,145 @@
                  </GridPane>
                </children>
             </GridPane>
+           </content>
+       </Tab>
+       <Tab fx:id="tab3" closable="false" text="Comparar Resultados">
+           <content>
+               <GridPane>
+                   <columnConstraints>
+                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                   </columnConstraints>
+                   <rowConstraints>
+                       <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                   </rowConstraints>
+                   <children>
+                       <GridPane maxWidth="1000.0" minHeight="650.0" minWidth="1000.0" GridPane.halignment="CENTER">
+                           <columnConstraints>
+                               <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" />
+                           </columnConstraints>
+                           <rowConstraints>
+                               <RowConstraints maxHeight="96.0" minHeight="0.0" prefHeight="51.0" vgrow="SOMETIMES" />
+                               <RowConstraints maxHeight="224.0" minHeight="0.0" prefHeight="45.0" vgrow="SOMETIMES" />
+                               <RowConstraints maxHeight="274.0" minHeight="10.0" prefHeight="106.0" vgrow="SOMETIMES" />
+                               <RowConstraints maxHeight="514.0" minHeight="245.0" prefHeight="304.0" vgrow="SOMETIMES" />
+                               <RowConstraints maxHeight="178.0" minHeight="50.0" prefHeight="159.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                           <children>
+                               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Comparar Resultados" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                                   <font>
+                                       <Font name="System Bold" size="20.0" />
+                                   </font>
+                               </Text>
+                               <GridPane prefHeight="81.0" prefWidth="1000.0" GridPane.rowIndex="1">
+                                   <columnConstraints>
+                                       <ColumnConstraints hgrow="SOMETIMES" maxWidth="285.0" minWidth="83.0" prefWidth="83.0" />
+                                       <ColumnConstraints hgrow="SOMETIMES" maxWidth="704.0" minWidth="300.0" prefWidth="704.0" />
+                                       <ColumnConstraints hgrow="SOMETIMES" />
+                                   </columnConstraints>
+                                   <rowConstraints>
+                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                   </rowConstraints>
+                                   <children>
+                                       <Button mnemonicParsing="false" text="Selecionar Excel">
+                                           <GridPane.margin>
+                                               <Insets left="25.0" right="25.0" />
+                                           </GridPane.margin>
+                                       </Button>
+                                       <Text fx:id="path2" strokeType="OUTSIDE" strokeWidth="0.0" text="Nenhum ficheiro excel selecionado." GridPane.columnIndex="1" />
+                                   </children>
+                               </GridPane>
+                               <GridPane layoutX="10.0" layoutY="210.0" prefHeight="204.0" prefWidth="991.0" GridPane.rowIndex="3">
+                                   <columnConstraints>
+                                       <ColumnConstraints hgrow="SOMETIMES" maxWidth="767.0" minWidth="16.0" prefWidth="32.0" />
+                                       <ColumnConstraints hgrow="SOMETIMES" maxWidth="865.0" minWidth="8.0" prefWidth="492.0" />
+                                       <ColumnConstraints hgrow="SOMETIMES" maxWidth="865.0" minWidth="10.0" prefWidth="383.0" />
+                                       <ColumnConstraints hgrow="SOMETIMES" maxWidth="767.0" minWidth="16.0" prefWidth="93.0" />
+                                   </columnConstraints>
+                                   <rowConstraints>
+                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                   </rowConstraints>
+                                   <children>
+                                       <GridPane gridLinesVisible="true" GridPane.columnIndex="1">
+                                           <columnConstraints>
+                                               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                           </columnConstraints>
+                                           <rowConstraints>
+                                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                           </rowConstraints>
+                                           <children>
+                                               <Label text="Predicted Positive" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                                                   <font>
+                                                       <Font size="14.0" />
+                                                   </font>
+                                               </Label>
+                                               <Label text="Predicted Negative" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                                                   <font>
+                                                       <Font size="14.0" />
+                                                   </font>
+                                               </Label>
+                                               <Label text="Actually Positive" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                                                   <font>
+                                                       <Font size="14.0" />
+                                                   </font>
+                                               </Label>
+                                               <Label text="Actually Negative" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                                                   <font>
+                                                       <Font size="14.0" />
+                                                   </font>
+                                               </Label>
+                                               <Label fx:id="totalnumber" text="Total: Number" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                                                   <font>
+                                                       <Font size="14.0" />
+                                                   </font>
+                                               </Label>
+                                               <Label text="True Positive (TP)" textAlignment="CENTER" textFill="#238a4a" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP">
+                                                   <font>
+                                                       <Font name="System Bold" size="14.0" />
+                                                   </font>
+                                                   <GridPane.margin>
+                                                       <Insets top="10.0" />
+                                                   </GridPane.margin>
+                                               </Label>
+                                               <Label text="False Positive (FP)" textAlignment="CENTER" textFill="#c3592f" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP">
+                                                   <font>
+                                                       <Font name="System Bold" size="14.0" />
+                                                   </font>
+                                                   <GridPane.margin>
+                                                       <Insets top="10.0" />
+                                                   </GridPane.margin>
+                                               </Label>
+                                               <Label text="False Negative (FN)" textAlignment="CENTER" textFill="#bf0e0e" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="TOP">
+                                                   <font>
+                                                       <Font name="System Bold" size="14.0" />
+                                                   </font>
+                                                   <GridPane.margin>
+                                                       <Insets top="10.0" />
+                                                   </GridPane.margin>
+                                               </Label>
+                                               <Label text="True Negative (TN)" textAlignment="CENTER" textFill="#6a9a3b" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="TOP">
+                                                   <font>
+                                                       <Font name="System Bold" size="14.0" />
+                                                   </font>
+                                                   <GridPane.margin>
+                                                       <Insets top="10.0" />
+                                                   </GridPane.margin>
+                                               </Label>
+                                               <Label fx:id="fnnumber" text="Number" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+                                               <Label fx:id="tnnumber" text="Number" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+                                               <Label fx:id="fpnumber" text="Number" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                                               <Label fx:id="tpnumber" text="Number" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                                           </children>
+                                       </GridPane>
+                                   </children>
+                               </GridPane>
+                           </children>
+                       </GridPane>
+                   </children>
+               </GridPane>
            </content>
        </Tab>
    </tabs>
