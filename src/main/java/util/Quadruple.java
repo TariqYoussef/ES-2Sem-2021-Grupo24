@@ -1,10 +1,10 @@
 package util;
 
-import com.github.javaparser.ast.PackageDeclaration;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
-
 /**
+ * <p>Generic Quadruple class created to encapsulate any 4 objects into only one</p>
+ * <p>Has four paramethers each with its own getter and setter</p>
+ * <p>Each Quadruple can be instantiated with any kind of class as its four parameters</p>
+ *
  * @param <A> First object of the quadruple
  * @param <B> Second object of the quadruple
  * @param <C> Third object of the quadruple
@@ -28,6 +28,35 @@ public class Quadruple <A, B, C, D>{
         this.c = c;
         this.d = d;
     }
+
+//  TODO abstract Quadruple and make a child that is specific for PackageDeclaration, ClassOrInterfaceDeclaration, MethodDeclaration, Integer
+    // dont know if this is a good idea
+    /**
+     *
+     */
+    @Override
+    public String toString() {
+        return "Quadruple{" +
+                this.a.getClass().toString() + "=" + a +
+                this.b.getClass().toString() + "=" + b +
+                this.c.getClass().toString() + "=" + c +
+                this.d.getClass().toString() + "=" + d +
+                "}";
+    }
+
+/*
+/**
+* @param quadruples
+*/
+/*
+    //Print function
+    public static void PrintQuad() {
+        for (Quadruple<PackageDeclaration, ClassOrInterfaceDeclaration, MethodDeclaration, Integer> quadruple : quadruples) {
+            System.out.println("Package:" + quadruple.getA().getNameAsString() + ";Class:" + quadruple.getB().getNameAsString() + ";Method:" + quadruple.getC().getNameAsString() + ";NOM_class:" + quadruple.getD());
+            System.out.println("=================");
+        }
+    }
+    */
 
     /**
      * @return return the first object of the quadruple
