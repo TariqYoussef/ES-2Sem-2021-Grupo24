@@ -1,9 +1,13 @@
 package metrics;
 
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.PackageDeclaration;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.MethodDeclaration;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import util.Quadruple;
 
 import java.io.File;
 import java.io.IOException;
@@ -83,8 +87,9 @@ class MetricExtractorTest {
     @Test
     void testLOC_method() throws IOException {
         List<CompilationUnit> compilationUnits = extractor.CreateCompilationUnits();
-        int actual = extractor.LOC_class(compilationUnits).get(12).getD();
-        assertEquals(8,actual);
+        List<Quadruple<PackageDeclaration, ClassOrInterfaceDeclaration, MethodDeclaration, Integer>> quadruples = extractor.LOC_method(compilationUnits);
+        int actual = quadruples.get(0).getD();
+        assertEquals(16,actual);
     }
 
 }
