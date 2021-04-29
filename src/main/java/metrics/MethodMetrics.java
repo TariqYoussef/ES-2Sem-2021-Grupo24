@@ -126,43 +126,43 @@ public class MethodMetrics {
         return "True";
     }
 
-    private int getNom_class() {
+    public int getNom_class() {
         return nom_class;
     }
 
-    private void setNom_class(int nom_class) {
+    public void setNom_class(int nom_class) {
         this.nom_class = nom_class;
     }
 
-    private int getLoc_class() {
+    public int getLoc_class() {
         return loc_class;
     }
 
-    private void setLoc_class(int loc_class) {
+    public void setLoc_class(int loc_class) {
         this.loc_class = loc_class;
     }
 
-    private int getWmc_class() {
+    public int getWmc_class() {
         return wmc_class;
     }
 
-    private void setWmc_class(int wmc_class) {
+    public void setWmc_class(int wmc_class) {
         this.wmc_class = wmc_class;
     }
 
-    private int getLoc_method() {
+    public int getLoc_method() {
         return loc_method;
     }
 
-    private void setLoc_method(int loc_method) {
+    public void setLoc_method(int loc_method) {
         this.loc_method = loc_method;
     }
 
-    private int getCyclo_method() {
+    public int getCyclo_method() {
         return cyclo_method;
     }
 
-    private void setCyclo_method(int cyclo_method) {
+    public void setCyclo_method(int cyclo_method) {
         this.cyclo_method = cyclo_method;
     }
 }

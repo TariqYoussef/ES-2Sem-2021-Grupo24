@@ -7,7 +7,7 @@ import java.util.Arrays;
 class QuickSort {
 
     // divide the array on the basis of pivot
-    private int partition(int array[], int low, int high) {
+    private int partition(int[] array, int low, int high) {
 
         // select last element as pivot
         int pivot = array[high];
@@ -44,7 +44,7 @@ class QuickSort {
         return (i + 1);
     }
 
-    private void quickSort(int array[], int low, int high) {
+    private void quickSort(int[] array, int low, int high) {
         if (low < high) {
 
             // Select pivot position and put all the elements smaller
@@ -60,7 +60,7 @@ class QuickSort {
     }
 
     // Driver code
-    public static void main(String args[]) {
+    public static void main(String[] args) {
 
         // create an unsorted array
         int[] data = { 8, 7, 2, 1, 0, 9, 6 };

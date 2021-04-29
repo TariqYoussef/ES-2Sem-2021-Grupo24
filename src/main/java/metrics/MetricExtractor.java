@@ -1,5 +1,6 @@
 package metrics;
 
+import com.github.javaparser.ast.Node;
 import rules.Metric;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
@@ -144,31 +145,45 @@ public class MetricExtractor {
      */
     private static PackageDeclaration ConvertOptionalToActual(Optional<PackageDeclaration> packageD){
         PackageDeclaration pack ;
-        if(packageD.isPresent()){
-            return packageD.get();
-        }else{
-           return new PackageDeclaration(new Name("none"));
-        }
+        return packageD.orElseGet(() -> new PackageDeclaration(new Name("none")));
     }
 
     /**
-     * @param quadruples
+     * PreetyPrints an  Iterable<? extends Quadruple<PackageDeclaration, ClassOrInterfaceDeclaration, MethodDeclaration, Integer>>
+     *
+     * @param quadruples - Iterable<? extends Quadruple<PackageDeclaration, ClassOrInterfaceDeclaration, MethodDeclaration, Integer>>
      */
-    //Print function
-    //TODO move this to Quadruple.toString
-    private static void PrintQuad(Iterable<? extends Quadruple<PackageDeclaration, ClassOrInterfaceDeclaration, MethodDeclaration, Integer>> quadruples) {
+    private static void PrettyPrintQuad(Iterable<? extends Quadruple<PackageDeclaration, ClassOrInterfaceDeclaration, MethodDeclaration, Integer>> quadruples) {
         for (Quadruple<PackageDeclaration, ClassOrInterfaceDeclaration, MethodDeclaration, Integer> quadruple : quadruples) {
-            System.out.println("Package:" + quadruple.getA().getNameAsString() + ";Class:" + quadruple.getB().getNameAsString() + ";Method:" + quadruple.getC().getNameAsString() + ";NOM_class:" + quadruple.getD());
-            System.out.println("=================");
+            PrettyPrintQuad(quadruple);
         }
+    }
+    /**
+     * PreetyPrints a specific Quadruple<PackageDeclaration, ClassOrInterfaceDeclaration, MethodDeclaration, Integer>
+     *
+     * example:
+     *
+     * @param quadruple - Quadruple<PackageDeclaration, ClassOrInterfaceDeclaration, MethodDeclaration, Integer>
+     */
+    private static void PrettyPrintQuad(Quadruple<PackageDeclaration, ClassOrInterfaceDeclaration, MethodDeclaration, Integer> quadruple) {
+        System.out.println(
+                "Package:"      + quadruple.getA().getNameAsString() +
+                ";Class:"       + quadruple.getB().getNameAsString() +
+                ";Method:"      + quadruple.getC().getNameAsString() +
+                ";NOM_class:"   + quadruple.getD());
+        System.out.println("=================");
     }
 
 
     /**
-     * @param compilationUnits
-     * @return
+     *  Extracts the Number of Methods inside each class, the number is stored in the D atribute of the returned Quadruple
+     *
+     * @param compilationUnits - The compilationUnits are going to be analyzed and scanned for each method in a class
+     * @return a list of Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer> which is
+     * an object frequently used in the project, in order to associate the specific method with its corresponding extracted metric
+     *
+     * @see Quadruple
      */
-    //Extract Number of Methods each class
     public List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>> NOM_class(List<CompilationUnit> compilationUnits) {
         List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>> quadruples = new LinkedList<>();
 
@@ -177,14 +192,14 @@ public class MetricExtractor {
             for (ClassOrInterfaceDeclaration cla : cu.findAll(ClassOrInterfaceDeclaration.class)) {
                 for (MethodDeclaration md : cla.getMethods()) {
                     Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer> q =
-                            new Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>(
-                                    ConvertOptionalToActual(cu.getPackageDeclaration()),cla, md, cla.getMethods().size());
+                            new Quadruple<>(
+                                    ConvertOptionalToActual(cu.getPackageDeclaration()), cla, md, cla.getMethods().size());
                     quadruples.add(q);
                }
             }
         }
 
-        PrintQuad(quadruples);
+        PrettyPrintQuad(quadruples);
 
         return quadruples;
     }
@@ -218,10 +233,15 @@ public class MetricExtractor {
                             }
                         }
                     }
-                    for (ForStmt forStmt : md.findAll(ForStmt.class)) {
-                        //for found
+                    complexity = getComplexity(md, complexity, ForStmt.class);
+                    complexity = getComplexity(md, complexity, ForEachStmt.class);
+                    complexity = getComplexity(md, complexity, WhileStmt.class);
+                    complexity = getComplexity(md, complexity, SwitchEntry.class);
+                    /*
+                    for (ForStmt forEachStmt : md.findAll(ForStmt.class)) {
+                        //for each found
                         complexity++;
-                        //System.out.println(forStmt);
+                        //System.out.println(forEachStmt);
                     }
                     for (ForEachStmt forEachStmt : md.findAll(ForEachStmt.class)) {
                         //for each found
@@ -237,20 +257,24 @@ public class MetricExtractor {
                         //switch case found
                         complexity++;
                         //System.out.println(switchEntry);
-                    }
-                    Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer> p = new Quadruple<>(ConvertOptionalToActual(cu.getPackageDeclaration()),cla,md, complexity);
-                    quads.add(p);
+                    }*/
+                    Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer> quad = new Quadruple<>(ConvertOptionalToActual(cu.getPackageDeclaration()),cla,md, complexity);
+                    quads.add(quad);
+                    PrettyPrintQuad(quad);
                 }
             }
         }
 
-        //Print block
-        for (Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer> quad : quads) {
-            System.out.println("Package:"+quad.getA().getNameAsString()+";Class:"+quad.getB().getNameAsString()+";Method:"+quad.getC().getNameAsString()+";CYCLO_method:"+quad.getD());
-            System.out.println("=================");
-        }
-
         return quads;
+    }
+
+    private < T extends Node> int getComplexity(MethodDeclaration md, int complexity, Class<T> nodeType) {
+        for (T forStmt : md.findAll(nodeType)) {
+            //for found
+            complexity++;
+            //System.out.println(forStmt);
+        }
+        return complexity;
     }
 
     /**
@@ -279,11 +303,15 @@ public class MetricExtractor {
                             }
                         }
                     }
+                    classComplexity = getComplexity(md, classComplexity, ForStmt.class);
+                    classComplexity = getComplexity(md, classComplexity, ForEachStmt.class);
+                    classComplexity = getComplexity(md, classComplexity, WhileStmt.class);
+                    classComplexity = getComplexity(md, classComplexity, SwitchEntry.class);
+                    /*
                     for (ForStmt forStmt : md.findAll(ForStmt.class)) {
-                        //for found
+                        //for each found
                         classComplexity++;
-                    }
-                    for (ForEachStmt forEachStmt : md.findAll(ForEachStmt.class)) {
+                    }for (ForEachStmt forEachStmt : md.findAll(ForEachStmt.class)) {
                         //for each found
                         classComplexity++;
                     }
@@ -295,19 +323,14 @@ public class MetricExtractor {
                         //switch case found
                         classComplexity++;
                     }
-
+*/
                 }
                 for (MethodDeclaration md : cla.getMethods()) {
-                    Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer> p = new Quadruple<>(ConvertOptionalToActual(cu.getPackageDeclaration()),cla,md, classComplexity);
-                    quads.add(p);
+                    Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer> quad = new Quadruple<>(ConvertOptionalToActual(cu.getPackageDeclaration()),cla,md, classComplexity);
+                    quads.add(quad);
+                    PrettyPrintQuad(quad);
                 }
             }
-        }
-
-        //Print block
-        for (Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer> quad : quads) {
-            System.out.println("Package:"+quad.getA().getNameAsString()+";Class:"+quad.getB().getNameAsString()+";Method:"+quad.getC().getNameAsString()+";WMC_class:"+quad.getD());
-            System.out.println("=================");
         }
 
         return quads;
@@ -328,15 +351,15 @@ public class MetricExtractor {
 //                    System.out.println(body);
 //                    System.out.println(comments);
                     lines = (1+countLines(body)-countLines(comments));
-                    quadruples.add(new Quadruple(ConvertOptionalToActual(cu.getPackageDeclaration()), cla, md, lines));
-                    System.out.println("Lines of "+md.getNameAsString()+" in "+cla.getNameAsString()+": "+lines);
-                    System.out.println("=================");
+                    Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer> quad = new Quadruple<>(ConvertOptionalToActual(cu.getPackageDeclaration()), cla, md, lines);
+                    quadruples.add(quad);
+                    PrettyPrintQuad(quad);
+
+                    /*System.out.println("Lines of "+md.getNameAsString()+" in "+cla.getNameAsString()+": "+lines);
+                    System.out.println("=================");*/
                 }
             }
         }
-
-
-
         return quadruples;
     }
 
@@ -351,11 +374,13 @@ public class MetricExtractor {
                 int classLength = cla.getRange().map(range -> range.end.line - range.begin.line).orElse(0);
                 //TODO change getRange to countlines(body da class) - countLines(getcomments)
                 for (MethodDeclaration md : cla.getMethods()) {
-                    quadruples.add(new Quadruple(ConvertOptionalToActual(cu.getPackageDeclaration()), cla, md, classLength));
+                    Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer> quad = new Quadruple<>(ConvertOptionalToActual(cu.getPackageDeclaration()), cla, md, classLength);
+                    quadruples.add(quad);
+                    PrettyPrintQuad(quad);
                 }
-
+                /*
                 System.out.println("Lines in "+cla.getNameAsString()+": "+classLength);
-                System.out.println("=================");
+                System.out.println("=================");*/
             }
         }
         return quadruples;
@@ -365,7 +390,7 @@ public class MetricExtractor {
      * @param s
      * @return
      */
-    private int countLines(String s){
+    private static int countLines(String s){
         int n = 0;
         for(int i = 0; i < s.length(); i++) {
             if(s.charAt(i) == '\n')
