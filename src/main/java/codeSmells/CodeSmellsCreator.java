@@ -108,12 +108,12 @@ public class CodeSmellsCreator {
         row.createCell(1).setCellValue(method.getPackageOfMethod().getNameAsString());
         row.createCell(2).setCellValue(method.getClassOfMethod().getNameAsString());
         row.createCell(3).setCellValue(method.getMethod().getDeclarationAsString(false,false,false));
-        row.createCell(4).setCellValue(method.getMetric(Metric.NOM_class));//getNom_class());
-        row.createCell(5).setCellValue(method.getMetric(Metric.LOC_class));//getLoc_class());
-        row.createCell(6).setCellValue(method.getMetric(Metric.WMC_class));//getWmc_class());
+        row.createCell(4).setCellValue(method.getNom_class());//getNom_class());
+        row.createCell(5).setCellValue(method.getLoc_class());//getLoc_class());
+        row.createCell(6).setCellValue(method.getWmc_class());//getWmc_class());
         row.createCell(7).setCellValue(method.verifyRuleset(godRules));
-        row.createCell(8).setCellValue(method.getMetric(Metric.LOC_method));//getLoc_method());
-        row.createCell(9).setCellValue(method.getMetric(Metric.CYCLO_method));//getCyclo_method());
+        row.createCell(8).setCellValue(method.getLoc_method());//getLoc_method());
+        row.createCell(9).setCellValue(method.getCyclo_method());//getCyclo_method());
         row.createCell(10).setCellValue(method.verifyRuleset(longRules));
     }
 
