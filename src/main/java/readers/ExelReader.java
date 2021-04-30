@@ -17,20 +17,11 @@ import java.util.ArrayList;
  *
  */
 public class ExelReader {
-    private File file;
 
-    /**
-     * @param path path to exel file
-     */
-    public ExelReader(String path){
-        file= new File(path);
-    }
-
-    //TODO static
     /**
      * @return return the exel file as a list of string
      */
-    public ArrayList<String> read(){
+    public static ArrayList<String> read(File file){
         ArrayList<String> lines = new ArrayList<>();
         try {
             FileInputStream fileInputStream = new FileInputStream(file);
@@ -50,7 +41,6 @@ public class ExelReader {
                     }
                 }
                 lines.add(line.substring(0,line.length()-1));
-                System.out.println();
             }
             wb.close();
 
