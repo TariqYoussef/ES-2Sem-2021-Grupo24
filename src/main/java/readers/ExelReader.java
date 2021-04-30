@@ -5,13 +5,14 @@ import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.checkerframework.checker.units.qual.A;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
@@ -20,6 +21,7 @@ public class ExelReader {
 
     /**
      * @return return the exel file as a list of string
+     * @param file
      */
     public static ArrayList<String> read(File file){
         ArrayList<String> lines = new ArrayList<>();
