@@ -7,6 +7,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import metrics.MetricExtractor;
 import readers.ExelReader;
@@ -29,7 +30,7 @@ public class Controller {
     private File projectDir; // Pasta do projeto java
     private File codeSmells; // CodeSmell selecionado
 
-    @FXML private Text path; // Path que aparece o GUI após a seleção da pasta
+    @FXML private Text labelProjectMainTab; // Path que aparece o GUI após a seleção da pasta
     @FXML private Button createButton;
     @FXML private GridPane excelBox;
 
@@ -58,9 +59,12 @@ public class Controller {
     @FXML private Button donerulebtn;
 
     //Confusion matrix
+    //Compare Tab
     private File excelToCompare; //Excel for confusion matrix
 
     @FXML private Text path2; // Path of Excel file
+    @FXML private Text labelExcelOriginalCompareTab;
+    @FXML private Text labelExcelCompareCompareTab;
     @FXML private Label totalnumber;
     @FXML private Label tpnumber;
     @FXML private Label fpnumber;
@@ -74,9 +78,9 @@ public class Controller {
     }
 
     /**
-     * The FXML when initializing fills the choiceboxes with the corresponding values
-     * Once started the FXML will be observing the clicks the user does
-     * Once the user clicks in a rule from the rule history table the choiceboxes will fill with the values from the rule clicked
+     * <p>The FXML when initializing fills the choiceboxes with the corresponding values</p>
+     * <p>Once started the FXML will be observing the clicks the user does</p>
+     * <p>Once the user clicks in a rule from the rule history table the choiceboxes will fill with the values from the rule clicked</p>
      */
     @FXML private void initialize(){
         //Para quando o programa inicia
@@ -121,8 +125,8 @@ public class Controller {
     }
 
     /**
-     *  This method starts when select project button is clicked.
-     *  It checks if a code smells file exists in the selected project to update GUI.
+     *  <p>This method starts when select project button is clicked.</p>
+     *  <p>It checks if a code smells file exists in the selected project to update GUI.</p>
      */
     @FXML private void openProject(){
         DirectoryChooser directoryChooser = new DirectoryChooser();
@@ -131,12 +135,13 @@ public class Controller {
         File dir = directoryChooser.showDialog(stage);
 
         projectDir = dir;
-        path.setText(dir.getAbsolutePath());
+        labelProjectMainTab.setText(dir.getAbsolutePath());
 
         //If there is code smells in project
         String pathCodeSmell = projectDir.getAbsolutePath() + "/" + projectDir.getName() + "_metrics/" + projectDir.getName() + "_metrics.xlsx";
-
-        if(Files.exists(new File(pathCodeSmell).toPath())) {
+        File projectCodeSmell = new File(pathCodeSmell);
+        if(Files.exists(projectCodeSmell.toPath()) ){;
+            setExcelOriginal(projectCodeSmell);
             updateGUIElements(pathCodeSmell);
         }else{
             clearGUIElements();
@@ -144,12 +149,98 @@ public class Controller {
     }
 
     /**
-     * Used to launch the creation of the code smells excel file.
-     * This method starts when create code smells button is clicked.
-     * It creates a MetricExtractor object that will be used to extract the metrics needed to create the code smells file
-     * then it filters the rules.
-     * After this, it creates a codeSmellsCreator object that will be responsible to create the excel file. This object will
-     * be used to call different functions responsible of the creation of the excel file.
+     * @param pathCodeSmell {@link File} file for the OriginalExcel
+     */
+    private void setExcelOriginal(File pathCodeSmell) {
+        projectCodeSmell = pathCodeSmell;
+        labelExcelOriginalCompareTab.setText(pathCodeSmell.getName());
+        updateGUIElements(pathCodeSmell);
+    }
+
+    /**
+     * @param pathCodeSmell {@link File} file for the Comparing Excel
+     */
+    private void setExcelToCompare(File pathCodeSmell) {
+        excelToCompare = pathCodeSmell;
+        labelExcelCompareCompareTab.setText(pathCodeSmell.getName());
+    }
+    //TODO check if exists a codeSmells within
+
+    private CodeSmellsComparator codeSmellsComparator;
+//TODO change behaviour: fazer com que o botao do selecionar excel simplesmente guarde a path do file
+//TODO adicionar novo botao para comparar code smells
+
+    /**
+     * <p>Method used for choosing the Comparing Excel that will be compared to another one </p>
+     */
+    @FXML private void chooseExcelToCompare(){
+
+
+        FileChooser fileChooser = new FileChooser();
+        Stage stage = new Stage();
+        fileChooser.setTitle("Escolher ficheiro excel para comparar");
+        fileChooser.getExtensionFilters().add(excelFilter);
+        File exceltoCompare =  fileChooser.showOpenDialog(stage);
+        setExcelToCompare(exceltoCompare);
+    }
+
+    /**
+     *<p>Method used for choosing the Original Excel that will be compared to another one </p>
+     */
+    @FXML private void chooseExcelOriginal(){
+        //String pathCodeSmell = projectDir.getAbsolutePath() + "/" + projectDir.getName() + "_metrics/" + projectDir.getName() + "_metrics.xlsx";
+        //File excelOriginal = new File(pathCodeSmell);
+
+        FileChooser fileChooser = new FileChooser();
+        Stage stage = new Stage();
+        fileChooser.setTitle("Escolher ficheiro excel original");
+        fileChooser.getExtensionFilters().add(excelFilter);
+        File exceloriginal =  fileChooser.showOpenDialog(stage);
+        setExcelOriginal(exceloriginal);
+
+    }
+
+        /*if (!isProjectSelected()) {
+            showInformationMessage("Erro", "Por favor selecione um projeto primeiro!", Alert.AlertType.ERROR);
+            return;
+        }*/
+
+    /**
+     * <p>Method used when the user click the CompareCodeSmells button on the Compare Tab </p>
+     *
+     */
+    @FXML private void compareExcels(){
+        // if (checkCodeSmellsOriginal() || checkCodeSmellsToCompare()  ) return;
+
+        try {
+            codeSmellsComparator = new CodeSmellsComparator(projectCodeSmell,excelToCompare);
+            System.out.println(codeSmellsComparator.getValuesToCompare());
+        } catch (NullPointerException nullPointerException) {
+            showInformationMessage("Erro", "Selecione os Ficheiros excel a comparar", Alert.AlertType.ERROR);
+            //nullPointerException.printStackTrace();
+        }catch (Exception exception){
+            throwErroInesperado();
+        }
+
+    }
+
+    /**
+     * <p>Private Method for encapsulating showInformationMessage with the specific "Erro inesperado." content</p>
+     *
+     */
+    private void throwErroInesperado() {
+        showInformationMessage("Erro", "Erro inesperado.", Alert.AlertType.ERROR);
+    }
+
+
+    //
+    /**
+     * <p>Used to launch the creation of the code smells excel file.</p>
+     * <p>This method starts when create code smells button is clicked.</p>
+     * <p>It creates a MetricExtractor object that will be used to extract the metrics needed to create the code smells file
+     * then it filters the rules.</p>
+     * <p>After this, it creates a codeSmellsCreator object that will be responsible to create the excel file. This object will
+     * be used to call different functions responsible of the creation of the excel file.</p>
      */
     // Função que será executada para criar o code smell excutada através do botão para tal
     @FXML private void createCodeSmell(){
@@ -189,15 +280,16 @@ public class Controller {
         }catch (NullPointerException e){
             showInformationMessage("Informação","Por favor selecione a pasta do projeto.", Alert.AlertType.INFORMATION);
         }catch (Exception e){
-            showInformationMessage("Erro", "Erro inesperado.", Alert.AlertType.ERROR);
+            throwErroInesperado();
+            e.printStackTrace();
         }
 
     }
 
     /**
-     *  Once all the values from the choiceboxes are filled a new rule with those values is created
-     *  The program checks if the rule created already exists in the set of rules, if it doesn't exist then it proceeds
-     *  That rule is then added to the current set of rules and sent back to the serialized file with the serializeRule method
+     *  <p>Once all the values from the choiceboxes are filled a new rule with those values is created</p>
+     *  <p>The program checks if the rule created already exists in the set of rules, if it doesn't exist then it proceeds</p>
+     *  <p>That rule is then added to the current set of rules and sent back to the serialized file with the serializeRule method</p>
      * @throws IOException IO operation failed
      * @throws ClassNotFoundException Class Rule doesn't exist
      */
@@ -221,7 +313,7 @@ public class Controller {
     }
 
     /**
-     *  The program calls the static method from Rule class to delete the rule selected by the user
+     * <p> The program calls the static method from Rule class to delete the rule selected by the user</p>
      * @throws IOException IO operation failed
      * @throws ClassNotFoundException Class Rule doesn't exist
      */
@@ -237,9 +329,9 @@ public class Controller {
     }
 
     /**
-     * The user chooses the rule he wants to edit
-     * The program hides the remove and edit button and swaps for a done button
-     * The follow up to this method is finishChangeRuleFromHistory().
+     * <p>The user chooses the rule he wants to edit</p>
+     * <p>The program hides the remove and edit button and swaps for a done button</p>
+     * <p>The follow up to this method is finishChangeRuleFromHistory().</p>
      */
     @FXML private void changeRuleFromHistory(){
         if(listrules.getSelectionModel().getSelectedItems().isEmpty())
@@ -263,9 +355,9 @@ public class Controller {
     }
 
     /**
-     * After selecting the rule to be edited and changing the button layout from changeRuleFromHistory()
-     * The program check if the updated rule already exists and if not it updates the rule set
-     * Once it updates the remove and edit button reappear and the done button goes hidden again
+     * <p>After selecting the rule to be edited and changing the button layout from changeRuleFromHistory()</p>
+     * <p>The program checks if the updated rule already exists and if not it updates the rule set</p>
+     * <p>Once it updates the remove and edit button reappear and the done button goes hidden again</p>
      */
     @FXML private void finishChangeRuleFromHistory() {
         Rule newRule = getRule();
@@ -300,7 +392,7 @@ public class Controller {
     }
 
     /**
-     * The program gets the values selected from header and creates a new rule with those values
+     * <p>The program gets the values selected from header and creates a new rule with those values</p>
      * @return Rule selected for removal or editing
      */
     private Rule getRule(){
@@ -317,7 +409,7 @@ public class Controller {
     }
 
     /**
-     * Method used to clear all GUI elements of a project in the program.
+     * <p>Method used to clear all GUI elements of a project in the program.</p>
      */
     private void clearGUIElements(){
         excelBox.getChildren().clear();
@@ -328,11 +420,29 @@ public class Controller {
     }
 
     /**
-     * Method used to update GUI elements of a project in the program.
-     * @param pathCodeSmell path to code smells excel file
+     * <p>Method used to update GUI elements of a project in the program.</p>
+     * <p>Updates</p>
+     * <ul>
+     *     <li>CharacteristicsGUI</li>
+     *     <li>CodeSmellsGUI</li>
+     * </ul>
+     * @param pathCodeSmell {@link String} path to code smells excel file
      */
     private void updateGUIElements(String pathCodeSmell){
-        ArrayList<String> lines = ExelReader.read(new File(pathCodeSmell));
+        updateGUIElements(new File(pathCodeSmell));
+    }
+
+    /**
+     * <p>Method used to update GUI elements of a project in the program.</p>
+     * <p>Updates the following GUI elements:</p>
+     * <ul>
+     *     <li>CharacteristicsGUI</li>
+     *     <li>CodeSmellsGUI</li>
+     * </ul>
+     * @param pathCodeSmell {@link File} of the code Smells excel
+     */
+    private void updateGUIElements(File pathCodeSmell){
+        ArrayList<String> lines = ExelReader.read(pathCodeSmell);
         /*
          * TODO
          *   -Usar o ArrayList lines num método separado para obter as caracteristicas
@@ -346,6 +456,7 @@ public class Controller {
     /**
      * @param lines
      */
+    //TODO se o ficheiro excel nao for o correto isto manda erro
     private void writeCharacteristicsGUI(ArrayList<String> lines) {
         int packNum = 0, classNum = 0, methodNum = 0, locNum = 0;
         ArrayList<String> packNames = new ArrayList<String>();
