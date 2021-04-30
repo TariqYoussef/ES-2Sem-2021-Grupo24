@@ -332,8 +332,7 @@ public class Controller {
      * @param pathCodeSmell path to code smells excel file
      */
     private void updateGUIElements(String pathCodeSmell){
-        ExelReader exelReader = new ExelReader(pathCodeSmell);
-        ArrayList<String> lines = exelReader.read();
+        ArrayList<String> lines = ExelReader.read(new File(pathCodeSmell));
         /*
          * TODO
          *   -Usar o ArrayList lines num método separado para obter as caracteristicas
@@ -406,7 +405,7 @@ public class Controller {
     }
 
     /**
-     * This method is used to show a informative popup message
+     * This method is used to show a informative popup message.
      * @param title title of the window
      * @param content content of the message
      * @param alertType alert type EX: ERROR, INFORMATION, etc
