@@ -114,6 +114,14 @@ public class MethodMetrics {
         }
     }
 
+    /**
+     * <p>Recieves a {@link List<Rule>} and checks if if is an empty list first (returning "NA"), then if the object fails any of the rules (returning "False").
+     * If the object doesn't fail any rule, then "True" is returned.</p>
+     *
+     * @param rules {@link List<Rule>} Set of rules to be verified
+     * @return string
+     *
+     */
     public String verifyRuleset(List<Rule> rules){
         if(rules.size()==0){
             return "NA";
@@ -126,42 +134,92 @@ public class MethodMetrics {
         return "True";
     }
 
+    /**
+     * <p>Returns {@link int} corresponding to the nom_class method</p>
+     *
+     * @return int
+     *
+     */
     public int getNom_class() {
         return nom_class;
     }
 
+    /**
+     * <p>Sets {@link int} corresponding to the nom_class method</p>
+     *
+     */
     public void setNom_class(int nom_class) {
         this.nom_class = nom_class;
     }
 
+    /**
+     * <p>Returns {@link int} corresponding to the loc_class method</p>
+     *
+     * @return int
+     *
+     */
     public int getLoc_class() {
         return loc_class;
     }
 
+    /**
+     * <p>Sets {@link int} corresponding to the loc_class method</p>
+     *
+     */
     public void setLoc_class(int loc_class) {
         this.loc_class = loc_class;
     }
 
+    /**
+     * <p>Returns {@link int} corresponding to the wmc_class method</p>
+     *
+     * @return int
+     *
+     */
     public int getWmc_class() {
         return wmc_class;
     }
 
+    /**
+     * <p>Sets {@link int} corresponding to the wmc_class method</p>
+     *
+     */
     public void setWmc_class(int wmc_class) {
         this.wmc_class = wmc_class;
     }
 
+    /**
+     * <p>Returns {@link int} corresponding to the loc_method method</p>
+     *
+     * @return int
+     *
+     */
     public int getLoc_method() {
         return loc_method;
     }
 
+    /**
+     * <p>Sets {@link int} corresponding to the loc_method method</p>
+     *
+     */
     public void setLoc_method(int loc_method) {
         this.loc_method = loc_method;
     }
 
+    /**
+     * <p>Returns {@link int} corresponding to the cyclo_method method</p>
+     *
+     * @return int
+     *
+     */
     public int getCyclo_method() {
         return cyclo_method;
     }
 
+    /**
+     * <p>Sets {@link int} corresponding to the cyclo_method method</p>
+     *
+     */
     public void setCyclo_method(int cyclo_method) {
         this.cyclo_method = cyclo_method;
     }
