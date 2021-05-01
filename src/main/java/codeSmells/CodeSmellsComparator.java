@@ -115,31 +115,24 @@ public class CodeSmellsComparator {
      *
      */
     private void compareValues(String originalValue, String toCompareValue){
-        if(originalValue.equals("True")){
-            if(toCompareValue.equals("True")){
+        if(originalValue.equals("true")){
+            if(toCompareValue.equals("true")){
                 truePositiveNumber++;
-                return;
-            }else if(toCompareValue.equals("False")){
+            }else if(toCompareValue.equals("false")){
                 falsePositiveNumber++;
-                return;
-            }else if(toCompareValue.equals("NA")){
+            }else if(toCompareValue.equals("na")){
                 //TODO what to do here??
-                return;
             }
-        }else if(originalValue.equals("False")){
-            if(toCompareValue.equals("True")){
+        }else if(originalValue.equals("false")){
+            if(toCompareValue.equals("true")){
                 falseNegativeNumber++;
-                return;
-            }else if(toCompareValue.equals("False")){
+            }else if(toCompareValue.equals("false")){
                 trueNegativeNumber++;
-                return;
-            }else if(toCompareValue.equals("NA")){
+            }else if(toCompareValue.equals("na")){
                 //TODO what to do here??
-                return;
             }
-        }else if(originalValue.equals("NA")){
+        }else if(originalValue.equals("na")){
             //TODO what to do here??
-            return;
         }
     }
 
