@@ -11,23 +11,36 @@ public class CodeSmellsComparator {
     private final File excelOriginal;
     private final File excelToCompare;
 
+    private int truePositiveNumber;
+    private int trueNegativeNumber;
+    private int falsePositiveNumber;
+    private int falseNegativeNumber;
+
+    /**
+     *
+     * @param excelOriginal excel file generated from the Code Smells Creator class
+     * @param excelToCompare excel file to compare to get the confusion matrix
+     */
     public CodeSmellsComparator(File excelOriginal, File excelToCompare) {
         this.excelOriginal = excelOriginal;
         this.excelToCompare = excelToCompare;
+
+        setConfusionTableValues();
     }
 
-    //duas listas de Pair ou ent Boolean[2]
-    //uma lista para God_Class outra pa Long_method
-    //esquerda são do Original os da direita sao do Compare
-
-    private ArrayList<String> getOriginalLines(){
-        return ExelReader.read(excelOriginal);
-    }
-    private ArrayList<String> getToCompareLines(){
-        return ExelReader.read(excelToCompare);
-    }
-
-    public ArrayList<Quadruple<String,String,String,String>> getValuesToCompare(){
+    /**
+     *
+     * <p>Method used to extract the excel values from the columns of both given files in the constructor.</p>
+     * <p>After this it will call set values function to assing the values to the following class variables.</p>
+     * <ul>
+     *     <li>truePositiveNumber</li>
+     *     <li>trueNegativeNumber</li>
+     *     <li>falsePositiveNumber</li>
+     *     <li>falseNegativeNumber</li>
+     * </ul>
+     *
+     */
+    private void setConfusionTableValues(){
         ArrayList<Quadruple<String,String,String,String>> values = new ArrayList<>();
 
         ArrayList<String> toCompareLines=  getToCompareLines();
@@ -35,7 +48,7 @@ public class CodeSmellsComparator {
         toCompareLines.remove(0);
         originalLines.remove(0);
 
-        //debugging purposes must be the name of methods in the project
+        //debugging purposes must be the number of methods in the project
         int i = 0;
 
         for(int originalLinePos = 0; originalLinePos < originalLines.size(); originalLinePos++){
@@ -67,14 +80,161 @@ public class CodeSmellsComparator {
         }
 
         System.out.println(i);
-        return values;
+
+        setValues(values);
+    }
+
+    /**
+     * <p>Method called by setConfusionTableValues() to set the values of the following parameters:</p>
+     * <ul>
+     *     <li>truePositiveNumber</li>
+     *     <li>trueNegativeNumber</li>
+     *     <li>falsePositiveNumber</li>
+     *     <li>falseNegativeNumber</li>
+     * </ul>
+     *
+     * @param values ArrayList of Quadruple with the values of the columns isGodClass and IsLongMethod of both excel files given at the constructor.
+     *
+     */
+    private void setValues( ArrayList<Quadruple<String,String,String,String>> values){
+
+        for(Quadruple<String,String,String,String> value: values){
+
+            compareValues(value.getA(), value.getC());
+            compareValues(value.getB(), value.getD());
+
+        }
+
+    }
+
+    /**
+     * Method used to compare the 2 values (original and toCompare) to conclude de veracity of the prediction.
+     *
+     * @param originalValue original value to compare
+     * @param toCompareValue to compare value to compare
+     *
+     */
+    private void compareValues(String originalValue, String toCompareValue){
+        if(originalValue.equals("True")){
+            if(toCompareValue.equals("True")){
+                truePositiveNumber++;
+                return;
+            }else if(toCompareValue.equals("False")){
+                falsePositiveNumber++;
+                return;
+            }else if(toCompareValue.equals("NA")){
+                //TODO what to do here??
+                return;
+            }
+        }else if(originalValue.equals("False")){
+            if(toCompareValue.equals("True")){
+                falseNegativeNumber++;
+                return;
+            }else if(toCompareValue.equals("False")){
+                trueNegativeNumber++;
+                return;
+            }else if(toCompareValue.equals("NA")){
+                //TODO what to do here??
+                return;
+            }
+        }else if(originalValue.equals("NA")){
+            //TODO what to do here??
+            return;
+        }
+    }
+
+    /**
+     * <p>Method use to return the original excel file.</p>
+     *
+     * @return Original Excel file
+     *
+     */
+    public File getExcelOriginal() {
+
+        return excelOriginal;
+    }
+
+    /**
+     * <p>Method use to return the excel file used to compare with the original.</p>
+     *
+     * @return To compare Excel file
+     *
+     */
+    public File getExcelToCompare() {
+
+        return excelToCompare;
+    }
+
+    /**
+     * <p>Method used to get the true positive number parameter encapsulating the parameter of the class.</p>
+     *
+     * @return true positive number int.
+     *
+     */
+    public int getTruePositiveNumber() {
+
+        return truePositiveNumber;
+    }
+
+    /**
+     * <p>Method used to get the true negative number parameter encapsulating the parameter of the class.</p>
+     *
+     * @return true negative number int.
+     *
+     */
+    public int getTrueNegativeNumber() {
+
+        return trueNegativeNumber;
+    }
+
+    /**
+     * <p>Method used to get the false positive number parameter encapsulating the parameter of the class.</p>
+     *
+     * @return false positive number int.
+     *
+     */
+    public int getFalsePositiveNumber() {
+
+        return falsePositiveNumber;
+    }
+
+    /**
+     * <p>Method used to get the false negative number parameter encapsulating the parameter of the class.</p>
+     *
+     * @return false negative number int.
+     *
+     */
+    public int getFalseNegativeNumber() {
+
+        return falseNegativeNumber;
+    }
+
+    /**
+     * <p>Method used to get the lines of the original excel file as a ArrayList of string.</p>
+     *
+     * @return ArrayList of String of the lines of the original excel file
+     *
+     */
+    private ArrayList<String> getOriginalLines(){
+
+        return ExelReader.read(excelOriginal);
+    }
+
+    /**
+     * <p>Method used to get the lines of the excel file to compare as a ArrayList of string.</p>
+     *
+     * @return ArrayList of String of the lines of the excel file to compare
+     *
+     */
+    private ArrayList<String> getToCompareLines(){
+
+        return ExelReader.read(excelToCompare);
     }
 
     public static void main(String[] args) {
         File excelOriginal = new File("ES-2Sem-2021-Grupo24_metrics/ES-2Sem-2021-Grupo24_metrics.xlsx");
         File excelToCompare = new File("metrics_to_compare/ES-2Sem-2021-Grupo24_compare_metrics.xlsx");
         CodeSmellsComparator codeSmellsComparator = new CodeSmellsComparator(excelOriginal, excelToCompare);
-        codeSmellsComparator.getValuesToCompare();
     }
 
 }

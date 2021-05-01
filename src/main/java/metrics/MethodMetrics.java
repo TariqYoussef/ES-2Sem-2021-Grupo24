@@ -126,8 +126,8 @@ public class MethodMetrics {
         if(rules.size()==0){
             return "NA";
         }
-        for(Rule r: rules) {
-            if (!r.passesRule(this)){
+        for(Rule rule: rules) {
+            if (!rule.passesRule(this)){
                 return "False";
             }
         }

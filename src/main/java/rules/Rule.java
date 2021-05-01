@@ -57,7 +57,7 @@ public class Rule implements java.io.Serializable {
      * <ul>
      *     <li>AND - And logic Operation, only if both inputs are true the result is also true</li>
      *     <li>OR - Or logic Operation, only one input needs to be true for the result to also be true</li>
-     *     <li>XOR - Xor logic Operation, only if both inputs are diferent from each other the result is also true</li>
+     *     <li>XOR - Xor logic Operation, only if both inputs are different from each other the result is also true</li>
      * </ul>
      */
     public enum LogicOp {

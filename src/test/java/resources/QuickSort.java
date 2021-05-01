@@ -66,7 +66,7 @@ class QuickSort {
         int[] data = { 8, 7, 2, 1, 0, 9, 6 };
         int size = data.length;
 
-        // create an object of the Main class
+        // create an object of the main.Main class
         QuickSort qs = new QuickSort();
 
         // pass the array with the first and last index

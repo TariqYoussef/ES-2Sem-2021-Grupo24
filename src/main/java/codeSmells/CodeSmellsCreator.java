@@ -28,8 +28,8 @@ public class CodeSmellsCreator {
     /**
      * @param metrics MetricExtractor object that will be used to get the metrics
      * @param name name of the excel file
-     * @param godRules //TODO david
-     * @param longRules //TODO david
+     * @param godRules List of God rules to verify and write in the excel file
+     * @param longRules ist of Long rules to verify and write in the excel file
      */
     public CodeSmellsCreator(MetricExtractor metrics, String name, List<Rule> godRules, List<Rule> longRules){
 
@@ -40,8 +40,8 @@ public class CodeSmellsCreator {
     }
 
     /**
-     * This method creates an empty excel file in which will be written the code smells and metrics.
-     * This method should only be executed whenever the file doesn't exist.
+     * <p>This method creates an empty excel file in which will be written the code smells and metrics.</p>
+     * <p>This method should only be executed whenever the file doesn't exist.</p>
      * @param dir dir where the excel file will be placed
      * @throws IOException
      */
@@ -51,7 +51,7 @@ public class CodeSmellsCreator {
     }
 
     /**
-     * This method is used to add/replace the content of the code smells excel file.
+     * <p>This method is used to add/replace the content of the code smells excel file.</p>
      * @param dir dir where the excel file is placed
      * @throws IOException
      */
@@ -82,7 +82,7 @@ public class CodeSmellsCreator {
     }
 
     /**
-     * This method is used to create the header of the table in the excel file.
+     * <p>This method is used to create the header of the table in the excel file.</p>
      * @param rowHead object that specifies in which row of the excel file the header will be written
      */
     private void createHeaderCodeSmellsXlsx(XSSFRow rowHead){
@@ -100,7 +100,7 @@ public class CodeSmellsCreator {
     }
 
     /**
-     * This method is used to write in the excel file the metrics and code smells of a given method.
+     * <p>This method is used to write in the excel file the metrics and code smells of a given method.</p>
      * @param row object that specifies in which row of the excel file the line will be written
      * @param method object that will be used to get the values of the cells
      */
