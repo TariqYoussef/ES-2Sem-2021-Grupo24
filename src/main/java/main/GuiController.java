@@ -29,7 +29,7 @@ import java.util.function.Predicate;
  *
  */
 public class GuiController {
-    public static final FileChooser.ExtensionFilter EXTENSION_FILTER = new FileChooser.ExtensionFilter("ExcelFiles (.xlsx)", ".xlsx");
+    public static final FileChooser.ExtensionFilter EXTENSION_FILTER = new FileChooser.ExtensionFilter("ExcelFiles (.xlsx)", "*.xlsx");
 
     private File projectDir; // Pasta do projeto java
     private File projectCodeSmell; // Path para o excel de codeSmells do projeto
@@ -67,7 +67,6 @@ public class GuiController {
     //Compare Tab
     private File excelToCompare; //Excel for confusion matrix
 
-    @FXML private Text path2; // Path of Excel file
     @FXML private Text labelExcelOriginalCompareTab;
     @FXML private Text labelExcelCompareCompareTab;
     @FXML private Label totalnumber;
@@ -210,6 +209,16 @@ public class GuiController {
 
         try {
             codeSmellsComparator = new CodeSmellsComparator(projectCodeSmell,excelToCompare);
+            int total = 0;
+            tpnumber.setText(String.valueOf(codeSmellsComparator.getTruePositiveNumber()));
+            total+=codeSmellsComparator.getTruePositiveNumber();
+            tnnumber.setText(String.valueOf(codeSmellsComparator.getTrueNegativeNumber()));
+            total+=codeSmellsComparator.getTrueNegativeNumber();
+            fpnumber.setText(String.valueOf(codeSmellsComparator.getFalsePositiveNumber()));
+            total+=codeSmellsComparator.getFalsePositiveNumber();
+            fnnumber.setText(String.valueOf(codeSmellsComparator.getFalseNegativeNumber()));
+            total+=codeSmellsComparator.getFalseNegativeNumber();
+            totalnumber.setText("Total: " + total);
             //System.out.println(codeSmellsComparator.setValuesToCompare());
         } catch (NullPointerException nullPointerException) {
             showInformationMessage("Erro", "Selecione os Ficheiros excel a comparar", Alert.AlertType.ERROR);
