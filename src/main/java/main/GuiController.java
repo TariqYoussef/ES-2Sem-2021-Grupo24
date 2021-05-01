@@ -1,3 +1,6 @@
+package main;
+
+import codeSmells.CodeSmellsComparator;
 import codeSmells.CodeSmellsCreator;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -25,10 +28,12 @@ import java.util.function.Predicate;
 /**
  *
  */
-public class Controller {
+public class GuiController {
+    public static final FileChooser.ExtensionFilter EXTENSION_FILTER = new FileChooser.ExtensionFilter("ExcelFiles (.xlsx)", ".xlsx");
 
     private File projectDir; // Pasta do projeto java
-    private File codeSmells; // CodeSmell selecionado
+    private File projectCodeSmell; // Path para o excel de codeSmells do projeto
+    private CodeSmellsComparator codeSmellsComparator;
 
     @FXML private Text labelProjectMainTab; // Path que aparece o GUI após a seleção da pasta
     @FXML private Button createButton;
@@ -165,21 +170,17 @@ public class Controller {
         labelExcelCompareCompareTab.setText(pathCodeSmell.getName());
     }
     //TODO check if exists a codeSmells within
-
-    private CodeSmellsComparator codeSmellsComparator;
-//TODO change behaviour: fazer com que o botao do selecionar excel simplesmente guarde a path do file
-//TODO adicionar novo botao para comparar code smells
+    //TODO change behaviour: fazer com que o botao do selecionar excel simplesmente guarde a path do file
+    //TODO adicionar novo botao para comparar code smells
 
     /**
      * <p>Method used for choosing the Comparing Excel that will be compared to another one </p>
      */
     @FXML private void chooseExcelToCompare(){
-
-
         FileChooser fileChooser = new FileChooser();
         Stage stage = new Stage();
         fileChooser.setTitle("Escolher ficheiro excel para comparar");
-        fileChooser.getExtensionFilters().add(excelFilter);
+        fileChooser.getExtensionFilters().add(EXTENSION_FILTER);
         File exceltoCompare =  fileChooser.showOpenDialog(stage);
         setExcelToCompare(exceltoCompare);
     }
@@ -194,16 +195,11 @@ public class Controller {
         FileChooser fileChooser = new FileChooser();
         Stage stage = new Stage();
         fileChooser.setTitle("Escolher ficheiro excel original");
-        fileChooser.getExtensionFilters().add(excelFilter);
+        fileChooser.getExtensionFilters().add(EXTENSION_FILTER);
         File exceloriginal =  fileChooser.showOpenDialog(stage);
         setExcelOriginal(exceloriginal);
 
     }
-
-        /*if (!isProjectSelected()) {
-            showInformationMessage("Erro", "Por favor selecione um projeto primeiro!", Alert.AlertType.ERROR);
-            return;
-        }*/
 
     /**
      * <p>Method used when the user click the CompareCodeSmells button on the Compare Tab </p>
@@ -214,12 +210,12 @@ public class Controller {
 
         try {
             codeSmellsComparator = new CodeSmellsComparator(projectCodeSmell,excelToCompare);
-            System.out.println(codeSmellsComparator.getValuesToCompare());
+            //System.out.println(codeSmellsComparator.setValuesToCompare());
         } catch (NullPointerException nullPointerException) {
             showInformationMessage("Erro", "Selecione os Ficheiros excel a comparar", Alert.AlertType.ERROR);
             //nullPointerException.printStackTrace();
-        }catch (Exception exception){
-            throwErroInesperado();
+        }catch (Exception e){
+            throwErroInesperado(e);
         }
 
     }
@@ -228,12 +224,11 @@ public class Controller {
      * <p>Private Method for encapsulating showInformationMessage with the specific "Erro inesperado." content</p>
      *
      */
-    private void throwErroInesperado() {
+    private void throwErroInesperado(Exception exception) {
+        exception.printStackTrace();
         showInformationMessage("Erro", "Erro inesperado.", Alert.AlertType.ERROR);
     }
 
-
-    //
     /**
      * <p>Used to launch the creation of the code smells excel file.</p>
      * <p>This method starts when create code smells button is clicked.</p>
@@ -252,10 +247,10 @@ public class Controller {
             MetricExtractor metrics = new MetricExtractor(projectDir.toPath());
 
             // filtrar as rules
-            Predicate<Rule> pr1 = (Rule r) -> (r.getSmell().equals(Rule.Smell.God_Class));
-            List<Rule> godRules = getRegras().filtered(pr1);
-            Predicate<Rule> pr2 = (Rule r) -> (r.getSmell().equals(Rule.Smell.Long_Method));
-            List<Rule> longRules = getRegras().filtered(pr2);
+            Predicate<Rule> rulePredicateGodClass = (Rule r) -> (r.getSmell().equals(Rule.Smell.God_Class));
+            List<Rule> godRules = getRegras().filtered(rulePredicateGodClass);
+            Predicate<Rule> rulePredicateLongMethod = (Rule r) -> (r.getSmell().equals(Rule.Smell.Long_Method));
+            List<Rule> longRules = getRegras().filtered(rulePredicateLongMethod);
 
             // criar code smells
             CodeSmellsCreator codeSmellsCreator = new CodeSmellsCreator(metrics, projectDir.getName(), godRules, longRules);
@@ -280,8 +275,7 @@ public class Controller {
         }catch (NullPointerException e){
             showInformationMessage("Informação","Por favor selecione a pasta do projeto.", Alert.AlertType.INFORMATION);
         }catch (Exception e){
-            throwErroInesperado();
-            e.printStackTrace();
+            throwErroInesperado(e);
         }
 
     }

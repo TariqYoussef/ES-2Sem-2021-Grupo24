@@ -54,7 +54,7 @@ public class MetricExtractor {
      * @return
      * @throws IOException
      */
-//Main execution method----------
+//main.Main execution method----------
     //TODO Decide when/where to handle excepttion
     public List<MethodMetrics> ExtractMetrics() throws IOException {
         List<CompilationUnit> cuList = CreateCompilationUnits(srcpath);
@@ -105,7 +105,7 @@ public class MetricExtractor {
         }
     }
 
-//Main execution method----------
+//main.Main execution method----------
 
 
     /**
@@ -387,6 +387,7 @@ public class MetricExtractor {
     }
 
     /**
+     *
      * @param s
      * @return
      */
