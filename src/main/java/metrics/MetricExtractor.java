@@ -362,25 +362,34 @@ public class MetricExtractor {
         }
         return quadruples;
     }
-
     /**
-     * @param compilationUnits
-     * @return
+     *  <p>
+     *      Method used to count the number of lines in a class, by adding the number of lines in each method with the number of class attributes
+     *  </p>
+     *
+     * @param compilationUnits - The compilationUnits are going to be analyzed and scanned for each method in a class
+     * @return a list of Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer> which is
+     * an object frequently used in the project, in order to associate the specific method with its corresponding extracted metric
+     *
+     * @see Quadruple
      */
     public List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>> LOC_class(List<CompilationUnit> compilationUnits) {
         List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>> quadruples = new LinkedList<>();
         for (CompilationUnit cu : compilationUnits) {
             for (ClassOrInterfaceDeclaration cla : cu.findAll(ClassOrInterfaceDeclaration.class)) {
-                int classLength = cla.getRange().map(range -> range.end.line - range.begin.line).orElse(0);
-                //TODO change getRange to countlines(body da class) - countLines(getcomments)
+                int classLength= countLines(cla.getFields().toString());
+
                 for (MethodDeclaration md : cla.getMethods()) {
+                    String body = md.getBody().toString();
+                    String comments = md.getAllContainedComments().toString();
+
+                    classLength = classLength + (1 + countLines(body) - countLines(comments));
+                }
+                for(MethodDeclaration md: cla.getMethods()){
                     Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer> quad = new Quadruple<>(ConvertOptionalToActual(cu.getPackageDeclaration()), cla, md, classLength);
                     quadruples.add(quad);
                     PrettyPrintQuad(quad);
                 }
-                /*
-                System.out.println("Lines in "+cla.getNameAsString()+": "+classLength);
-                System.out.println("=================");*/
             }
         }
         return quadruples;

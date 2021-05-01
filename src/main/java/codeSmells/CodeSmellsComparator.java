@@ -237,4 +237,6 @@ public class CodeSmellsComparator {
         CodeSmellsComparator codeSmellsComparator = new CodeSmellsComparator(excelOriginal, excelToCompare);
     }
 
+
+
 }
