@@ -2,8 +2,6 @@ package util;
 
 public class Math {
 
-
-
     public static int calculateTotal(int trueP, int trueN, int falseP, int falseN){
         int total = trueP + trueN + falseN + falseP;
         return total;
@@ -32,8 +30,6 @@ public class Math {
 
         return accuracy;
     }
-
-
 
     public String evaluateMeasure(Double measure) {
         if (measure == 0) {
