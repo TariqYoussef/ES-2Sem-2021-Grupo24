@@ -37,10 +37,10 @@ public class Quadruple <A, B, C, D>{
     @Override
     public String toString() {
         return "Quadruple{" +
-                this.a.getClass().toString() + "=" + a +
-                this.b.getClass().toString() + "=" + b +
-                this.c.getClass().toString() + "=" + c +
-                this.d.getClass().toString() + "=" + d +
+                this.a.getClass().getName() + "=" + a + ", " +
+                this.b.getClass().getName() + "=" + b + ", " +
+                this.c.getClass().getName() + "=" + c + ", " +
+                this.d.getClass().getName() + "=" + d + ", " +
                 "}";
     }
 
