@@ -64,7 +64,7 @@ public class CodeSmellsComparator {
                 if(originalSplit[1].equals(toCompareSplit[1])
                         && originalSplit[2].equals(toCompareSplit[2])
                         && originalSplit[3].equals(toCompareSplit[3])){
-                    System.out.println("Original: "+originalLine+"\ntoCompare: " + toCompareLine);
+               //     System.out.println("Original: "+originalLine+"\ntoCompare: " + toCompareLine);
 
                     //For efficiency
                     toCompareLines.remove(toCompareLine);
@@ -72,14 +72,14 @@ public class CodeSmellsComparator {
                     Quadruple<String,String,String,String> valuesLine = new Quadruple<>(originalSplit[7], originalSplit[10],toCompareSplit[7],toCompareSplit[10]);
 
                     values.add(valuesLine);
-                    System.out.println(valuesLine);
+              //      System.out.println(valuesLine);
                     i++;
                     break;
                 }
             }
         }
 
-        System.out.println(i);
+      //  System.out.println(i);
 
         setValues(values);
     }

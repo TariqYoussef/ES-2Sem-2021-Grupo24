@@ -25,6 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
+import static util.Math.calculateTotal;
+
 /**
  *
  */
@@ -209,16 +211,12 @@ public class GuiController {
 
         try {
             codeSmellsComparator = new CodeSmellsComparator(projectCodeSmell,excelToCompare);
-            int total = 0;
             tpnumber.setText(String.valueOf(codeSmellsComparator.getTruePositiveNumber()));
-            total+=codeSmellsComparator.getTruePositiveNumber();
             tnnumber.setText(String.valueOf(codeSmellsComparator.getTrueNegativeNumber()));
-            total+=codeSmellsComparator.getTrueNegativeNumber();
             fpnumber.setText(String.valueOf(codeSmellsComparator.getFalsePositiveNumber()));
-            total+=codeSmellsComparator.getFalsePositiveNumber();
             fnnumber.setText(String.valueOf(codeSmellsComparator.getFalseNegativeNumber()));
-            total+=codeSmellsComparator.getFalseNegativeNumber();
-            totalnumber.setText("Total: " + total);
+            totalnumber.setText("Total: " + calculateTotal(codeSmellsComparator.getTruePositiveNumber(),codeSmellsComparator.getTrueNegativeNumber(),
+                    codeSmellsComparator.getFalsePositiveNumber(),codeSmellsComparator.getFalseNegativeNumber()));
             //System.out.println(codeSmellsComparator.setValuesToCompare());
         } catch (NullPointerException nullPointerException) {
             showInformationMessage("Erro", "Selecione os Ficheiros excel a comparar", Alert.AlertType.ERROR);
