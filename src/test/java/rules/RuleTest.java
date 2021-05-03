@@ -1,5 +1,6 @@
 package rules;
 
+import codeSmells.CodeSmellsComparator;
 import metrics.MethodMetrics;
 import metrics.MetricExtractor;
 import org.junit.jupiter.api.BeforeAll;
@@ -14,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class RuleTest {
     
     static MetricExtractor extractor;
-    static Rule rule1, rule2, rule3,rule4;
+    static Rule rule1, rule2, rule3;
     static List<MethodMetrics> methods;
 
     @BeforeAll
@@ -72,7 +73,63 @@ class RuleTest {
 
     }
 
+    /**
+     * Test method for {@link Rule#getOperation()}.
+     *
+     */
+    @Test
+    void getOperationTest() {
+        assertEquals(Rule.LogicOp.AND,rule1.getOperation());
+    }
 
+    /**
+     * Test method for {@link Rule#getSmell()}.
+     *
+     */
+    @Test
+    void getSmellTest() {
+        assertEquals(Rule.Smell.Long_Method,rule1.getSmell());
+    }
 
+    /**
+     * Test method for {@link Rule#getMetric(Rule.SubRule)}.
+     *
+     */
+    @Test
+    void getMetricTest() {
+        assertEquals(Metric.LOC_method,rule1.getMetric(rule1.getRule1()));
+    }
+
+    /**
+     * Test method for {@link Rule#getMetricOperation(Rule.SubRule)}.
+     *
+     */
+    @Test
+    void getMetricOperationTest() {
+        assertEquals(Rule.Operation.BiggerThan,rule1.getMetricOperation(rule1.getRule1()));
+    }
+
+    /**
+     * Test method for {@link Rule#getMetricValue(Rule.SubRule)}.
+     *
+     */
+    @Test
+    void getMetricValueTest() {
+        assertEquals(10,rule1.getMetricValue(rule1.getRule1()));
+    }
+
+    /**
+     * Test method for {@link Rule#toString()}.
+     *
+     */
+    @Test
+    void toStringTest() {
+
+        String string = "If "+ Metric.LOC_method +" is "+ Rule.Operation.BiggerThan + ": " + 10 +
+                " "+ Rule.LogicOp.AND +" If "+ Metric.CYCLO_method +" is "+ Rule.Operation.BiggerThanEqual +
+                ": " + 2 +" Then is "+ Rule.Smell.Long_Method;
+
+        assertEquals(string,rule1.toString());
+    }
 
 }

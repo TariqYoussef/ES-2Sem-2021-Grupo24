@@ -177,8 +177,7 @@ public class Rule implements java.io.Serializable {
     public SubRule getRule1() {
         return rule1;
     }
-//TODO remover, é igual ao deserialize
-//TODO o programa só lê do file uma vez, as outras ele vai escrever no file as regras novas e quando queremos apagar uma regra ele dá rewrite ao file todo
+
     /**
      * @return {@link SubRule}
      */
