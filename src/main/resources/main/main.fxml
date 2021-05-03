@@ -306,13 +306,13 @@
                          </Text>
                          <GridPane hgap="15.0" vgap="15.0" GridPane.rowIndex="1">
                              <columnConstraints>
-                                 <ColumnConstraints fillWidth="false" halignment="CENTER" hgrow="SOMETIMES" minWidth="0.0" />
-                                 <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" prefWidth="500.0" />
+                                 <ColumnConstraints fillWidth="false" halignment="CENTER" hgrow="SOMETIMES" />
+                                 <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" />
                              </columnConstraints>
                              <rowConstraints>
-                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                 <RowConstraints vgrow="SOMETIMES" />
+                        <RowConstraints vgrow="SOMETIMES" />
+                        <RowConstraints vgrow="SOMETIMES" />
                              </rowConstraints>
                              <children>
                                  <Button mnemonicParsing="false" onAction="#chooseExcelOriginal" prefWidth="200.0" text="Selecionar Excel original">
