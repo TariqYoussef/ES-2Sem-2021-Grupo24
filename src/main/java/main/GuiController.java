@@ -73,10 +73,12 @@ public class GuiController {
     @FXML private Text labelExcelOriginalCompareTab;
     @FXML private Text labelExcelCompareCompareTab;
     @FXML private Label totalnumber;
+    @FXML private Label invalidComparisonsNumber;
     @FXML private Label tpnumber;
     @FXML private Label fpnumber;
     @FXML private Label fnnumber;
     @FXML private Label tnnumber;
+
 
     @FXML private Button qualityMeasures;
 
@@ -224,12 +226,7 @@ public class GuiController {
 
         try {
             codeSmellsComparator = new CodeSmellsComparator(projectCodeSmell,excelToCompare);
-            tpnumber.setText(String.valueOf(codeSmellsComparator.getTruePositiveNumber()));
-            tnnumber.setText(String.valueOf(codeSmellsComparator.getTrueNegativeNumber()));
-            fpnumber.setText(String.valueOf(codeSmellsComparator.getFalsePositiveNumber()));
-            fnnumber.setText(String.valueOf(codeSmellsComparator.getFalseNegativeNumber()));
-            totalnumber.setText("Total: " + calculateTotal(codeSmellsComparator.getTruePositiveNumber(),codeSmellsComparator.getTrueNegativeNumber(),
-                    codeSmellsComparator.getFalsePositiveNumber(),codeSmellsComparator.getFalseNegativeNumber()));
+            setLabels(codeSmellsComparator);
             //System.out.println(codeSmellsComparator.setValuesToCompare());
             qualityMeasures.setDisable(false);
             qualityMeasures.setVisible(true);
@@ -240,6 +237,16 @@ public class GuiController {
             throwErroInesperado(e);
         }
 
+    }
+
+    private void setLabels(CodeSmellsComparator codeSmellsComparator) {
+        tpnumber.setText(String.valueOf(codeSmellsComparator.getTruePositiveNumber()));
+        tnnumber.setText(String.valueOf(codeSmellsComparator.getTrueNegativeNumber()));
+        fpnumber.setText(String.valueOf(codeSmellsComparator.getFalsePositiveNumber()));
+        fnnumber.setText(String.valueOf(codeSmellsComparator.getFalseNegativeNumber()));
+        totalnumber.setText("Total: " + calculateTotal(codeSmellsComparator.getTruePositiveNumber(), codeSmellsComparator.getTrueNegativeNumber(),
+                codeSmellsComparator.getFalsePositiveNumber(), codeSmellsComparator.getFalseNegativeNumber()));
+        invalidComparisonsNumber.setText("Invalid Comparisons: "+ codeSmellsComparator.getInvalidComparisonsNumber());
     }
 
     /**
