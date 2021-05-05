@@ -11,10 +11,26 @@ public class CodeSmellsComparator {
     private final File excelOriginal;
     private final File excelToCompare;
 
-    private int truePositiveNumber;
-    private int trueNegativeNumber;
-    private int falsePositiveNumber;
-    private int falseNegativeNumber;
+    /**
+     *
+     * <p>The comparisons array stores all the values resulting from the execution of the methods in this class. Their positions are:</p>
+     * <ul>
+     *     <li>[0] = truePositiveNumber</li>
+     *     <li>[1] = trueNegativeNumber</li>
+     *     <li>[2] = falsePositiveNumber</li>
+     *     <li>[3] = falseNegativeNumber</li>
+     *     <li>[4] = invalidComparisonsNumber</li>
+     * </ul>
+     *
+     */
+    private int[] comparisons = {0,0,0,0,0};
+
+//    private int truePositiveNumber = 0;
+//    private int trueNegativeNumber = 0;
+//    private int falsePositiveNumber = 0;
+//    private int falseNegativeNumber = 0;
+//
+//    private int invalidComparisons = 0;
 
     /**
      * <p>Object used to represent the comparison between two codeSmells xlsx files</p>
@@ -33,12 +49,13 @@ public class CodeSmellsComparator {
     /**
      *
      * <p>Method used to extract the excel values from the columns of both given files in the constructor.</p>
-     * <p>After this it will call set values function to assing the values to the following class variables.</p>
+     * <p>After this it will call set values function to assign the values to the following class variables.</p>
      * <ul>
      *     <li>truePositiveNumber</li>
      *     <li>trueNegativeNumber</li>
      *     <li>falsePositiveNumber</li>
      *     <li>falseNegativeNumber</li>
+     *     <li>invalidComparisonsNumber</li>
      * </ul>
      *
      */
@@ -123,23 +140,23 @@ public class CodeSmellsComparator {
      */
     private void compareValues(String originalValue, String toCompareValue){
         if(originalValue.equals("true")){
-            if(toCompareValue.equals("true") || toCompareValue.equals("1")){
-                truePositiveNumber++;
-            }else if(toCompareValue.equals("false") || toCompareValue.equals("0")){
-                falsePositiveNumber++;
-            }else if(toCompareValue.equals("na")){
-                //TODO what to do here??
+            if(toCompareValue.equals("true")|| toCompareValue.equals("1")){
+                comparisons[0]++;
+            }else if(toCompareValue.equals("false")|| toCompareValue.equals("0")){
+                comparisons[2]++;
+            }else {
+                comparisons[4]++;
             }
         }else if(originalValue.equals("false")){
             if(toCompareValue.equals("true")|| toCompareValue.equals("1")){
-                falseNegativeNumber++;
+                comparisons[3]++;
             }else if(toCompareValue.equals("false")|| toCompareValue.equals("0")){
-                trueNegativeNumber++;
-            }else if(toCompareValue.equals("na")){
-                //TODO what to do here??
+                comparisons[1]++;
+            }else {
+                comparisons[4]++;
             }
         }else if(originalValue.equals("na")){
-            //TODO what to do here??
+            comparisons[4]++;
         }
     }
 
@@ -173,7 +190,7 @@ public class CodeSmellsComparator {
      */
     public int getTruePositiveNumber() {
 
-        return truePositiveNumber;
+        return comparisons[0];
     }
 
     /**
@@ -184,7 +201,7 @@ public class CodeSmellsComparator {
      */
     public int getTrueNegativeNumber() {
 
-        return trueNegativeNumber;
+        return comparisons[1];
     }
 
     /**
@@ -195,7 +212,7 @@ public class CodeSmellsComparator {
      */
     public int getFalsePositiveNumber() {
 
-        return falsePositiveNumber;
+        return comparisons[2];
     }
 
     /**
@@ -206,8 +223,19 @@ public class CodeSmellsComparator {
      */
     public int getFalseNegativeNumber() {
 
-        return falseNegativeNumber;
+        return comparisons[3];
     }
+
+    /**
+     * <p>Method used to get the number of comparisons where at least one of the values in nonexistent or invalid.</p>
+     *
+     * @return false negative number int.
+     *
+     */
+    public int getInvalidComparisonsNumber() {
+        return comparisons[4];
+    }
+
 
     /**
      * <p>Method used to get the lines of the original excel file as a ArrayList of string.</p>

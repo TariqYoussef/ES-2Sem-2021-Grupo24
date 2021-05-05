@@ -73,10 +73,12 @@ public class GuiController {
     @FXML private Text labelExcelOriginalCompareTab;
     @FXML private Text labelExcelCompareCompareTab;
     @FXML private Label totalnumber;
+    @FXML private Label invalidComparisonsNumber;
     @FXML private Label tpnumber;
     @FXML private Label fpnumber;
     @FXML private Label fnnumber;
     @FXML private Label tnnumber;
+
 
     @FXML private Button qualityMeasures;
 
@@ -138,22 +140,26 @@ public class GuiController {
      *  <p>It checks if a code smells file exists in the selected project to update GUI.</p>
      */
     @FXML private void openProject(){
-        DirectoryChooser directoryChooser = new DirectoryChooser();
-        Stage stage = new Stage();
-        directoryChooser.setTitle("Escolher pasta do projeto");
-        File dir = directoryChooser.showDialog(stage);
+        try {
+            DirectoryChooser directoryChooser = new DirectoryChooser();
+            Stage stage = new Stage();
+            directoryChooser.setTitle("Escolher pasta do projeto");
+            File dir = directoryChooser.showDialog(stage);
 
-        projectDir = dir;
-        labelProjectMainTab.setText(dir.getAbsolutePath());
+            projectDir = dir;
+            labelProjectMainTab.setText(dir.getAbsolutePath());
 
-        //If there is code smells in project
-        String pathCodeSmell = projectDir.getAbsolutePath() + "/" + projectDir.getName() + "_metrics/" + projectDir.getName() + "_metrics.xlsx";
-        File projectCodeSmell = new File(pathCodeSmell);
-        if(Files.exists(projectCodeSmell.toPath()) ){;
-            setExcelOriginal(projectCodeSmell);
-            updateGUIElements(pathCodeSmell);
-        }else{
-            clearGUIElements();
+            //If there is code smells in project
+            String pathCodeSmell = projectDir.getAbsolutePath() + "/" + projectDir.getName() + "_metrics/" + projectDir.getName() + "_metrics.xlsx";
+            File projectCodeSmell = new File(pathCodeSmell);
+            if(Files.exists(projectCodeSmell.toPath()) ){;
+                setExcelOriginal(projectCodeSmell);
+                updateGUIElements(pathCodeSmell);
+            }else{
+                clearGUIElements();
+            }
+        } catch (NullPointerException e) {
+            showInformationMessage("Informação", "Nenhum ficheiro selecionado.", Alert.AlertType.INFORMATION);
         }
     }
 
@@ -181,27 +187,33 @@ public class GuiController {
      * <p>Method used for choosing the Comparing Excel that will be compared to another one </p>
      */
     @FXML private void chooseExcelToCompare(){
-        FileChooser fileChooser = new FileChooser();
-        Stage stage = new Stage();
-        fileChooser.setTitle("Escolher ficheiro excel para comparar");
-        fileChooser.getExtensionFilters().add(EXTENSION_FILTER);
-        File exceltoCompare =  fileChooser.showOpenDialog(stage);
-        setExcelToCompare(exceltoCompare);
+        try {
+            FileChooser fileChooser = new FileChooser();
+            Stage stage = new Stage();
+            fileChooser.setTitle("Escolher ficheiro excel para comparar");
+            fileChooser.getExtensionFilters().add(EXTENSION_FILTER);
+            File exceltoCompare =  fileChooser.showOpenDialog(stage);
+            setExcelToCompare(exceltoCompare);
+        } catch (NullPointerException e) {
+            showInformationMessage("Informação", "Nenhum ficheiro excel selecionado.", Alert.AlertType.INFORMATION);
+
+        }
     }
 
     /**
      *<p>Method used for choosing the Original Excel that will be compared to another one </p>
      */
     @FXML private void chooseExcelOriginal(){
-        //String pathCodeSmell = projectDir.getAbsolutePath() + "/" + projectDir.getName() + "_metrics/" + projectDir.getName() + "_metrics.xlsx";
-        //File excelOriginal = new File(pathCodeSmell);
-
-        FileChooser fileChooser = new FileChooser();
-        Stage stage = new Stage();
-        fileChooser.setTitle("Escolher ficheiro excel original");
-        fileChooser.getExtensionFilters().add(EXTENSION_FILTER);
-        File exceloriginal =  fileChooser.showOpenDialog(stage);
-        setExcelOriginal(exceloriginal);
+        try {
+            FileChooser fileChooser = new FileChooser();
+            Stage stage = new Stage();
+            fileChooser.setTitle("Escolher ficheiro excel original");
+            fileChooser.getExtensionFilters().add(EXTENSION_FILTER);
+            File exceloriginal =  fileChooser.showOpenDialog(stage);
+            setExcelOriginal(exceloriginal);
+        } catch (NullPointerException e) {
+            showInformationMessage("Informação", "Nenhum ficheiro excel selecionado.", Alert.AlertType.INFORMATION);
+        }
 
     }
 
@@ -214,13 +226,10 @@ public class GuiController {
 
         try {
             codeSmellsComparator = new CodeSmellsComparator(projectCodeSmell,excelToCompare);
-            tpnumber.setText(String.valueOf(codeSmellsComparator.getTruePositiveNumber()));
-            tnnumber.setText(String.valueOf(codeSmellsComparator.getTrueNegativeNumber()));
-            fpnumber.setText(String.valueOf(codeSmellsComparator.getFalsePositiveNumber()));
-            fnnumber.setText(String.valueOf(codeSmellsComparator.getFalseNegativeNumber()));
-            totalnumber.setText("Total: " + calculateTotal(codeSmellsComparator.getTruePositiveNumber(),codeSmellsComparator.getTrueNegativeNumber(),
-                    codeSmellsComparator.getFalsePositiveNumber(),codeSmellsComparator.getFalseNegativeNumber()));
+            setLabels(codeSmellsComparator);
             //System.out.println(codeSmellsComparator.setValuesToCompare());
+            qualityMeasures.setDisable(false);
+            qualityMeasures.setVisible(true);
         } catch (NullPointerException nullPointerException) {
             showInformationMessage("Erro", "Selecione os Ficheiros excel a comparar", Alert.AlertType.ERROR);
             //nullPointerException.printStackTrace();
@@ -230,49 +239,25 @@ public class GuiController {
 
     }
 
+    private void setLabels(CodeSmellsComparator codeSmellsComparator) {
+        tpnumber.setText(String.valueOf(codeSmellsComparator.getTruePositiveNumber()));
+        tnnumber.setText(String.valueOf(codeSmellsComparator.getTrueNegativeNumber()));
+        fpnumber.setText(String.valueOf(codeSmellsComparator.getFalsePositiveNumber()));
+        fnnumber.setText(String.valueOf(codeSmellsComparator.getFalseNegativeNumber()));
+        totalnumber.setText("Total: " + calculateTotal(codeSmellsComparator.getTruePositiveNumber(), codeSmellsComparator.getTrueNegativeNumber(),
+                codeSmellsComparator.getFalsePositiveNumber(), codeSmellsComparator.getFalseNegativeNumber()));
+        invalidComparisonsNumber.setText("Invalid Comparisons: "+ codeSmellsComparator.getInvalidComparisonsNumber());
+    }
+
     /**
      * <p>Method used when the user click the qualityMeasures button on the Compare Tab </p>
-     * <p>It will create a popup info window with all the quality measures generated from the Confusion Matrix</p>
      *
      */
     @FXML private void getQualityMeasures(){
         try {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            Label precisionN = new Label("Precision: ");
-            Double precision = calculatePrecision(Double.parseDouble(tpnumber.getText()), Double.parseDouble(fpnumber.getText()));
-            Double recall = calculateRecall(Double.parseDouble(tpnumber.getText()),Double.parseDouble(fnnumber.getText()));
-            Label precisionV = new Label(precision.toString());
-            Label recallN = new Label("Recall: ");
-            Label recallV = new Label(recall.toString());
-            Label errorN = new Label("Error: ");
-            Label errorV = new Label(calculateError(Double.parseDouble(tpnumber.getText()),Double.parseDouble(tnnumber.getText()),
-                    Double.parseDouble(fpnumber.getText()),Double.parseDouble(fnnumber.getText())).toString());
-            Label accuracy = new Label("Accuracy: ");
-            Label accuracyV = new Label(calculateAccuracy(Double.parseDouble(tpnumber.getText()),Double.parseDouble(tnnumber.getText()),
-                    Double.parseDouble(fpnumber.getText()),Double.parseDouble(fnnumber.getText())).toString());
-            Label precisionEva = new Label(evaluateMeasure(precision));
-            Label recallEva = new Label(evaluateMeasure(recall));
 
-            GridPane quality = new GridPane();
-            quality.setMinHeight(Region.USE_COMPUTED_SIZE);
-            quality.setMinWidth(300);
-            quality.setMaxHeight(Region.USE_COMPUTED_SIZE);
-            quality.setMaxWidth(Region.USE_COMPUTED_SIZE);
-            quality.add(precisionN, 1, 0);
-            quality.add(precisionV, 3, 0);
-            quality.add(precisionEva, 5, 0);
-            quality.add(recallN,1, 1);
-            quality.add(recallV, 3, 1);
-            quality.add(recallEva, 5, 1);
-            quality.add(errorN,1,2);
-            quality.add(errorV, 3, 2);
-            quality.add(accuracy,1,3);
-            quality.add(accuracyV, 3, 3);
-
-            alert.getDialogPane().setContent(quality);
-            alert.setTitle("Medidas de Qualidade");
-            alert.setContentText("As medidas calculadas foram as seguintes");
-            alert.showAndWait();
+            createAlert(codeSmellsComparator.getTruePositiveNumber(), codeSmellsComparator.getTrueNegativeNumber(),
+                    codeSmellsComparator.getFalsePositiveNumber(), codeSmellsComparator.getFalseNegativeNumber());
 
         } catch (NullPointerException nullPointerException) {
             showInformationMessage("Erro", "Ainda não foi criada a Matriz de Confusão", Alert.AlertType.ERROR);
@@ -280,6 +265,49 @@ public class GuiController {
             throwErroInesperado(e);
         }
     }
+
+    /**
+     * <p>Method used to create a popup info window with all the quality measures generated from the Confusion Matrix</p>
+     *
+     */
+    private void createAlert(double tp, double tn, double fp, double fn){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        Label precisionN = new Label("Precision: ");
+        Double precision = calculatePrecision(tp, fp);
+        Double recall = calculateRecall(tp,fn);
+        Label precisionV = new Label(precision.toString());
+        Label recallN = new Label("Recall: ");
+        Label recallV = new Label(recall.toString());
+        Label errorN = new Label("Error: ");
+        Label errorV = new Label(calculateError(tp,tn,fp,fn).toString());
+        Label accuracy = new Label("Accuracy: ");
+        Label accuracyV = new Label(calculateAccuracy(tp,tn,fp,fn).toString());
+        Label precisionEva = new Label(evaluateMeasure(precision));
+        Label recallEva = new Label(evaluateMeasure(recall));
+
+        GridPane quality = new GridPane();
+        quality.setMinHeight(Region.USE_COMPUTED_SIZE);
+        quality.setMinWidth(300);
+        quality.setMaxHeight(Region.USE_COMPUTED_SIZE);
+        quality.setMaxWidth(Region.USE_COMPUTED_SIZE);
+        quality.add(precisionN, 1, 0);
+        quality.add(precisionV, 3, 0);
+        quality.add(precisionEva, 5, 0);
+        quality.add(recallN,1, 1);
+        quality.add(recallV, 3, 1);
+        quality.add(recallEva, 5, 1);
+        quality.add(errorN,1,2);
+        quality.add(errorV, 3, 2);
+        quality.add(accuracy,1,3);
+        quality.add(accuracyV, 3, 3);
+
+        alert.getDialogPane().setContent(quality);
+        alert.setTitle("Medidas de Qualidade");
+        alert.setContentText("As medidas calculadas foram as seguintes");
+        alert.showAndWait();
+    }
+
+
 
 
     /**
