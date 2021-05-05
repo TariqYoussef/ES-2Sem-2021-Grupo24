@@ -3,11 +3,13 @@ package util;
 public class Math {
 
     /**
+     * <p>Method used to calculate the total of all the quality metrics</p>
+     *
      * @return return the total of the quality metrics
-     * @param trueP
-     * @param trueN
-     * @param falseP
-     * @param falseN
+     * @param trueP number of true positives
+     * @param trueN number of true negatives
+     * @param falseP number of false positives
+     * @param falseN number of false negatives
      */
     public static int calculateTotal(double trueP, double trueN, double falseP, double falseN){
         double total = trueP + trueN + falseN + falseP;
@@ -16,9 +18,11 @@ public class Math {
 
 
     /**
-     * @return return the precision of the positive predictions
-     * @param trueP
-     * @param falseP
+     * <p>Method used to calculate the precision of the predictions</p>
+     *
+     * @return return the precision of the predictions
+     * @param trueP number of true positives
+     * @param falseP number of false positives
      */
     public static Double calculatePrecision(double trueP, double falseP){
         if(trueP == 0){
@@ -30,9 +34,11 @@ public class Math {
 
 
     /**
-     * @return return the percentage of true positives among all positives
-     * @param trueP
-     * @param falseN
+     * <p>Method used to calculate the percentage of the correct true predictions</p>
+     *
+     * @return return the percentage of true positives
+     * @param trueP number of true positives
+     * @param falseN number of false negatives
      */
     public static Double calculateRecall(double trueP, double falseN){
         if(trueP == 0){
@@ -43,11 +49,13 @@ public class Math {
     }
 
     /**
+     * <p>Method used to calculate the the percentage of wrong predictions among all metrics</p>
+     *
      * @return return the percentage of wrong predictions
-     * @param trueP
-     * @param trueN
-     * @param falseP
-     * @param falseN
+     * @param trueP number of true positives
+     * @param trueN number of true negatives
+     * @param falseP number of false positives
+     * @param falseN number of false negatives
      */
     public static Double calculateError(double trueP, double trueN, double falseP, double falseN){
         if (falseN == 0 && falseP == 0){
@@ -60,11 +68,13 @@ public class Math {
     }
 
     /**
+     * <p>Method used to calculate the accuracy of the starting predictions</p>
+     *
      * @return return the accuracy of the predictions
-     * @param trueP
-     * @param trueN
-     * @param falseP
-     * @param falseN
+     * @param trueP number of true positives
+     * @param trueN number of true negatives
+     * @param falseP number of false positives
+     * @param falseN number of false negatives
      */
     public static Double calculateAccuracy(double trueP, double trueN, double falseP, double falseN){
         if(trueP == 0 && trueN == 0){
@@ -77,8 +87,10 @@ public class Math {
     }
 
     /**
+     * <p>Method used evaluate the quality of each measure</p>
+     *
      * @return return the quality of the measure
-     * @param measure
+     * @param measure quality measure
      */
     public static String evaluateMeasure(Double measure) {
         if (measure == 0) {
