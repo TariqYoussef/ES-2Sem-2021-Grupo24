@@ -8,16 +8,25 @@ public class Math {
     }
 
     public static Double calculatePrecision(double trueP, double falseP){
+        if(trueP == 0){
+            return 0.0;
+        }
         double precision = trueP / (trueP + falseP);
         return precision;
     }
 
     public static Double calculateRecall(double trueP, double falseN){
+        if(trueP == 0){
+            return 0.0;
+        }
         double recall = trueP / (trueP + falseN);
         return recall;
     }
 
     public static Double calculateError(double trueP, double trueN, double falseP, double falseN){
+        if (falseN == 0 && falseP == 0){
+            return 0.0;
+        }
         double total = calculateTotal(trueP, trueN, falseP, falseN);
         double error = (falseN + falseP) / total;
 
@@ -25,6 +34,9 @@ public class Math {
     }
 
     public static Double calculateAccuracy(double trueP, double trueN, double falseP, double falseN){
+        if(trueP == 0 && trueN == 0){
+            return 0.0;
+        }
         double total = calculateTotal(trueP, trueN, falseP, falseN);
         double accuracy = (trueN + trueP) / total;
 

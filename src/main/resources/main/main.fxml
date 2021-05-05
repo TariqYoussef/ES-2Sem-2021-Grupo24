@@ -6,7 +6,7 @@
 <?import javafx.scene.text.*?>
 <?import util.*?>
 
-<TabPane minHeight="500.0" minWidth="1000.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.GuiController">
+<TabPane minHeight="500.0" minWidth="1000.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.GuiController">
    <tabs>
       <Tab fx:id="tab1" closable="false" text="Painel De Utilização">
          <content>
@@ -345,84 +345,100 @@
                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                              </rowConstraints>
                              <children>
-                                 <GridPane gridLinesVisible="true" GridPane.columnIndex="1">
-                                     <columnConstraints>
-                                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                     </columnConstraints>
-                                     <rowConstraints>
-                                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                     </rowConstraints>
-                                     <children>
-                                         <Label text="Predicted Positive" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
-                                             <font>
-                                                 <Font size="14.0" />
-                                             </font>
-                                         </Label>
-                                         <Label text="Predicted Negative" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
-                                             <font>
-                                                 <Font size="14.0" />
-                                             </font>
-                                         </Label>
-                                         <Label text="Actually Positive" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
-                                             <font>
-                                                 <Font size="14.0" />
-                                             </font>
-                                         </Label>
-                                         <Label text="Actually Negative" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
-                                             <font>
-                                                 <Font size="14.0" />
-                                             </font>
-                                         </Label>
-                                         <Label fx:id="totalnumber" text="Total: -" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
-                                             <font>
-                                                 <Font size="14.0" />
-                                             </font>
-                                         </Label>
-                                         <Label text="True Positive (TP)" textAlignment="CENTER" textFill="#238a4a" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP">
-                                             <font>
-                                                 <Font name="System Bold" size="14.0" />
-                                             </font>
-                                             <GridPane.margin>
-                                                 <Insets top="10.0" />
-                                             </GridPane.margin>
-                                         </Label>
-                                         <Label text="False Positive (FP)" textAlignment="CENTER" textFill="#c3592f" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP">
-                                             <font>
-                                                 <Font name="System Bold" size="14.0" />
-                                             </font>
-                                             <GridPane.margin>
-                                                 <Insets top="10.0" />
-                                             </GridPane.margin>
-                                         </Label>
-                                         <Label text="False Negative (FN)" textAlignment="CENTER" textFill="#bf0e0e" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="TOP">
-                                             <font>
-                                                 <Font name="System Bold" size="14.0" />
-                                             </font>
-                                             <GridPane.margin>
-                                                 <Insets top="10.0" />
-                                             </GridPane.margin>
-                                         </Label>
-                                         <Label text="True Negative (TN)" textAlignment="CENTER" textFill="#6a9a3b" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="TOP">
-                                             <font>
-                                                 <Font name="System Bold" size="14.0" />
-                                             </font>
-                                             <GridPane.margin>
-                                                 <Insets top="10.0" />
-                                             </GridPane.margin>
-                                         </Label>
-                                         <Label fx:id="fnnumber" text="-" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
-                                         <Label fx:id="tnnumber" text="-" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
-                                         <Label fx:id="fpnumber" text="-" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
-                                         <Label fx:id="tpnumber" text="-" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
-                                     </children>
+                        <GridPane GridPane.columnIndex="1">
                            <GridPane.margin>
                               <Insets bottom="20.0" left="10.0" right="10.0" top="20.0" />
                            </GridPane.margin>
-                                 </GridPane>
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints maxHeight="259.0" minHeight="183.0" prefHeight="259.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="107.0" minHeight="31.0" prefHeight="31.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                           <children>
+                                       <GridPane gridLinesVisible="true">
+                                           <columnConstraints>
+                                               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                           </columnConstraints>
+                                           <rowConstraints>
+                                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                           </rowConstraints>
+                                           <children>
+                                               <Label text="Predicted Positive" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                                                   <font>
+                                                       <Font size="14.0" />
+                                                   </font>
+                                               </Label>
+                                               <Label text="Predicted Negative" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                                                   <font>
+                                                       <Font size="14.0" />
+                                                   </font>
+                                               </Label>
+                                               <Label text="Actually Positive" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                                                   <font>
+                                                       <Font size="14.0" />
+                                                   </font>
+                                               </Label>
+                                               <Label text="Actually Negative" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                                                   <font>
+                                                       <Font size="14.0" />
+                                                   </font>
+                                               </Label>
+                                               <Label fx:id="totalnumber" text="Total: -" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                                                   <font>
+                                                       <Font size="14.0" />
+                                                   </font>
+                                               </Label>
+                                               <Label text="True Positive (TP)" textAlignment="CENTER" textFill="#238a4a" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP">
+                                                   <font>
+                                                       <Font name="System Bold" size="14.0" />
+                                                   </font>
+                                                   <GridPane.margin>
+                                                       <Insets top="10.0" />
+                                                   </GridPane.margin>
+                                               </Label>
+                                               <Label text="False Positive (FP)" textAlignment="CENTER" textFill="#c3592f" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP">
+                                                   <font>
+                                                       <Font name="System Bold" size="14.0" />
+                                                   </font>
+                                                   <GridPane.margin>
+                                                       <Insets top="10.0" />
+                                                   </GridPane.margin>
+                                               </Label>
+                                               <Label text="False Negative (FN)" textAlignment="CENTER" textFill="#bf0e0e" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="TOP">
+                                                   <font>
+                                                       <Font name="System Bold" size="14.0" />
+                                                   </font>
+                                                   <GridPane.margin>
+                                                       <Insets top="10.0" />
+                                                   </GridPane.margin>
+                                               </Label>
+                                               <Label text="True Negative (TN)" textAlignment="CENTER" textFill="#6a9a3b" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="TOP">
+                                                   <font>
+                                                       <Font name="System Bold" size="14.0" />
+                                                   </font>
+                                                   <GridPane.margin>
+                                                       <Insets top="10.0" />
+                                                   </GridPane.margin>
+                                               </Label>
+                                               <Label fx:id="fnnumber" text="-" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+                                               <Label fx:id="tnnumber" text="-" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+                                               <Label fx:id="fpnumber" text="-" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                                               <Label fx:id="tpnumber" text="-" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                                           </children>
+                                       </GridPane>
+                              <BorderPane GridPane.rowIndex="1">
+                                 <center>
+                                    <Button fx:id="qualityMeasures" mnemonicParsing="false" onAction="#getQualityMeasures" text="Ver as Métricas de Qualidade" />
+                                 </center>
+                              </BorderPane>
+                           </children>
+                        </GridPane>
                              </children>
                      <GridPane.margin>
                         <Insets />

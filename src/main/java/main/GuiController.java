@@ -7,6 +7,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Region;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
@@ -25,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
-import static util.Math.calculateTotal;
+import static util.Math.*;
 
 /**
  *
@@ -76,6 +77,8 @@ public class GuiController {
     @FXML private Label fpnumber;
     @FXML private Label fnnumber;
     @FXML private Label tnnumber;
+
+    @FXML private Button qualityMeasures;
 
     private Rule oldRule;
 
@@ -226,6 +229,58 @@ public class GuiController {
         }
 
     }
+
+    /**
+     * <p>Method used when the user click the qualityMeasures button on the Compare Tab </p>
+     * <p>It will create a popup info window with all the quality measures generated from the Confusion Matrix</p>
+     *
+     */
+    @FXML private void getQualityMeasures(){
+        try {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            Label precisionN = new Label("Precision: ");
+            Double precision = calculatePrecision(codeSmellsComparator.getTruePositiveNumber(),codeSmellsComparator.getFalsePositiveNumber());
+            Double recall = calculateRecall(codeSmellsComparator.getTruePositiveNumber(),codeSmellsComparator.getFalseNegativeNumber());
+            Label precisionV = new Label(precision.toString());
+            Label recallN = new Label("Recall: ");
+            Label recallV = new Label(recall.toString());
+            Label errorN = new Label("Error: ");
+            Label errorV = new Label(calculateError(codeSmellsComparator.getTruePositiveNumber(),codeSmellsComparator.getTrueNegativeNumber(),
+                    codeSmellsComparator.getFalsePositiveNumber(),codeSmellsComparator.getFalseNegativeNumber()).toString());
+            Label accuracy = new Label("Accuracy: ");
+            Label accuracyV = new Label(calculateAccuracy(codeSmellsComparator.getTruePositiveNumber(),codeSmellsComparator.getTrueNegativeNumber(),
+                    codeSmellsComparator.getFalsePositiveNumber(),codeSmellsComparator.getFalseNegativeNumber()).toString());
+            Label precisionEva = new Label(evaluateMeasure(precision));
+            Label recallEva = new Label(evaluateMeasure(recall));
+
+            GridPane quality = new GridPane();
+            quality.setMinHeight(Region.USE_COMPUTED_SIZE);
+            quality.setMinWidth(300);
+            quality.setMaxHeight(Region.USE_COMPUTED_SIZE);
+            quality.setMaxWidth(Region.USE_COMPUTED_SIZE);
+            quality.add(precisionN, 1, 0);
+            quality.add(precisionV, 3, 0);
+            quality.add(precisionEva, 5, 0);
+            quality.add(recallN,1, 1);
+            quality.add(recallV, 3, 1);
+            quality.add(recallEva, 5, 1);
+            quality.add(errorN,1,2);
+            quality.add(errorV, 3, 2);
+            quality.add(accuracy,1,3);
+            quality.add(accuracyV, 3, 3);
+
+            alert.getDialogPane().setContent(quality);
+            alert.setTitle("Medidas de Qualidade");
+            alert.setContentText("As medidas calculadas foram as seguintes");
+            alert.showAndWait();
+
+        } catch (NullPointerException nullPointerException) {
+            showInformationMessage("Erro", "Ainda não foi criada a Matriz de Confusão", Alert.AlertType.ERROR);
+        }catch (Exception e){
+            throwErroInesperado(e);
+        }
+    }
+
 
     /**
      * <p>Private Method for encapsulating showInformationMessage with the specific "Erro inesperado." content</p>
