@@ -109,7 +109,10 @@ public class CodeSmellsCreator {
         row.createCell(1).setCellValue(method.getPackageOfMethod().getNameAsString());
         row.createCell(2).setCellValue(method.getClassOfMethod().getNameAsString());
         String declaration = method.getMethod().getDeclarationAsString(false,false,false);
-        row.createCell(3).setCellValue(declaration.substring(declaration.indexOf(' ')));
+        if(declaration.indexOf(' ') < declaration.indexOf('(') && declaration.indexOf(' ') != -1){
+            declaration = declaration.substring(declaration.indexOf(' ')).trim();
+        }
+        row.createCell(3).setCellValue(declaration);
         row.createCell(4).setCellValue(method.getNom_class());//getNom_class());
         row.createCell(5).setCellValue(method.getLoc_class());//getLoc_class());
         row.createCell(6).setCellValue(method.getWmc_class());//getWmc_class());
@@ -119,71 +122,5 @@ public class CodeSmellsCreator {
         row.createCell(10).setCellValue(method.verifyRuleset(longRules).toUpperCase(Locale.ROOT));
     }
 
-    /**
-     * @param rules
-     * @param method
-     * @return
-     */
-//    public String isLongMethod(List<Rule> rules, MethodMetrics method) {
-//        //ArrayList<Rule> rules = null;
-//        /*
-//        try {
-//            rules = Rule.deserializedRule();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        } catch (ClassNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//        */
-////        if(rules.size()==0){
-////            return "NA";
-////        }
-//        Predicate<Rule> pr = (Rule r) -> (r.getSmell().equals(Rule.Smell.Long_Method));
-//        rules.removeIf(pr.negate());
-////
-////        for(Rule r: rules) {
-////            if (!r.passesRule(method)){
-////                return "False";
-////            }
-////        }
-////        return "True";
-//        return method.verifyRuleset(rules);
-//    }
-
-//    public String isGodClass(List<Rule> rules, MethodMetrics method) {
-//        Predicate<Rule> pr = (Rule r) -> (r.getSmell().equals(Rule.Smell.God_Class));
-//        rules.removeIf(pr.negate());
-//        return method.verifyRuleset(rules);
-//    }
-
-//    /**
-//     * @param method
-//     * @return
-//     */
-//    public String isGodClass(MethodMetrics method) {
-//        ArrayList<Rule> rules = null;
-//        try {
-//            rules = Rule.deserializedRule();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        } catch (ClassNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//        int count= 0;
-//        for (Rule r : rules) {
-//            if (r.getSmell().equals(Rule.Smell.God_Class)){
-//                if (!r.passesRule(method)) {
-//                    return "False";
-//                }else{
-//                    count++;
-//                }
-//            }
-//        }
-//        if(count >0){
-//            return "True";
-//        }else{
-//            return " - - - ";
-//        }
-//    }
 
 }

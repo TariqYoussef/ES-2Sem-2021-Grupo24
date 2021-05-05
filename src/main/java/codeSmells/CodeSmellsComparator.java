@@ -17,6 +17,8 @@ public class CodeSmellsComparator {
     private int falseNegativeNumber;
 
     /**
+     * <p>Object used to represent the comparison between two codeSmells xlsx files</p>
+     * <p></p>
      *
      * @param excelOriginal excel file generated from the Code Smells Creator class
      * @param excelToCompare excel file to compare to get the confusion matrix
@@ -51,12 +53,12 @@ public class CodeSmellsComparator {
         //debugging purposes must be the number of methods in the project
         int i = 0;
 
-        for(int originalLinePos = 0; originalLinePos < originalLines.size(); originalLinePos++){
-            String originalLine = originalLines.get(originalLinePos);
+        for(int toCompareLinePos = 0; toCompareLinePos < toCompareLines.size(); toCompareLinePos++){
+            String toCompareLine = toCompareLines.get(toCompareLinePos);
 
-            for(int toCompareLinePos = 0; toCompareLinePos < toCompareLines.size(); toCompareLinePos++){
+            for(int originalLinePos = 0; originalLinePos < originalLines.size(); originalLinePos++){
+                String originalLine = originalLines.get(originalLinePos);
 
-                String toCompareLine = toCompareLines.get(toCompareLinePos);
 
                 String[] originalSplit=originalLine.toLowerCase(Locale.ROOT).split(";");
                 String[] toCompareSplit = toCompareLine.toLowerCase(Locale.ROOT).split(";");
@@ -64,15 +66,20 @@ public class CodeSmellsComparator {
                 if(originalSplit[1].equals(toCompareSplit[1])
                         && originalSplit[2].equals(toCompareSplit[2])
                         && originalSplit[3].equals(toCompareSplit[3])){
-               //     System.out.println("Original: "+originalLine+"\ntoCompare: " + toCompareLine);
+                    //System.out.println("Original: "+originalLine+"\ntoCompare: " + toCompareLine);
 
                     //For efficiency
                     toCompareLines.remove(toCompareLine);
 
-                    Quadruple<String,String,String,String> valuesLine = new Quadruple<>(originalSplit[7], originalSplit[10],toCompareSplit[7],toCompareSplit[10]);
+                    try {
 
-                    values.add(valuesLine);
-              //      System.out.println(valuesLine);
+                        values.add(new Quadruple<>(originalSplit[7], originalSplit[10],toCompareSplit[7],toCompareSplit[10]));
+                    } catch (ArrayIndexOutOfBoundsException arrayIndexOutOfBoundsException) {
+
+                        arrayIndexOutOfBoundsException.printStackTrace();
+                    }
+
+                    //System.out.println(valuesLine);
                     i++;
                     break;
                 }
@@ -116,17 +123,17 @@ public class CodeSmellsComparator {
      */
     private void compareValues(String originalValue, String toCompareValue){
         if(originalValue.equals("true")){
-            if(toCompareValue.equals("true")){
+            if(toCompareValue.equals("true") || toCompareValue.equals("1")){
                 truePositiveNumber++;
-            }else if(toCompareValue.equals("false")){
+            }else if(toCompareValue.equals("false") || toCompareValue.equals("0")){
                 falsePositiveNumber++;
             }else if(toCompareValue.equals("na")){
                 //TODO what to do here??
             }
         }else if(originalValue.equals("false")){
-            if(toCompareValue.equals("true")){
+            if(toCompareValue.equals("true")|| toCompareValue.equals("1")){
                 falseNegativeNumber++;
-            }else if(toCompareValue.equals("false")){
+            }else if(toCompareValue.equals("false")|| toCompareValue.equals("0")){
                 trueNegativeNumber++;
             }else if(toCompareValue.equals("na")){
                 //TODO what to do here??

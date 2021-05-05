@@ -510,7 +510,8 @@ public class GuiController {
     }
 
     /**
-     * @param lines
+     * <p>Method that creates the characteristics GUI </p>
+     * @param lines {@link ArrayList} lines
      */
     //TODO se o ficheiro excel nao for o correto isto manda erro
     private void writeCharacteristicsGUI(ArrayList<String> lines) {
@@ -547,7 +548,7 @@ public class GuiController {
 
 
     /**
-     * This method is used to write the code smells excel file in the GUI of the program
+     * <p>This method is used to display the code smells excel file in the GUI of the program</p>
      * @param lines each line represents a row in the excel file
      */
     private void writeCodeSmellsGUI(ArrayList<String> lines){
@@ -572,7 +573,7 @@ public class GuiController {
     }
 
     /**
-     * This method is used to show a informative popup message.
+     * <p>This method is used to show a informative popup message.</p>
      * @param title title of the window
      * @param content content of the message
      * @param alertType alert type EX: ERROR, INFORMATION, etc
