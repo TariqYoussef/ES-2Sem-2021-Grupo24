@@ -138,22 +138,26 @@ public class GuiController {
      *  <p>It checks if a code smells file exists in the selected project to update GUI.</p>
      */
     @FXML private void openProject(){
-        DirectoryChooser directoryChooser = new DirectoryChooser();
-        Stage stage = new Stage();
-        directoryChooser.setTitle("Escolher pasta do projeto");
-        File dir = directoryChooser.showDialog(stage);
+        try {
+            DirectoryChooser directoryChooser = new DirectoryChooser();
+            Stage stage = new Stage();
+            directoryChooser.setTitle("Escolher pasta do projeto");
+            File dir = directoryChooser.showDialog(stage);
 
-        projectDir = dir;
-        labelProjectMainTab.setText(dir.getAbsolutePath());
+            projectDir = dir;
+            labelProjectMainTab.setText(dir.getAbsolutePath());
 
-        //If there is code smells in project
-        String pathCodeSmell = projectDir.getAbsolutePath() + "/" + projectDir.getName() + "_metrics/" + projectDir.getName() + "_metrics.xlsx";
-        File projectCodeSmell = new File(pathCodeSmell);
-        if(Files.exists(projectCodeSmell.toPath()) ){;
-            setExcelOriginal(projectCodeSmell);
-            updateGUIElements(pathCodeSmell);
-        }else{
-            clearGUIElements();
+            //If there is code smells in project
+            String pathCodeSmell = projectDir.getAbsolutePath() + "/" + projectDir.getName() + "_metrics/" + projectDir.getName() + "_metrics.xlsx";
+            File projectCodeSmell = new File(pathCodeSmell);
+            if(Files.exists(projectCodeSmell.toPath()) ){;
+                setExcelOriginal(projectCodeSmell);
+                updateGUIElements(pathCodeSmell);
+            }else{
+                clearGUIElements();
+            }
+        } catch (NullPointerException e) {
+            showInformationMessage("Informação", "Nenhum ficheiro selecionado.", Alert.AlertType.INFORMATION);
         }
     }
 
@@ -181,27 +185,33 @@ public class GuiController {
      * <p>Method used for choosing the Comparing Excel that will be compared to another one </p>
      */
     @FXML private void chooseExcelToCompare(){
-        FileChooser fileChooser = new FileChooser();
-        Stage stage = new Stage();
-        fileChooser.setTitle("Escolher ficheiro excel para comparar");
-        fileChooser.getExtensionFilters().add(EXTENSION_FILTER);
-        File exceltoCompare =  fileChooser.showOpenDialog(stage);
-        setExcelToCompare(exceltoCompare);
+        try {
+            FileChooser fileChooser = new FileChooser();
+            Stage stage = new Stage();
+            fileChooser.setTitle("Escolher ficheiro excel para comparar");
+            fileChooser.getExtensionFilters().add(EXTENSION_FILTER);
+            File exceltoCompare =  fileChooser.showOpenDialog(stage);
+            setExcelToCompare(exceltoCompare);
+        } catch (NullPointerException e) {
+            showInformationMessage("Informação", "Nenhum ficheiro excel selecionado.", Alert.AlertType.INFORMATION);
+
+        }
     }
 
     /**
      *<p>Method used for choosing the Original Excel that will be compared to another one </p>
      */
     @FXML private void chooseExcelOriginal(){
-        //String pathCodeSmell = projectDir.getAbsolutePath() + "/" + projectDir.getName() + "_metrics/" + projectDir.getName() + "_metrics.xlsx";
-        //File excelOriginal = new File(pathCodeSmell);
-
-        FileChooser fileChooser = new FileChooser();
-        Stage stage = new Stage();
-        fileChooser.setTitle("Escolher ficheiro excel original");
-        fileChooser.getExtensionFilters().add(EXTENSION_FILTER);
-        File exceloriginal =  fileChooser.showOpenDialog(stage);
-        setExcelOriginal(exceloriginal);
+        try {
+            FileChooser fileChooser = new FileChooser();
+            Stage stage = new Stage();
+            fileChooser.setTitle("Escolher ficheiro excel original");
+            fileChooser.getExtensionFilters().add(EXTENSION_FILTER);
+            File exceloriginal =  fileChooser.showOpenDialog(stage);
+            setExcelOriginal(exceloriginal);
+        } catch (NullPointerException e) {
+            showInformationMessage("Informação", "Nenhum ficheiro excel selecionado.", Alert.AlertType.INFORMATION);
+        }
 
     }
 
