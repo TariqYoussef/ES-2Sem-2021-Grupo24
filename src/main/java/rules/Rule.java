@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
 /**
- * <p>Rule is a class used to represent two conditions that together determine wether a specific MethodMetrics object is constitutes some kind of Smell</p>
+ * <p>Rule is a class used to represent two conditions that together determine whether a specific MethodMetrics object is constitutes some kind of Smell</p>
  * <p>In order to achieve this we have at our disposal various enum types:</p>
  * <ul>
  * <li>{@link Operation}</li>
@@ -37,7 +37,7 @@ public class Rule implements java.io.Serializable {
 
     /**
      * <p>Operation is an enum used to categorize mathematical logical operations to compare two diferent integer values</p>
-     * <p>Operation contains theese values </p>
+     * <p>Operation contains these values </p>
      * <ul>
      *     <li>BiggerThan - ">" </li>
      *     <li>SmallerThan - "<" </li>
@@ -53,7 +53,7 @@ public class Rule implements java.io.Serializable {
     }
 
     /**
-     *<p>LogicOp is an enum containing theese values </p>
+     *<p>LogicOp is an enum containing these values </p>
      * <ul>
      *     <li>AND - And logic Operation, only if both inputs are true the result is also true</li>
      *     <li>OR - Or logic Operation, only one input needs to be true for the result to also be true</li>
@@ -124,7 +124,7 @@ public class Rule implements java.io.Serializable {
         }
 
         /**
-         * <p>Recieves a {@link MethodMetrics} and checks if its corresponding {@link Metric} is bigger or smaller or etc
+         * <p>Receives a {@link MethodMetrics} and checks if its corresponding {@link Metric} is bigger or smaller or etc
          * (see {@link LogicOp} for more options) than the extracted value for that {@link Metric} </p>
          *
          * @param method {@link MethodMetrics}
@@ -148,7 +148,7 @@ public class Rule implements java.io.Serializable {
     }
     */
     /**
-     * <p>Constructor for a Rule, itnerlnaly creates two {@link SubRule} and stores them inside itself together with the {@link LogicOp} and a {@link Smell} </p>
+     * <p>Constructor for a Rule, internally creates two {@link SubRule} and stores them inside itself together with the {@link LogicOp} and a {@link Smell} </p>
      *
      * @param metric1 {@link Metric} used to create the first {@link SubRule}
      * @param operation1 {@link Operation} used to create the first {@link SubRule}
@@ -223,7 +223,7 @@ public class Rule implements java.io.Serializable {
                 //(car.isDiesel() && !car.isManual()) || (!car.isDiesel() && car.isManual())
                 return ((passesrule1 && !passesrule2) || (!passesrule1 && passesrule2));
             default:
-                throw new NoSuchElementException("Non existant Logical Operation for rule passing, passesRule function");
+                throw new NoSuchElementException("Non existent Logical Operation for rule passing, passesRule function");
         }
     }
 
@@ -252,7 +252,7 @@ public class Rule implements java.io.Serializable {
             case SmallerThanEqual:
                 return value1 <= value2;
             default:
-                throw new NoSuchElementException("Non existant Operation for rule passing, Operation function");
+                throw new NoSuchElementException("Non existent Operation for rule passing, Operation function");
 
         }
     }
@@ -386,7 +386,7 @@ public class Rule implements java.io.Serializable {
     }
 
     /**
-     * <p>Returns a {@link Rule} as a String, as if it was a standart English phrase</p>
+     * <p>Returns a {@link Rule} as a String, as if it was a standard English phrase</p>
      * @return A detailed way to see the rule as a String.
      */
     @Override

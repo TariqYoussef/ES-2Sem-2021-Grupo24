@@ -31,7 +31,7 @@ public class CodeSmellsComparator {
     /**
      *
      * <p>Method used to extract the excel values from the columns of both given files in the constructor.</p>
-     * <p>After this it will call set values function to assing the values to the following class variables.</p>
+     * <p>After this it will call set values function to assign the values to the following class variables.</p>
      * <ul>
      *     <li>truePositiveNumber</li>
      *     <li>trueNegativeNumber</li>
