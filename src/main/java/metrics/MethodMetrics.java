@@ -1,5 +1,6 @@
 package metrics;
 
+import com.github.javaparser.ast.body.CallableDeclaration;
 import rules.Metric;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -17,7 +18,7 @@ public class MethodMetrics {
     private final int id;
     private PackageDeclaration packageOfMethod;
     private ClassOrInterfaceDeclaration classOfMethod;
-    private MethodDeclaration method;
+    private CallableDeclaration method;
 
 /*
  TODO maybe alterar comportamento das metricas para usarem herança, haver uma class abstrata Metric que estas implementavam
@@ -37,7 +38,7 @@ public class MethodMetrics {
      * @param classOfMethod
      * @param method
      */
-    public MethodMetrics(int id, PackageDeclaration packageOfMethod, ClassOrInterfaceDeclaration classOfMethod, MethodDeclaration method) {
+    public MethodMetrics(int id, PackageDeclaration packageOfMethod, ClassOrInterfaceDeclaration classOfMethod, CallableDeclaration method) {
         this.id = id;
         this.packageOfMethod = packageOfMethod;
         this.classOfMethod = classOfMethod;
@@ -59,7 +60,7 @@ public class MethodMetrics {
         return packageOfMethod;
     }
 
-    public MethodDeclaration getMethod() {
+    public CallableDeclaration getMethod() {
         return method;
     }
 

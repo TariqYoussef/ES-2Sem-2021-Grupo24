@@ -1,6 +1,9 @@
 package metrics;
 
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.CallableDeclaration;
+import com.github.javaparser.ast.body.ConstructorDeclaration;
+import jdk.nashorn.internal.codegen.CompilerConstants;
 import rules.Metric;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
@@ -59,11 +62,11 @@ public class MetricExtractor {
     public List<MethodMetrics> ExtractMetrics() throws IOException {
         List<CompilationUnit> cuList = CreateCompilationUnits(srcpath);
 
-        List<Quadruple<PackageDeclaration, ClassOrInterfaceDeclaration, MethodDeclaration, Integer>> nom_class = NOM_class(cuList);
-        List<Quadruple<PackageDeclaration, ClassOrInterfaceDeclaration, MethodDeclaration, Integer>> cyclo_method = CYCLO_method(cuList);
-        List<Quadruple<PackageDeclaration, ClassOrInterfaceDeclaration, MethodDeclaration, Integer>> loc_method = LOC_method(cuList);
-        List<Quadruple<PackageDeclaration, ClassOrInterfaceDeclaration, MethodDeclaration, Integer>> loc_class = LOC_class(cuList);
-        List<Quadruple<PackageDeclaration, ClassOrInterfaceDeclaration, MethodDeclaration, Integer>> wmc_class = WMC_class(cuList);
+        List<Quadruple<PackageDeclaration, ClassOrInterfaceDeclaration, CallableDeclaration, Integer>> nom_class = NOM_class(cuList);
+        List<Quadruple<PackageDeclaration, ClassOrInterfaceDeclaration, CallableDeclaration, Integer>> cyclo_method = CYCLO_method(cuList);
+        List<Quadruple<PackageDeclaration, ClassOrInterfaceDeclaration, CallableDeclaration, Integer>> loc_method = LOC_method(cuList);
+        List<Quadruple<PackageDeclaration, ClassOrInterfaceDeclaration, CallableDeclaration, Integer>> loc_class = LOC_class(cuList);
+        List<Quadruple<PackageDeclaration, ClassOrInterfaceDeclaration, CallableDeclaration, Integer>> wmc_class = WMC_class(cuList);
 
         List<MethodMetrics> methodMetrics = new ArrayList<>();
 
@@ -83,9 +86,9 @@ public class MetricExtractor {
      * @param metricEnum
      */
     // joins the metrics for xlsx file
-    public void joinMetrics(List<MethodMetrics> methodMetrics, List<Quadruple<PackageDeclaration, ClassOrInterfaceDeclaration, MethodDeclaration, Integer>> metrics, Metric metricEnum){
+    public void joinMetrics(List<MethodMetrics> methodMetrics, List<Quadruple<PackageDeclaration, ClassOrInterfaceDeclaration, CallableDeclaration, Integer>> metrics, Metric metricEnum){
         int id=1;
-        for(Quadruple<PackageDeclaration, ClassOrInterfaceDeclaration, MethodDeclaration, Integer> metric : metrics){
+        for(Quadruple<PackageDeclaration, ClassOrInterfaceDeclaration, CallableDeclaration, Integer> metric : metrics){
             boolean exists= false;
             for(MethodMetrics method:methodMetrics){
                 // If the method already exists set the metric in its line
@@ -153,8 +156,8 @@ public class MetricExtractor {
      *
      * @param quadruples - Iterable<? extends Quadruple<PackageDeclaration, ClassOrInterfaceDeclaration, MethodDeclaration, Integer>>
      */
-    private static void PrettyPrintQuad(Iterable<? extends Quadruple<PackageDeclaration, ClassOrInterfaceDeclaration, MethodDeclaration, Integer>> quadruples) {
-        for (Quadruple<PackageDeclaration, ClassOrInterfaceDeclaration, MethodDeclaration, Integer> quadruple : quadruples) {
+    private static void PrettyPrintQuad(Iterable<? extends Quadruple<PackageDeclaration, ClassOrInterfaceDeclaration, CallableDeclaration, Integer>> quadruples) {
+        for (Quadruple<PackageDeclaration, ClassOrInterfaceDeclaration, CallableDeclaration, Integer> quadruple : quadruples) {
             PrettyPrintQuad(quadruple);
         }
     }
@@ -165,7 +168,7 @@ public class MetricExtractor {
      *
      * @param quadruple - Quadruple<PackageDeclaration, ClassOrInterfaceDeclaration, MethodDeclaration, Integer>
      */
-    private static void PrettyPrintQuad(Quadruple<PackageDeclaration, ClassOrInterfaceDeclaration, MethodDeclaration, Integer> quadruple) {
+    private static void PrettyPrintQuad(Quadruple<PackageDeclaration, ClassOrInterfaceDeclaration, CallableDeclaration, Integer> quadruple) {
         System.out.println(
                 "Package:"      + quadruple.getA().getNameAsString() +
                 ";Class:"       + quadruple.getB().getNameAsString() +
@@ -184,18 +187,25 @@ public class MetricExtractor {
      *
      * @see Quadruple
      */
-    public List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>> NOM_class(List<CompilationUnit> compilationUnits) {
-        List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>> quadruples = new LinkedList<>();
+    public List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration, CallableDeclaration, Integer>> NOM_class(List<CompilationUnit> compilationUnits) {
+        List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,CallableDeclaration, Integer>> quadruples = new LinkedList<>();
 
         //Block to traverse the compilation Units and count all the methods in each class
         for (CompilationUnit cu : compilationUnits) {
             for (ClassOrInterfaceDeclaration cla : cu.findAll(ClassOrInterfaceDeclaration.class)) {
+                int numberMethodInCLA = cla.getMethods().size()+cla.getConstructors().size();
                 for (MethodDeclaration md : cla.getMethods()) {
-                    Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer> q =
+                    Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,CallableDeclaration, Integer> q =
                             new Quadruple<>(
-                                    ConvertOptionalToActual(cu.getPackageDeclaration()), cla, md, cla.getMethods().size());
+                                    ConvertOptionalToActual(cu.getPackageDeclaration()), cla, md, numberMethodInCLA);
                     quadruples.add(q);
                }
+                for(ConstructorDeclaration cd : cla.getConstructors()){
+                    Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,CallableDeclaration, Integer> q =
+                            new Quadruple<>(
+                                    ConvertOptionalToActual(cu.getPackageDeclaration()), cla, cd, numberMethodInCLA);
+                    quadruples.add(q);
+                }
             }
         }
 
@@ -209,58 +219,19 @@ public class MetricExtractor {
      * @return
      */
     //extract Cyclomatic complexity of each method
-    public List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>> CYCLO_method(List<CompilationUnit> compilationUnits) {
-        List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>> quads = new LinkedList<>();
+    public List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,CallableDeclaration, Integer>> CYCLO_method(List<CompilationUnit> compilationUnits) {
+        List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,CallableDeclaration, Integer>> quads = new LinkedList<>();
 
         //Block to traverse the compilation Units and count all cycle methods in each method
         for (CompilationUnit cu : compilationUnits) {
             for (ClassOrInterfaceDeclaration cla : cu.findAll(ClassOrInterfaceDeclaration.class)) {
                 for (MethodDeclaration md : cla.getMethods()) {
-                    int complexity = 0;
-                    for (IfStmt ifStmt : md.getChildNodesByType(IfStmt.class)) {
-                        //if found
-                        complexity++;
-                        //System.out.println(ifStmt);
-                        if (ifStmt.getElseStmt().isPresent()) {
-                            //has an else
-                            Statement elseStmt = ifStmt.getElseStmt().get();
-                            if (elseStmt instanceof IfStmt) {
-                                //its an else-if. its already counted by counting the if above
-                            } else {
-                                //its an else, so its added
-                                complexity++;
-                                //System.out.println(elseStmt);
-                            }
-                        }
-                    }
-                    complexity = getComplexity(md, complexity, ForStmt.class);
-                    complexity = getComplexity(md, complexity, ForEachStmt.class);
-                    complexity = getComplexity(md, complexity, WhileStmt.class);
-                    complexity = getComplexity(md, complexity, SwitchEntry.class);
-                    /*
-                    for (ForStmt forEachStmt : md.findAll(ForStmt.class)) {
-                        //for each found
-                        complexity++;
-                        //System.out.println(forEachStmt);
-                    }
-                    for (ForEachStmt forEachStmt : md.findAll(ForEachStmt.class)) {
-                        //for each found
-                        complexity++;
-                        //System.out.println(forEachStmt);
-                    }
-                    for (WhileStmt whileStmt : md.findAll(WhileStmt.class)) {
-                        //while found
-                        complexity++;
-                        //System.out.println(whileStmt);
-                    }
-                    for (SwitchEntry switchEntry : md.findAll(SwitchEntry.class)) {
-                        //switch case found
-                        complexity++;
-                        //System.out.println(switchEntry);
-                    }*/
-                    Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer> quad = new Quadruple<>(ConvertOptionalToActual(cu.getPackageDeclaration()),cla,md, complexity);
-                    quads.add(quad);
-                    PrettyPrintQuad(quad);
+                    quads.add(calculateCycloMethodAUX(cu, cla, md));
+                    //PrettyPrintQuad(quad);
+                }
+                for (ConstructorDeclaration cd : cla.getConstructors()) {
+                    quads.add(calculateCycloMethodAUX(cu, cla, cd));
+                //PrettyPrintQuad(quad);
                 }
             }
         }
@@ -268,8 +239,36 @@ public class MetricExtractor {
         return quads;
     }
 
-    private < T extends Node> int getComplexity(MethodDeclaration md, int complexity, Class<T> nodeType) {
-        for (T forStmt : md.findAll(nodeType)) {
+    private Quadruple<PackageDeclaration, ClassOrInterfaceDeclaration, CallableDeclaration, Integer> calculateCycloMethodAUX(CompilationUnit cu, ClassOrInterfaceDeclaration cla, CallableDeclaration cd) {
+        int complexity = 0;
+        for (IfStmt ifStmt : cd.getChildNodesByType(IfStmt.class)) {
+            //if found
+            complexity++;
+            //System.out.println(ifStmt);
+            if (ifStmt.getElseStmt().isPresent()) {
+                //has an else
+                Statement elseStmt = ifStmt.getElseStmt().get();
+                if (elseStmt instanceof IfStmt) {
+                    //its an else-if. its already counted by counting the if above
+                } else {
+                    //its an else, so its added
+                    complexity++;
+                    //System.out.println(elseStmt);
+                }
+            }
+        }
+        complexity = getComplexity(cd, complexity, ForStmt.class);
+        complexity = getComplexity(cd, complexity, ForEachStmt.class);
+        complexity = getComplexity(cd, complexity, WhileStmt.class);
+        complexity = getComplexity(cd, complexity, SwitchEntry.class);
+
+        Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,CallableDeclaration, Integer> quad =
+                new Quadruple<>(ConvertOptionalToActual(cu.getPackageDeclaration()), cla, cd, complexity);
+        return quad;
+    }
+
+    private < T extends Node> int getComplexity(CallableDeclaration cd, int complexity, Class<T> nodeType) {
+        for (T iterator : cd.findAll(nodeType)) {
             //for found
             complexity++;
             //System.out.println(forStmt);
@@ -281,52 +280,24 @@ public class MetricExtractor {
      * @param compilationUnits
      * @return
      */
-    public List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>> WMC_class(List<CompilationUnit> compilationUnits) {
-        List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>> quads = new LinkedList<>();
+    public List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,CallableDeclaration, Integer>> WMC_class(List<CompilationUnit> compilationUnits) {
+        List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,CallableDeclaration, Integer>> quads = new LinkedList<>();
 
         //Block to traverse the compilation Units and count all cycle methods in class
         for (CompilationUnit cu : compilationUnits) {
             for (ClassOrInterfaceDeclaration cla : cu.findAll(ClassOrInterfaceDeclaration.class)) {
                 int classComplexity = 0;
                 for (MethodDeclaration md : cla.getMethods()) {
-                    for (IfStmt ifStmt : md.getChildNodesByType(IfStmt.class)) {
-                        //if found
-                        classComplexity++;
-                        if (ifStmt.getElseStmt().isPresent()) {
-                            //has an else
-                            Statement elseStmt = ifStmt.getElseStmt().get();
-                            if (elseStmt instanceof IfStmt) {
-                                //its an else-if. its already counted by counting the if above
-                            } else {
-                                //its an else, so its added
-                                classComplexity++;
-                            }
-                        }
-                    }
-                    classComplexity = getComplexity(md, classComplexity, ForStmt.class);
-                    classComplexity = getComplexity(md, classComplexity, ForEachStmt.class);
-                    classComplexity = getComplexity(md, classComplexity, WhileStmt.class);
-                    classComplexity = getComplexity(md, classComplexity, SwitchEntry.class);
-                    /*
-                    for (ForStmt forStmt : md.findAll(ForStmt.class)) {
-                        //for each found
-                        classComplexity++;
-                    }for (ForEachStmt forEachStmt : md.findAll(ForEachStmt.class)) {
-                        //for each found
-                        classComplexity++;
-                    }
-                    for (WhileStmt whileStmt : md.findAll(WhileStmt.class)) {
-                        //while found
-                        classComplexity++;
-                    }
-                    for (SwitchEntry switchEntry : md.findAll(SwitchEntry.class)) {
-                        //switch case found
-                        classComplexity++;
-                    }
-*/
+                    classComplexity = calculateClassCOplecityAUX(classComplexity, md);
+
+                }
+                for (ConstructorDeclaration cd : cla.getConstructors()) {
+                    classComplexity = calculateClassCOplecityAUX(classComplexity, cd);
+
                 }
                 for (MethodDeclaration md : cla.getMethods()) {
-                    Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer> quad = new Quadruple<>(ConvertOptionalToActual(cu.getPackageDeclaration()),cla,md, classComplexity);
+                    Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,CallableDeclaration, Integer> quad =
+                            new Quadruple<>(ConvertOptionalToActual(cu.getPackageDeclaration()),cla,md, classComplexity);
                     quads.add(quad);
                     PrettyPrintQuad(quad);
                 }
@@ -336,24 +307,46 @@ public class MetricExtractor {
         return quads;
     }
 
+    private int calculateClassCOplecityAUX(int classComplexity, CallableDeclaration md) {
+        for (IfStmt ifStmt : md.getChildNodesByType(IfStmt.class)) {
+            //if found
+            classComplexity++;
+            if (ifStmt.getElseStmt().isPresent()) {
+                //has an else
+                Statement elseStmt = ifStmt.getElseStmt().get();
+                if (elseStmt instanceof IfStmt) {
+                    //its an else-if. its already counted by counting the if above
+                } else {
+                    //its an else, so its added
+                    classComplexity++;
+                }
+            }
+        }
+        classComplexity = getComplexity(md, classComplexity, ForStmt.class);
+        classComplexity = getComplexity(md, classComplexity, ForEachStmt.class);
+        classComplexity = getComplexity(md, classComplexity, WhileStmt.class);
+        classComplexity = getComplexity(md, classComplexity, SwitchEntry.class);
+        return classComplexity;
+    }
+
     /**
      * @param compilationUnits
      * @return
      */
-    public List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>> LOC_method(List<CompilationUnit> compilationUnits) {
-        List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>> quadruples = new LinkedList<>();
+    public List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,CallableDeclaration, Integer>> LOC_method(List<CompilationUnit> compilationUnits) {
+        List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,CallableDeclaration, Integer>> quadruples = new LinkedList<>();
         int lines = 0;
         for (CompilationUnit cu : compilationUnits) {
             for (ClassOrInterfaceDeclaration cla : cu.findAll(ClassOrInterfaceDeclaration.class)) {
                 for (MethodDeclaration md : cla.getMethods()) {
                     String body = md.getBody().toString();
                     String comments = md.getAllContainedComments().toString();
-//                    System.out.println(body);
-//                    System.out.println(comments);
+
                     lines = (1+countLines(body)-countLines(comments));
-                    Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer> quad = new Quadruple<>(ConvertOptionalToActual(cu.getPackageDeclaration()), cla, md, lines);
+                    Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,CallableDeclaration, Integer> quad =
+                            new Quadruple<>(ConvertOptionalToActual(cu.getPackageDeclaration()), cla, md, lines);
                     quadruples.add(quad);
-                    PrettyPrintQuad(quad);
+                    //PrettyPrintQuad(quad);
 
                     /*System.out.println("Lines of "+md.getNameAsString()+" in "+cla.getNameAsString()+": "+lines);
                     System.out.println("=================");*/
@@ -373,26 +366,57 @@ public class MetricExtractor {
      *
      * @see Quadruple
      */
-    public List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>> LOC_class(List<CompilationUnit> compilationUnits) {
-        List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer>> quadruples = new LinkedList<>();
+    public List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,CallableDeclaration, Integer>> LOC_class(List<CompilationUnit> compilationUnits) {
+        List<Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,CallableDeclaration, Integer>> quadruples = new LinkedList<>();
         for (CompilationUnit cu : compilationUnits) {
             for (ClassOrInterfaceDeclaration cla : cu.findAll(ClassOrInterfaceDeclaration.class)) {
+                List<MethodDeclaration> methods = cla.getMethods();
+                List<ConstructorDeclaration> constructors = cla.getConstructors();
                 int classLength= countLines(cla.getFields().toString());
 
-                for (MethodDeclaration md : cla.getMethods()) {
-                    String body = md.getBody().toString();
-                    String comments = md.getAllContainedComments().toString();
-
-                    classLength = classLength + (1 + countLines(body) - countLines(comments));
+                for (MethodDeclaration methodDeclaration : methods) {
+                    classLength = calculateLOC_CLASSAUX(classLength, methodDeclaration);
                 }
-                for(MethodDeclaration md: cla.getMethods()){
-                    Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer> quad = new Quadruple<>(ConvertOptionalToActual(cu.getPackageDeclaration()), cla, md, classLength);
+                for (ConstructorDeclaration constructorDeclaration : constructors) {
+                    classLength = calculateLOC_CLASSAUX(classLength, constructorDeclaration);
+                }
+
+                for(MethodDeclaration methodDeclaration: methods){
+                    Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,CallableDeclaration, Integer> quad =
+                            new Quadruple<>(ConvertOptionalToActual(cu.getPackageDeclaration()), cla, methodDeclaration, classLength);
                     quadruples.add(quad);
-                    PrettyPrintQuad(quad);
+                    //PrettyPrintQuad(quad);
+                }
+
+                for(ConstructorDeclaration constructorDeclaration: constructors){
+                    Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,CallableDeclaration, Integer> quad =
+                            new Quadruple<>(ConvertOptionalToActual(cu.getPackageDeclaration()), cla, constructorDeclaration, classLength);
+                    quadruples.add(quad);
+                    //PrettyPrintQuad(quad);
                 }
             }
         }
         return quadruples;
+    }
+
+    private int calculateLOC_CLASSAUX(int classLength, CallableDeclaration declaration) {
+        if(declaration.isConstructorDeclaration()){
+            ConstructorDeclaration constructorDeclaration =declaration.asConstructorDeclaration();
+            String body = constructorDeclaration.getBody().toString();
+            String comments = constructorDeclaration.getAllContainedComments().toString();
+
+            classLength += ((1 + countLines(body)) - countLines(comments));
+            return classLength;
+        }else if (declaration.isMethodDeclaration()){
+            MethodDeclaration methodDeclarationd = declaration.asMethodDeclaration();
+            String body = methodDeclarationd.getBody().toString();
+            String comments = methodDeclarationd.getAllContainedComments().toString();
+
+            classLength += ((1 + countLines(body)) - countLines(comments));
+            return classLength;
+        }else{
+            return classLength;
+        }
     }
 
     /**
