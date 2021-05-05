@@ -9,9 +9,9 @@ public class Math {
      * @param falseP
      * @param falseN
      */
-    public static double calculateTotal(double trueP, double trueN, double falseP, double falseN){
+    public static int calculateTotal(double trueP, double trueN, double falseP, double falseN){
         double total = trueP + trueN + falseN + falseP;
-        return total;
+        return (int) total;
     }
 
 
