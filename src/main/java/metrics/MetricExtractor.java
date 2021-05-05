@@ -176,7 +176,7 @@ public class MetricExtractor {
 
 
     /**
-     *  Extracts the Number of Methods inside each class, the number is stored in the D atribute of the returned Quadruple
+     *  Extracts the Number of Methods inside each class, the number is stored in the D attribute of the returned Quadruple
      *
      * @param compilationUnits - The compilationUnits are going to be analyzed and scanned for each method in a class
      * @return a list of Quadruple<PackageDeclaration,ClassOrInterfaceDeclaration,MethodDeclaration, Integer> which is
