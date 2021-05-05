@@ -221,6 +221,8 @@ public class GuiController {
             totalnumber.setText("Total: " + calculateTotal(codeSmellsComparator.getTruePositiveNumber(),codeSmellsComparator.getTrueNegativeNumber(),
                     codeSmellsComparator.getFalsePositiveNumber(),codeSmellsComparator.getFalseNegativeNumber()));
             //System.out.println(codeSmellsComparator.setValuesToCompare());
+            qualityMeasures.setDisable(false);
+            qualityMeasures.setVisible(true);
         } catch (NullPointerException nullPointerException) {
             showInformationMessage("Erro", "Selecione os Ficheiros excel a comparar", Alert.AlertType.ERROR);
             //nullPointerException.printStackTrace();
