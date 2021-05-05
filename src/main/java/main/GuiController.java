@@ -239,17 +239,17 @@ public class GuiController {
         try {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             Label precisionN = new Label("Precision: ");
-            Double precision = calculatePrecision(codeSmellsComparator.getTruePositiveNumber(),codeSmellsComparator.getFalsePositiveNumber());
-            Double recall = calculateRecall(codeSmellsComparator.getTruePositiveNumber(),codeSmellsComparator.getFalseNegativeNumber());
+            Double precision = calculatePrecision(Double.parseDouble(tpnumber.getText()), Double.parseDouble(fpnumber.getText()));
+            Double recall = calculateRecall(Double.parseDouble(tpnumber.getText()),Double.parseDouble(fnnumber.getText()));
             Label precisionV = new Label(precision.toString());
             Label recallN = new Label("Recall: ");
             Label recallV = new Label(recall.toString());
             Label errorN = new Label("Error: ");
-            Label errorV = new Label(calculateError(codeSmellsComparator.getTruePositiveNumber(),codeSmellsComparator.getTrueNegativeNumber(),
-                    codeSmellsComparator.getFalsePositiveNumber(),codeSmellsComparator.getFalseNegativeNumber()).toString());
+            Label errorV = new Label(calculateError(Double.parseDouble(tpnumber.getText()),Double.parseDouble(tnnumber.getText()),
+                    Double.parseDouble(fpnumber.getText()),Double.parseDouble(fnnumber.getText())).toString());
             Label accuracy = new Label("Accuracy: ");
-            Label accuracyV = new Label(calculateAccuracy(codeSmellsComparator.getTruePositiveNumber(),codeSmellsComparator.getTrueNegativeNumber(),
-                    codeSmellsComparator.getFalsePositiveNumber(),codeSmellsComparator.getFalseNegativeNumber()).toString());
+            Label accuracyV = new Label(calculateAccuracy(Double.parseDouble(tpnumber.getText()),Double.parseDouble(tnnumber.getText()),
+                    Double.parseDouble(fpnumber.getText()),Double.parseDouble(fnnumber.getText())).toString());
             Label precisionEva = new Label(evaluateMeasure(precision));
             Label recallEva = new Label(evaluateMeasure(recall));
 
