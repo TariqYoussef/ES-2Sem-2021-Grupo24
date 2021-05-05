@@ -92,7 +92,8 @@ public class CodeSmellsComparator {
 
                         values.add(new Quadruple<>(originalSplit[7], originalSplit[10],toCompareSplit[7],toCompareSplit[10]));
                     } catch (ArrayIndexOutOfBoundsException arrayIndexOutOfBoundsException) {
-
+                        System.out.println("Original"+originalLine);
+                        System.out.println("ToCompare:"+toCompareLine);
                         arrayIndexOutOfBoundsException.printStackTrace();
                     }
 
