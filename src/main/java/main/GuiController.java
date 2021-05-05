@@ -169,7 +169,7 @@ public class GuiController {
     private void setExcelOriginal(File pathCodeSmell) {
         projectCodeSmell = pathCodeSmell;
         labelExcelOriginalCompareTab.setText(pathCodeSmell.getName());
-        updateGUIElements(pathCodeSmell);
+        //updateGUIElements(pathCodeSmell);
     }
 
     /**
@@ -181,18 +181,13 @@ public class GuiController {
     }
     //TODO check if exists a codeSmells within
     //TODO change behaviour: fazer com que o botao do selecionar excel simplesmente guarde a path do file
-    //TODO adicionar novo botao para comparar code smells
 
     /**
      * <p>Method used for choosing the Comparing Excel that will be compared to another one </p>
      */
     @FXML private void chooseExcelToCompare(){
         try {
-            FileChooser fileChooser = new FileChooser();
-            Stage stage = new Stage();
-            fileChooser.setTitle("Escolher ficheiro excel para comparar");
-            fileChooser.getExtensionFilters().add(EXTENSION_FILTER);
-            File exceltoCompare =  fileChooser.showOpenDialog(stage);
+            File exceltoCompare = getFile("Escolher ficheiro excel para comparar");
             setExcelToCompare(exceltoCompare);
         } catch (NullPointerException e) {
             showInformationMessage("Informação", "Nenhum ficheiro excel selecionado.", Alert.AlertType.INFORMATION);
@@ -201,20 +196,34 @@ public class GuiController {
     }
 
     /**
+     *
      *<p>Method used for choosing the Original Excel that will be compared to another one </p>
      */
     @FXML private void chooseExcelOriginal(){
         try {
-            FileChooser fileChooser = new FileChooser();
-            Stage stage = new Stage();
-            fileChooser.setTitle("Escolher ficheiro excel original");
-            fileChooser.getExtensionFilters().add(EXTENSION_FILTER);
-            File exceloriginal =  fileChooser.showOpenDialog(stage);
+            File exceloriginal = getFile("Escolher ficheiro excel original");
             setExcelOriginal(exceloriginal);
         } catch (NullPointerException e) {
             showInformationMessage("Informação", "Nenhum ficheiro excel selecionado.", Alert.AlertType.INFORMATION);
         }
 
+    }
+
+    /**
+     * @param s {@link String}   message shown in the {@link FileChooser}
+     * @return {@link File} file that the user chose with the {@link FileChooser}
+     *
+     * @see FileChooser
+     * @see File
+     * @see String
+     *
+     */
+    private File getFile(String s) {
+        FileChooser fileChooser = new FileChooser();
+        Stage stage = new Stage();
+        fileChooser.setTitle(s);
+        fileChooser.getExtensionFilters().add(EXTENSION_FILTER);
+        return fileChooser.showOpenDialog(stage);
     }
 
     /**
@@ -366,6 +375,7 @@ public class GuiController {
             showInformationMessage("Informação","Por favor selecione a pasta do projeto.", Alert.AlertType.INFORMATION);
         }catch (Exception e){
             throwErroInesperado(e);
+            e.printStackTrace();
         }
 
     }
