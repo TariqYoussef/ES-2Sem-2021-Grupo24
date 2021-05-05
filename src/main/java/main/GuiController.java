@@ -109,12 +109,12 @@ public class GuiController {
                 listrules.setOnMouseClicked(mouseEvent -> {
                     if(listrules.getSelectionModel().getSelectedItem()!=null){
                         Rule ruleSelected = listrules.getSelectionModel().getSelectedItem();
-                        metric1.setValue(ruleSelected.getMetric(ruleSelected.getRule1()));
-                        metric1op.setValue(ruleSelected.getMetricOperation(ruleSelected.getRule1()));
-                        metric1value.setText(ruleSelected.getMetricValue(ruleSelected.getRule1()).toString());
-                        metric2.setValue(ruleSelected.getMetric(ruleSelected.getRule2()));
-                        metric2op.setValue(ruleSelected.getMetricOperation(ruleSelected.getRule2()));
-                        metric2value.setText(ruleSelected.getMetricValue(ruleSelected.getRule2()).toString());
+                        metric1.setValue(ruleSelected.getRule1().getMetric());
+                        metric1op.setValue(ruleSelected.getRule1().getOperation());
+                        metric1value.setText(ruleSelected.getRule1().getValue().toString());
+                        metric2.setValue(ruleSelected.getRule2().getMetric());
+                        metric2op.setValue(ruleSelected.getRule2().getOperation());
+                        metric2value.setText(ruleSelected.getRule2().getValue().toString());
 
                         rulelogic.setValue(ruleSelected.getOperation());
                         rulesmell.setValue(ruleSelected.getSmell());

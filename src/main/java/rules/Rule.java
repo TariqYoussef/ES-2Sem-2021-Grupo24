@@ -84,7 +84,7 @@ public class Rule implements java.io.Serializable {
      * @see Operation
      *
      */
-    private static class SubRule implements java.io.Serializable {
+    public static class SubRule implements java.io.Serializable {
         private static final long serialVersionUID = 40L;
 
         private final Metric metric;
@@ -200,30 +200,6 @@ public class Rule implements java.io.Serializable {
     }
 
     /**
-     * @param sr {@link SubRule} given
-     * @return the {@link Metric} of the {@link SubRule}
-     */
-    public Metric getMetric(SubRule sr) {
-        return sr.metric;
-    }
-
-    /**
-     * @param sr {@link SubRule} given
-     * @return the {@link Metric} operation of the subrule
-     */
-    public Operation getMetricOperation(SubRule sr) {
-        return sr.operation;
-    }
-
-    /**
-     * @param sr {@link SubRule} given
-     * @return the {@link Metric} value of the subrule
-     */
-    public Integer getMetricValue(SubRule sr) {
-        return sr.value;
-    }
-
-    /**
      * <p>Receives a  {@link MethodMetrics} and checks all of its stored {@link Metric} and </p>
      *
      * @param method {@link MethodMetrics}
@@ -260,8 +236,6 @@ public class Rule implements java.io.Serializable {
      * @param value2 integer
      * @return boolean
      * @throws NoSuchElementException for when the received Operation is not programmed in this method
-     *
-     *
      */
     private static boolean Operation(int value1, Operation op, int value2) throws NoSuchElementException {
         switch (op) {
@@ -282,18 +256,40 @@ public class Rule implements java.io.Serializable {
 
         }
     }
-//TODO fazer função pa escrever apenas uma rule no file
+
+    public static void createRuleFile(String filepath) throws IOException {
+        FileOutputStream fileOut = new FileOutputStream(filepath);
+        fileOut.close();
+    }
+
+
+
     /**
      * <p>Method to store an ArrayList of rules to rules/rulehistory.ser, replacing the old set of rules</p>
      * @param rules ArrayList of rules to be stored
      * @throws IOException IO operation failed
      */
     public static void serializeRule(ArrayList<Rule> rules) throws IOException {
-            FileOutputStream fileOut = new FileOutputStream(pathSeries);
+        serializeRule(rules, pathSeries);
+    }
+    /**
+     * <p>Method to store an ArrayList of rules to rules/rulehistory.ser, replacing the old set of rules</p>
+     * @param rules ArrayList of rules to be stored
+     * @param filepath {@link String} path to file where the rules will be serialized
+     * @throws IOException IO operation failed
+     */
+    public static void serializeRule(ArrayList<Rule> rules, String filepath) throws IOException {
+
+        try {
+            FileOutputStream fileOut = new FileOutputStream(filepath);
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
             out.writeObject(rules);
             out.close();
             fileOut.close();
+        } catch (IOException ioException) {
+            createRuleFile(filepath);
+            serializeRule(rules,filepath);
+        }
     }
 
     /**
@@ -304,9 +300,13 @@ public class Rule implements java.io.Serializable {
      * @throws ClassNotFoundException Class Rule doesn't exist
      */
     public static ArrayList<Rule> deserializedRule() throws IOException, ClassNotFoundException {
+        return deserializedRule(pathSeries);
+    }
+
+    public static ArrayList<Rule> deserializedRule(String filepath) throws IOException, ClassNotFoundException {
         ArrayList<Rule> result;
         try {
-            FileInputStream fileIn = new FileInputStream(pathSeries);
+            FileInputStream fileIn = new FileInputStream(filepath);
             ObjectInputStream in = new ObjectInputStream(fileIn);
             ArrayList<Rule> rules = (ArrayList<Rule>) in.readObject();
 
@@ -320,7 +320,7 @@ public class Rule implements java.io.Serializable {
 
             }
             FileOutputStream fileOut = new FileOutputStream(pathSeries);
-            serializeRule(new ArrayList<>());
+            serializeRule(new ArrayList<>(), pathSeries);
             fileOut.close();
             result = new ArrayList<>();
         }
@@ -342,7 +342,7 @@ public class Rule implements java.io.Serializable {
             if(!rule.toString().equals(r.toString()))
                 newRules.add(rule);
         }
-        serializeRule(newRules);
+        serializeRule(newRules, pathSeries);
     }
 
     /**
@@ -364,7 +364,7 @@ public class Rule implements java.io.Serializable {
                 newRules.add(newRule);
             }
         }
-        serializeRule(newRules);
+        serializeRule(newRules, pathSeries);
     }
 
     /**
@@ -377,7 +377,7 @@ public class Rule implements java.io.Serializable {
     public static boolean doesRuleExist(Rule rule) throws IOException, ClassNotFoundException {
         ArrayList<Rule> rules2add = Rule.deserializedRule();
         for (Rule rule2Compare:rules2add) {
-            System.out.println(rule2Compare);
+            //System.out.println(rule2Compare);
             if(rule2Compare.toString().equals(rule.toString())){
                 return true;
             }
