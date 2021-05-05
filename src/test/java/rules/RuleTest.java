@@ -1,6 +1,5 @@
 package rules;
 
-import codeSmells.CodeSmellsComparator;
 import metrics.MethodMetrics;
 import metrics.MetricExtractor;
 import org.junit.jupiter.api.BeforeAll;
@@ -8,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -15,7 +15,9 @@ import static org.junit.jupiter.api.Assertions.*;
 class RuleTest {
     
     static MetricExtractor extractor;
-    static Rule rule1, rule2, rule3;
+    static Rule rule1;
+    static Rule rule2;
+    static Rule rule3;
     static List<MethodMetrics> methods;
 
     @BeforeAll
@@ -92,30 +94,30 @@ class RuleTest {
     }
 
     /**
-     * Test method for {@link Rule#getMetric(Rule.SubRule)}.
+     * Test method for {@link Rule.SubRule#getMetric()}.
      *
      */
     @Test
-    void getMetricTest() {
-        assertEquals(Metric.LOC_method,rule1.getMetric(rule1.getRule1()));
+    void subRuleGetMetricTest() {
+        assertEquals(Metric.LOC_method,rule1.getRule1().getMetric());
     }
 
     /**
-     * Test method for {@link Rule#getMetricOperation(Rule.SubRule)}.
+     * Test method for {@link Rule.SubRule#getOperation()}.
      *
      */
     @Test
-    void getMetricOperationTest() {
-        assertEquals(Rule.Operation.BiggerThan,rule1.getMetricOperation(rule1.getRule1()));
+    void subRuleGetOperationTest() {
+        assertEquals(Rule.Operation.BiggerThan,rule1.getRule1().getOperation());
     }
 
     /**
-     * Test method for {@link Rule#getMetricValue(Rule.SubRule)}.
+     * Test method for {@link Rule.SubRule#getMetric()}.
      *
      */
     @Test
-    void getMetricValueTest() {
-        assertEquals(10,rule1.getMetricValue(rule1.getRule1()));
+    void subRuleGetValueTest() {
+        assertEquals(10,rule1.getRule1().getValue());
     }
 
     /**
@@ -130,6 +132,38 @@ class RuleTest {
                 ": " + 2 +" Then is "+ Rule.Smell.Long_Method;
 
         assertEquals(string,rule1.toString());
+    }
+    /**
+     * Test method for {@link Rule#serializeRule(ArrayList)}.
+     * Test method for {@link Rule#deserializedRule()} .
+     *
+     */
+    @Test
+    void serializationRuleTest() throws IOException, ClassNotFoundException {
+        String testRuleSer = "src/test/java/resources/ruleTest.ser";
+        ArrayList<Rule> rulesToWrite = new ArrayList<>();
+        rulesToWrite.add(rule1);
+        rulesToWrite.add(rule2);
+        rulesToWrite.add(rule3);
+        Rule.serializeRule(rulesToWrite,testRuleSer);
+
+        ArrayList<Rule> rulesRead = Rule.deserializedRule(testRuleSer) ;
+        for (int i = 0 ; i<rulesRead.size()-1;i++) {
+
+            assertEquals(rulesToWrite.get(i).getRule1().getMetric()     ,rulesRead.get(i).getRule1().getMetric() );
+            assertEquals(rulesToWrite.get(i).getRule1().getOperation()  ,rulesRead.get(i).getRule1().getOperation());
+            assertEquals(rulesToWrite.get(i).getRule1().getValue()      ,rulesRead.get(i).getRule1().getValue() );
+            assertEquals(rulesToWrite.get(i).getRule2().getMetric()     ,rulesRead.get(i).getRule2().getMetric() );
+            assertEquals(rulesToWrite.get(i).getRule2().getOperation()  ,rulesRead.get(i).getRule2().getOperation());
+            assertEquals(rulesToWrite.get(i).getRule2().getValue()      ,rulesRead.get(i).getRule2().getValue() );
+
+            assertEquals(rulesToWrite.get(i).getOperation(),rulesRead.get(i).getOperation() );
+            assertEquals(rulesToWrite.get(i).getSmell(),rulesRead.get(i).getSmell() );
+            assertEquals(rulesToWrite.get(i).getSmell(),rulesRead.get(i).getSmell() );
+        }
+
+
+
     }
 
 }
