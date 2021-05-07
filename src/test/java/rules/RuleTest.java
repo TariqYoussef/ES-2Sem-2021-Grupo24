@@ -18,6 +18,7 @@ class RuleTest {
     static Rule rule1;
     static Rule rule2;
     static Rule rule3;
+    static Rule ruleChanged;
     static List<MethodMetrics> methods;
 
     @BeforeAll
@@ -26,19 +27,24 @@ class RuleTest {
         extractor = new MetricExtractor();
         extractor.setSrcpath(testclass.toPath());
         methods = extractor.ExtractMetrics();
-        //RUle é LOC_method > 10 AND CYCLO_METHOD > 5 then is lONG_Method
+        //RUle é LOC_method > 10 AND CYCLO_METHOD >= 2 then is lONG_Method
         rule1 = new Rule(Metric.LOC_method, Rule.Operation.BiggerThan, 10,
                 Metric.CYCLO_method, Rule.Operation.BiggerThanEqual, 2,
                 Rule.LogicOp.AND, Rule.Smell.Long_Method );
 
-        //RUle é LOC_method == 10 OR CYCLO_METHOD != 5 then is lONG_Method
+        //RUle é LOC_method == 10 OR CYCLO_METHOD != 0 then is lONG_Method
         rule2 = new Rule(Metric.LOC_method, Rule.Operation.Equal, 10,
                 Metric.CYCLO_method, Rule.Operation.Different, 0,
                 Rule.LogicOp.OR, Rule.Smell.Long_Method );
 
-        //RUle é NOM_class < 10 XOR LOC_class <= 100 then is God_Class
+        //RUle é NOM_class < 20 XOR LOC_class <= 100 then is God_Class
         rule3 = new Rule(Metric.NOM_class, Rule.Operation.SmallerThan, 20,
                 Metric.LOC_class, Rule.Operation.SmallerThanEqual, 100,
+                Rule.LogicOp.XOR, Rule.Smell.God_Class );
+
+        //RUle é NOM_class == 15 XOR LOC_class < 100 then is God_Class
+        ruleChanged = new Rule(Metric.NOM_class, Rule.Operation.Equal, 15,
+                Metric.LOC_class, Rule.Operation.SmallerThan, 100,
                 Rule.LogicOp.XOR, Rule.Smell.God_Class );
 
     }
@@ -161,9 +167,64 @@ class RuleTest {
             assertEquals(rulesToWrite.get(i).getSmell(),rulesRead.get(i).getSmell() );
             assertEquals(rulesToWrite.get(i).getSmell(),rulesRead.get(i).getSmell() );
         }
+    }
+
+    /**
+     * Test method for {@link Rule#serializeRule(ArrayList)}.
+     * Test method for {@link Rule#deserializedRule()} .
+     *
+     */
+    @Test
+    void serializationRuleTestForThrows() throws IOException, ClassNotFoundException {
+        String testRuleFalseSer = "src/test/java/resources/ruleTestFalse.ser";
+        ArrayList<Rule> rulesRead = Rule.deserializedRule(testRuleFalseSer) ;
+    }
+
+    /**
+     * Test method for {@link Rule#createRuleFile(String)}.
+     */
+    @Test
+    void createRuleFileTest() throws IOException {
+        String testRuleFalseSer = "src/test/java/resources/ruleTestFalse.ser";
+        Rule.createRuleFile(testRuleFalseSer);
+        File file = new File(testRuleFalseSer);
+        file.delete();
+    }
+
+    /**
+     * Test method for {@link Rule#deleteRule(Rule, String)}.
+     * Test method for {@link Rule#doesRuleExist(Rule)}
+     */
+    @Test
+    void deleteRuleTest() throws IOException, ClassNotFoundException {
+        String testRuleSer = "src/test/java/resources/ruleTest.ser";
+        Rule.deleteRule(rule1,testRuleSer);
+        assertEquals(false,Rule.doesRuleExist(rule1,testRuleSer));
 
 
+        ArrayList<Rule> rulesToWrite = new ArrayList<>();
+        rulesToWrite.add(rule1);
+        rulesToWrite.add(rule2);
+        rulesToWrite.add(rule3);
+        Rule.serializeRule(rulesToWrite,testRuleSer);
+    }
 
+    /**
+     * Test method for {@link Rule#changeRule(Rule, Rule, String)}.
+     * Test method for {@link Rule#doesRuleExist(Rule)}
+     */
+    @Test
+    void changeRuleTest() throws IOException, ClassNotFoundException {
+        String testRuleSer = "src/test/java/resources/ruleTest.ser";
+        Rule.changeRule(rule1,ruleChanged,testRuleSer);
+        assertEquals(false,Rule.doesRuleExist(rule1,testRuleSer));
+        assertEquals(true,Rule.doesRuleExist(ruleChanged,testRuleSer));
+
+        ArrayList<Rule> rulesToWrite = new ArrayList<>();
+        rulesToWrite.add(rule1);
+        rulesToWrite.add(rule2);
+        rulesToWrite.add(rule3);
+        Rule.serializeRule(rulesToWrite,testRuleSer);
     }
 
 }

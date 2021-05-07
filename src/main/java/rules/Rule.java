@@ -337,12 +337,16 @@ public class Rule implements java.io.Serializable {
      * @throws ClassNotFoundException Class Rule doesn't exist.
      */
     public static void deleteRule(Rule r) throws IOException, ClassNotFoundException {
+        deleteRule(r,pathSeries);
+    }
+
+    public static void deleteRule(Rule r, String filePath) throws IOException, ClassNotFoundException {
         ArrayList<Rule> newRules = new ArrayList<>();
-        for (Rule rule:deserializedRule()){
+        for (Rule rule:deserializedRule(filePath)){
             if(!rule.toString().equals(r.toString()))
                 newRules.add(rule);
         }
-        serializeRule(newRules, pathSeries);
+        serializeRule(newRules, filePath);
     }
 
     /**
@@ -356,15 +360,19 @@ public class Rule implements java.io.Serializable {
      * @throws ClassNotFoundException Class Rule doesn't exist.
      */
     public static void changeRule(Rule oldRule, Rule newRule) throws IOException, ClassNotFoundException {
+        changeRule(oldRule,newRule,pathSeries);
+    }
+
+    public static void changeRule(Rule oldRule, Rule newRule, String filePath) throws IOException, ClassNotFoundException {
         ArrayList<Rule> newRules = new ArrayList<>();
-        for (Rule rule:deserializedRule()){
+        for (Rule rule:deserializedRule(filePath)){
             if(!rule.toString().equals(oldRule.toString()))
                 newRules.add(rule);
             else {
                 newRules.add(newRule);
             }
         }
-        serializeRule(newRules, pathSeries);
+        serializeRule(newRules, filePath);
     }
 
     /**
@@ -375,7 +383,11 @@ public class Rule implements java.io.Serializable {
      * @throws ClassNotFoundException Class Rule doesn't exist
      */
     public static boolean doesRuleExist(Rule rule) throws IOException, ClassNotFoundException {
-        ArrayList<Rule> rules2add = Rule.deserializedRule();
+        return  doesRuleExist(rule,pathSeries);
+    }
+
+    public static boolean doesRuleExist(Rule rule,String filePath) throws IOException, ClassNotFoundException {
+        ArrayList<Rule> rules2add = Rule.deserializedRule(filePath);
         for (Rule rule2Compare:rules2add) {
             //System.out.println(rule2Compare);
             if(rule2Compare.toString().equals(rule.toString())){
