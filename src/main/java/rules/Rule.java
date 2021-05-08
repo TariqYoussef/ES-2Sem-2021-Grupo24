@@ -214,7 +214,7 @@ public class Rule implements java.io.Serializable {
         boolean passesrule1 = rule1.passesSubRule(method);
         boolean passesrule2 = rule2.passesSubRule(method);
 
-        switch (operation) {
+        switch (this.operation) {
             case AND:
                 return passesrule1 && passesrule2;
             case OR:
