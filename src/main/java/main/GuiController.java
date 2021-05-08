@@ -243,10 +243,17 @@ public class GuiController {
 
         try {
             codeSmellsComparator = new CodeSmellsComparator(projectCodeSmell,excelToCompare);
+            invalidComparisonsNumberIsLongMethod.setDisable(true);
+            invalidComparisonsNumberIsLongMethod.setVisible(false);
+            invalidComparisonsNumberIsGodClass.setDisable(true);
+            invalidComparisonsNumberIsGodClass.setVisible(false);
+
             setLabels(codeSmellsComparator);
-            //System.out.println(codeSmellsComparator.setValuesToCompare());
+
             qualityMeasuresIsGodClass.setDisable(false);
             qualityMeasuresIsGodClass.setVisible(true);
+            qualityMeasuresIsLongMethod.setDisable(false);
+            qualityMeasuresIsLongMethod.setVisible(true);
         } catch (NullPointerException nullPointerException) {
             showInformationMessage("Erro", "Selecione os Ficheiros excel a comparar", Alert.AlertType.ERROR);
             //nullPointerException.printStackTrace();
