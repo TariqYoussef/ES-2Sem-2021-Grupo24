@@ -43,43 +43,43 @@ class CodeSmellsComparatorTest {
         assertEquals(expected, actual);
     }
 
-    /**
-     * Test method for {@link CodeSmellsComparator#getTruePositiveNumber()}.
-     *
-     */
-    @Test
-    void getTruePositiveNumber() {
-        int actual = codeSmellsComparator.getTruePositiveNumber();
-        assertEquals(0, actual);
-    }
-
-    /**
-     * Test method for {@link CodeSmellsComparator#getTrueNegativeNumber()}.
-     *
-     */
-    @Test
-    void getTrueNegativeNumber() {
-        int actual = codeSmellsComparator.getTrueNegativeNumber();
-        assertEquals(92, actual);
-    }
-
-    /**
-     * Test method for {@link CodeSmellsComparator#getFalsePositiveNumber()}.
-     *
-     */
-    @Test
-    void getFalsePositiveNumber() {
-        int actual = codeSmellsComparator.getFalsePositiveNumber();
-        assertEquals(0, actual);
-    }
-
-    /**
-     * Test method for {@link CodeSmellsComparator#getFalseNegativeNumber()}.
-     *
-     */
-    @Test
-    void getFalseNegativeNumber() {
-        int actual = codeSmellsComparator.getFalseNegativeNumber();
-        assertEquals(0, actual);
-    }
+//    /**
+//     * Test method for {@link CodeSmellsComparator#getTruePositiveNumber()}.
+//     *
+//     */
+//    @Test
+//    void getTruePositiveNumber() {
+//        int actual = codeSmellsComparator.getTruePositiveNumber();
+//        assertEquals(0, actual);
+//    }
+//
+//    /**
+//     * Test method for {@link CodeSmellsComparator#getTrueNegativeNumber()}.
+//     *
+//     */
+//    @Test
+//    void getTrueNegativeNumber() {
+//        int actual = codeSmellsComparator.getTrueNegativeNumber();
+//        assertEquals(92, actual);
+//    }
+//
+//    /**
+//     * Test method for {@link CodeSmellsComparator#getFalsePositiveNumber()}.
+//     *
+//     */
+//    @Test
+//    void getFalsePositiveNumber() {
+//        int actual = codeSmellsComparator.getFalsePositiveNumber();
+//        assertEquals(0, actual);
+//    }
+//
+//    /**
+//     * Test method for {@link CodeSmellsComparator#getFalseNegativeNumber()}.
+//     *
+//     */
+//    @Test
+//    void getFalseNegativeNumber() {
+//        int actual = codeSmellsComparator.getFalseNegativeNumber();
+//        assertEquals(0, actual);
+//    }
 }

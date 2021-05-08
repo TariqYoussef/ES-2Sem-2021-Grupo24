@@ -72,15 +72,23 @@ public class GuiController {
 
     @FXML private Text labelExcelOriginalCompareTab;
     @FXML private Text labelExcelCompareCompareTab;
-    @FXML private Label totalnumber;
-    @FXML private Label invalidComparisonsNumber;
-    @FXML private Label tpnumber;
-    @FXML private Label fpnumber;
-    @FXML private Label fnnumber;
-    @FXML private Label tnnumber;
+    @FXML private Label totalnumberIsGodClass;
+    @FXML private Label invalidComparisonsNumberIsGodClass;
+    @FXML private Label tpnumberIsGodClass;
+    @FXML private Label fpnumberIsGodClass;
+    @FXML private Label fnnumberIsGodClass;
+    @FXML private Label tnnumberIsGodClass;
+    @FXML private Label totalnumberIsLongMethod;
+    @FXML private Label invalidComparisonsNumberIsLongMethod;
+    @FXML private Label tpnumberIsLongMethod;
+    @FXML private Label fpnumberIsLongMethod;
+    @FXML private Label fnnumberIsLongMethod;
+    @FXML private Label tnnumberIsLongMethod;
 
 
-    @FXML private Button qualityMeasures;
+    @FXML private Button qualityMeasuresIsGodClass;
+    @FXML private Button qualityMeasuresIsLongMethod;
+
 
     private Rule oldRule;
 
@@ -237,8 +245,8 @@ public class GuiController {
             codeSmellsComparator = new CodeSmellsComparator(projectCodeSmell,excelToCompare);
             setLabels(codeSmellsComparator);
             //System.out.println(codeSmellsComparator.setValuesToCompare());
-            qualityMeasures.setDisable(false);
-            qualityMeasures.setVisible(true);
+            qualityMeasuresIsGodClass.setDisable(false);
+            qualityMeasuresIsGodClass.setVisible(true);
         } catch (NullPointerException nullPointerException) {
             showInformationMessage("Erro", "Selecione os Ficheiros excel a comparar", Alert.AlertType.ERROR);
             //nullPointerException.printStackTrace();
@@ -249,24 +257,48 @@ public class GuiController {
     }
 
     private void setLabels(CodeSmellsComparator codeSmellsComparator) {
-        tpnumber.setText(String.valueOf(codeSmellsComparator.getTruePositiveNumber()));
-        tnnumber.setText(String.valueOf(codeSmellsComparator.getTrueNegativeNumber()));
-        fpnumber.setText(String.valueOf(codeSmellsComparator.getFalsePositiveNumber()));
-        fnnumber.setText(String.valueOf(codeSmellsComparator.getFalseNegativeNumber()));
-        totalnumber.setText("Total: " + calculateTotal(codeSmellsComparator.getTruePositiveNumber(), codeSmellsComparator.getTrueNegativeNumber(),
-                codeSmellsComparator.getFalsePositiveNumber(), codeSmellsComparator.getFalseNegativeNumber()));
-        invalidComparisonsNumber.setText("Invalid Comparisons: "+ codeSmellsComparator.getInvalidComparisonsNumber());
+        tpnumberIsGodClass.setText(String.valueOf(codeSmellsComparator.getTruePositiveNumberIsGodClass()));
+        tnnumberIsGodClass.setText(String.valueOf(codeSmellsComparator.getTrueNegativeNumberIsGodClass()));
+        fpnumberIsGodClass.setText(String.valueOf(codeSmellsComparator.getFalsePositiveNumberIsGodClass()));
+        fnnumberIsGodClass.setText(String.valueOf(codeSmellsComparator.getFalseNegativeNumberIsGodClass()));
+        totalnumberIsGodClass.setText("Total: " + calculateTotal(codeSmellsComparator.getTruePositiveNumberIsGodClass(), codeSmellsComparator.getTrueNegativeNumberIsGodClass(),
+                codeSmellsComparator.getFalsePositiveNumberIsGodClass(), codeSmellsComparator.getFalseNegativeNumberIsGodClass()));
+        invalidComparisonsNumberIsGodClass.setText("Invalid Comparisons: "+ codeSmellsComparator.getInvalidComparisonsNumberIsGodClass());
+
+        tpnumberIsLongMethod.setText(String.valueOf(codeSmellsComparator.getTruePositiveNumberIsLongMethod()));
+        tnnumberIsLongMethod.setText(String.valueOf(codeSmellsComparator.getTrueNegativeNumberIsLongMethod()));
+        fpnumberIsLongMethod.setText(String.valueOf(codeSmellsComparator.getFalsePositiveNumberIsLongMethod()));
+        fnnumberIsLongMethod.setText(String.valueOf(codeSmellsComparator.getFalseNegativeNumberIsLongMethod()));
+        totalnumberIsLongMethod.setText("Total: " + calculateTotal(codeSmellsComparator.getTruePositiveNumberIsLongMethod(), codeSmellsComparator.getTrueNegativeNumberIsLongMethod(),
+                codeSmellsComparator.getFalsePositiveNumberIsLongMethod(), codeSmellsComparator.getFalseNegativeNumberIsLongMethod()));
+        invalidComparisonsNumberIsLongMethod.setText("Invalid Comparisons: "+ codeSmellsComparator.getInvalidComparisonsNumberIsLongMethod());
     }
 
     /**
-     * <p>Method used when the user click the qualityMeasures button on the Compare Tab </p>
+     * <p>Method used when the user click the qualityMeasures button on the Compare Tab relative to the God Class metric </p>
      *
      */
-    @FXML private void getQualityMeasures(){
+    @FXML private void setQualityMeasuresIsGodClass(){
         try {
 
-            createAlert(codeSmellsComparator.getTruePositiveNumber(), codeSmellsComparator.getTrueNegativeNumber(),
-                    codeSmellsComparator.getFalsePositiveNumber(), codeSmellsComparator.getFalseNegativeNumber());
+            createAlert(codeSmellsComparator.getTruePositiveNumberIsGodClass(), codeSmellsComparator.getTrueNegativeNumberIsGodClass(),
+                    codeSmellsComparator.getFalsePositiveNumberIsGodClass(), codeSmellsComparator.getFalseNegativeNumberIsGodClass());
+
+        } catch (NullPointerException nullPointerException) {
+            showInformationMessage("Erro", "Ainda não foi criada a Matriz de Confusão", Alert.AlertType.ERROR);
+        }catch (Exception e){
+            throwErroInesperado(e);
+        }
+    }
+    /**
+     * <p>Method used when the user click the qualityMeasures button on the Compare Tab relative to the Long Method metric</p>
+     *
+     */
+    @FXML private void setQualityMeasuresIsLongMethod(){
+        try {
+
+            createAlert(codeSmellsComparator.getTruePositiveNumberIsLongMethod(), codeSmellsComparator.getTrueNegativeNumberIsLongMethod(),
+                    codeSmellsComparator.getFalsePositiveNumberIsLongMethod(), codeSmellsComparator.getFalseNegativeNumberIsLongMethod());
 
         } catch (NullPointerException nullPointerException) {
             showInformationMessage("Erro", "Ainda não foi criada a Matriz de Confusão", Alert.AlertType.ERROR);
