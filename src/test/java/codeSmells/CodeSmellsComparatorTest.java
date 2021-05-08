@@ -43,43 +43,98 @@ class CodeSmellsComparatorTest {
         assertEquals(expected, actual);
     }
 
-//    /**
-//     * Test method for {@link CodeSmellsComparator#getTruePositiveNumber()}.
-//     *
-//     */
-//    @Test
-//    void getTruePositiveNumber() {
-//        int actual = codeSmellsComparator.getTruePositiveNumber();
-//        assertEquals(0, actual);
-//    }
-//
-//    /**
-//     * Test method for {@link CodeSmellsComparator#getTrueNegativeNumber()}.
-//     *
-//     */
-//    @Test
-//    void getTrueNegativeNumber() {
-//        int actual = codeSmellsComparator.getTrueNegativeNumber();
-//        assertEquals(92, actual);
-//    }
-//
-//    /**
-//     * Test method for {@link CodeSmellsComparator#getFalsePositiveNumber()}.
-//     *
-//     */
-//    @Test
-//    void getFalsePositiveNumber() {
-//        int actual = codeSmellsComparator.getFalsePositiveNumber();
-//        assertEquals(0, actual);
-//    }
-//
-//    /**
-//     * Test method for {@link CodeSmellsComparator#getFalseNegativeNumber()}.
-//     *
-//     */
-//    @Test
-//    void getFalseNegativeNumber() {
-//        int actual = codeSmellsComparator.getFalseNegativeNumber();
-//        assertEquals(0, actual);
-//    }
+    /**
+     * Test method for {@link CodeSmellsComparator#getTruePositiveNumberIsGodClass()}.
+     *
+     */
+    @Test
+    void getTruePositiveNumberIsGodClass() {
+        int actual = codeSmellsComparator.getTruePositiveNumberIsGodClass();
+        assertEquals(22, actual);
+    }
+    /**
+     * Test method for {@link CodeSmellsComparator#getTruePositiveNumberIsLongMethod()} ()}.
+     *
+     */
+    @Test
+    void getTruePositiveNumberIsLongMethod() {
+        int actual = codeSmellsComparator.getTruePositiveNumberIsLongMethod();
+        assertEquals(4, actual);
+    }
+
+    /**
+     * Test method for {@link CodeSmellsComparator#getTrueNegativeNumberIsGodClass()}.
+     *
+     */
+    @Test
+    void getTrueNegativeNumberIsGodClass() {
+        int actual = codeSmellsComparator.getTrueNegativeNumberIsGodClass();
+        assertEquals(34, actual);
+    }
+    /**
+     * Test method for {@link CodeSmellsComparator#getTrueNegativeNumberIsLongMethod()}.
+     *
+     */
+    @Test
+    void getTrueNegativeNumberIsLongMethod() {
+        int actual = codeSmellsComparator.getTrueNegativeNumberIsLongMethod();
+        assertEquals(71, actual);
+    }
+
+    /**
+     * Test method for {@link CodeSmellsComparator#getFalsePositiveNumberIsGodClass()}.
+     *
+     */
+    @Test
+    void getFalsePositiveNumberIsGodClass() {
+        int actual = codeSmellsComparator.getFalsePositiveNumberIsGodClass();
+        assertEquals(1, actual);
+    }
+    /**
+     * Test method for {@link CodeSmellsComparator#getFalsePositiveNumberIsGodClass()}.
+     *
+     */
+    @Test
+    void getFalsePositiveNumberIsLongMethod() {
+        int actual = codeSmellsComparator.getFalsePositiveNumberIsLongMethod();
+        assertEquals(0, actual);
+    }
+
+    /**
+     * Test method for {@link CodeSmellsComparator#getFalseNegativeNumberIsGodClass()}.
+     *
+     */
+    @Test
+    void getFalseNegativeNumberIsGodClass() {
+        int actual = codeSmellsComparator.getFalseNegativeNumberIsGodClass();
+        assertEquals(37, actual);
+    }
+    /**
+     * Test method for {@link CodeSmellsComparator#getFalseNegativeNumberIsLongMethod()}.
+     *
+     */
+    @Test
+    void getFalseNegativeNumberIsLongMethod() {
+        int actual = codeSmellsComparator.getFalseNegativeNumberIsLongMethod();
+        assertEquals(19, actual);
+    }
+
+    /**
+     * Test method for {@link CodeSmellsComparator#getInvalidComparisonsNumberIsGodClass()}.
+     *
+     */
+    @Test
+    void getInvalidComparisonsNumberIsGodClass() {
+        int actual = codeSmellsComparator.getInvalidComparisonsNumberIsGodClass();
+        assertEquals(0, actual);
+    }
+    /**
+     * Test method for {@link CodeSmellsComparator#getInvalidComparisonsNumberIsLongMethod()}.
+     *
+     */
+    @Test
+    void getInvalidComparisonsNumberIsLongMethod() {
+        int actual = codeSmellsComparator.getInvalidComparisonsNumberIsLongMethod();
+        assertEquals(0, actual);
+    }
 }
