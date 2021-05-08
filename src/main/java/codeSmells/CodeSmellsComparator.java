@@ -13,7 +13,7 @@ public class CodeSmellsComparator {
 
     /**
      *
-     * <p>The comparisons array stores all the values resulting from the execution of the methods in this class. Their positions are:</p>
+     * <p>The comparisons arrays store all the values resulting from the execution of the methods in this class. Their positions are:</p>
      * <ul>
      *     <li>[0] = truePositiveNumber</li>
      *     <li>[1] = trueNegativeNumber</li>
@@ -23,7 +23,12 @@ public class CodeSmellsComparator {
      * </ul>
      *
      */
-    private int[] comparisons = {0,0,0,0,0};
+    private int[] comparisonsIsGodClass = {0,0,0,0,0};
+    private int[] comparisonsIsLongMethod = {0,0,0,0,0};
+
+
+    private final int indexOfIsGodClass = 7;
+    private final int indexOfIsLongMethod = 10;
 
 //    private int truePositiveNumber = 0;
 //    private int trueNegativeNumber = 0;
@@ -90,7 +95,7 @@ public class CodeSmellsComparator {
 
                     try {
 
-                        values.add(new Quadruple<>(originalSplit[7], originalSplit[10],toCompareSplit[7],toCompareSplit[10]));
+                        values.add(new Quadruple<>(originalSplit[indexOfIsGodClass], originalSplit[indexOfIsLongMethod],toCompareSplit[indexOfIsGodClass],toCompareSplit[indexOfIsLongMethod]));
                     } catch (ArrayIndexOutOfBoundsException arrayIndexOutOfBoundsException) {
                         System.out.println("Original"+originalLine);
                         System.out.println("ToCompare:"+toCompareLine);
@@ -125,8 +130,8 @@ public class CodeSmellsComparator {
 
         for(Quadruple<String,String,String,String> value: values){
 
-            compareValues(value.getA(), value.getC());
-            compareValues(value.getB(), value.getD());
+            compareValues(value.getA(), value.getC(), comparisonsIsGodClass);
+            compareValues(value.getB(), value.getD(), comparisonsIsLongMethod);
 
         }
 
@@ -139,7 +144,7 @@ public class CodeSmellsComparator {
      * @param toCompareValue to compare value to compare
      *
      */
-    private void compareValues(String originalValue, String toCompareValue){
+    private void compareValues(String originalValue, String toCompareValue, int[] comparisons){
         if(originalValue.equals("true")){
             if(toCompareValue.equals("true")|| toCompareValue.equals("1")){
                 comparisons[0]++;
@@ -184,57 +189,106 @@ public class CodeSmellsComparator {
     }
 
     /**
-     * <p>Method used to get the true positive number parameter encapsulating the parameter of the class.</p>
+     * <p>Method used to get the true positive number parameter encapsulating the parameter of the class corresponding to the IsGodClass metric.</p>
      *
      * @return true positive number int.
      *
      */
-    public int getTruePositiveNumber() {
+    public int getTruePositiveNumberIsGodClass() {
 
-        return comparisons[0];
+        return comparisonsIsGodClass[0];
+    }
+    /**
+     * <p>Method used to get the true positive number parameter encapsulating the parameter of the class corresponding to the IsLongMethod metric.</p>
+     *
+     * @return true positive number int.
+     *
+     */
+    public int getTruePositiveNumberIsLongMethod() {
+
+        return comparisonsIsLongMethod[0];
     }
 
     /**
-     * <p>Method used to get the true negative number parameter encapsulating the parameter of the class.</p>
+     * <p>Method used to get the true negative number parameter encapsulating the parameter of the class corresponding to the IsGodClass metric.</p>
      *
      * @return true negative number int.
      *
      */
-    public int getTrueNegativeNumber() {
+    public int getTrueNegativeNumberIsGodClass() {
 
-        return comparisons[1];
+        return comparisonsIsGodClass[1];
+    }
+    /**
+     * <p>Method used to get the true negative number parameter encapsulating the parameter of the class corresponding to the IsLongMethod metric.</p>
+     *
+     * @return true negative number int.
+     *
+     */
+    public int getTrueNegativeNumberIsLongMethod() {
+
+        return comparisonsIsLongMethod[1];
     }
 
     /**
-     * <p>Method used to get the false positive number parameter encapsulating the parameter of the class.</p>
+     * <p>Method used to get the false positive number parameter encapsulating the parameter of the class corresponding to the IsGodClass metric.</p>
      *
      * @return false positive number int.
      *
      */
-    public int getFalsePositiveNumber() {
+    public int getFalsePositiveNumberIsGodClass() {
 
-        return comparisons[2];
+        return comparisonsIsGodClass[2];
+    }
+    /**
+     * <p>Method used to get the false positive number parameter encapsulating the parameter of the class corresponding to the IsLongMethod metric.</p>
+     *
+     * @return false positive number int.
+     *
+     */
+    public int getFalsePositiveNumberIsLongMethod() {
+
+        return comparisonsIsLongMethod[2];
     }
 
     /**
-     * <p>Method used to get the false negative number parameter encapsulating the parameter of the class.</p>
+     * <p>Method used to get the false negative number parameter encapsulating the parameter of the class corresponding to the IsGodClass metric.</p>
      *
      * @return false negative number int.
      *
      */
-    public int getFalseNegativeNumber() {
+    public int getFalseNegativeNumberIsGodClass() {
 
-        return comparisons[3];
+        return comparisonsIsGodClass[3];
     }
-
     /**
-     * <p>Method used to get the number of comparisons where at least one of the values in nonexistent or invalid.</p>
+     * <p>Method used to get the false negative number parameter encapsulating the parameter of the class corresponding to the IsLongMethod metric.</p>
      *
      * @return false negative number int.
      *
      */
-    public int getInvalidComparisonsNumber() {
-        return comparisons[4];
+    public int getFalseNegativeNumberIsLongMethod() {
+
+        return comparisonsIsLongMethod[3];
+    }
+
+    /**
+     * <p>Method used to get the number of comparisons where at least one of the values in nonexistent or invalid corresponding to the IsGodClass metric.</p>
+     *
+     * @return false negative number int.
+     *
+     */
+    public int getInvalidComparisonsNumberIsGodClass() {
+        return comparisonsIsGodClass[4];
+    }
+    /**
+     * <p>Method used to get the number of comparisons where at least one of the values in nonexistent or invalid corresponding to the IsLongMethod metric.</p>
+     *
+     * @return false negative number int.
+     *
+     */
+    public int getInvalidComparisonsNumberIsLongMethod() {
+        return comparisonsIsLongMethod[4];
     }
 
 
