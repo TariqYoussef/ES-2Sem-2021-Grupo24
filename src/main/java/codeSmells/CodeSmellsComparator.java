@@ -34,7 +34,7 @@ public class CodeSmellsComparator {
 //    private int trueNegativeNumber = 0;
 //    private int falsePositiveNumber = 0;
 //    private int falseNegativeNumber = 0;
-//
+
 //    private int invalidComparisons = 0;
 
     /**
@@ -313,15 +313,4 @@ public class CodeSmellsComparator {
 
         return ExelReader.read(excelToCompare);
     }
-
-    public static void main(String[] args) {
-        //File excelOriginal = new File("ES-2Sem-2021-Grupo24_metrics/ES-2Sem-2021-Grupo24_metrics.xlsx");
-        //File excelToCompare = new File("Metrics_to_compare/ES-2Sem-2021-Grupo24_compare_metrics.xlsx");
-        File excelOriginal = new File("Example_files/Code_Smells.xlsx");
-        File excelToCompare = new File("Metrics_to_compare/jasml_0.10_metrics.xlsx");
-        CodeSmellsComparator codeSmellsComparator = new CodeSmellsComparator(excelOriginal, excelToCompare);
-    }
-
-
-
 }

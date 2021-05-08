@@ -1,12 +1,15 @@
-package main;
+package gui;
 
 import codeSmells.CodeSmellsComparator;
 import codeSmells.CodeSmellsCreator;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -22,6 +25,7 @@ import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
@@ -327,17 +331,20 @@ public class GuiController {
      *
      */
     private void createAlert(double tp, double tn, double fp, double fn){
+        DecimalFormat df = new DecimalFormat("###.##");
+
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         Label precisionN = new Label("Precision: ");
         Double precision = calculatePrecision(tp, fp);
         Double recall = calculateRecall(tp,fn);
-        Label precisionV = new Label(precision.toString());
+
+        Label precisionV = new Label(df.format(precision));
         Label recallN = new Label("Recall: ");
-        Label recallV = new Label(recall.toString());
+        Label recallV = new Label(df.format(recall));
         Label errorN = new Label("Error: ");
-        Label errorV = new Label(calculateError(tp,tn,fp,fn).toString());
+        Label errorV = new Label(df.format(calculateError(tp,tn,fp,fn)));
         Label accuracy = new Label("Accuracy: ");
-        Label accuracyV = new Label(calculateAccuracy(tp,tn,fp,fn).toString());
+        Label accuracyV = new Label(df.format(calculateAccuracy(tp,tn,fp,fn)));
         Label precisionEva = new Label(evaluateMeasure(precision));
         Label recallEva = new Label(evaluateMeasure(recall));
 
@@ -346,16 +353,23 @@ public class GuiController {
         quality.setMinWidth(300);
         quality.setMaxHeight(Region.USE_COMPUTED_SIZE);
         quality.setMaxWidth(Region.USE_COMPUTED_SIZE);
+        //quality.setAlignment(Pos.CENTER_LEFT);
+        quality.setHgap(10);
+        quality.setVgap(5);
+
         quality.add(precisionN, 1, 0);
-        quality.add(precisionV, 3, 0);
-        quality.add(precisionEva, 5, 0);
+        quality.add(precisionV, 2, 0);
+        quality.add(precisionEva, 3, 0);
+
         quality.add(recallN,1, 1);
-        quality.add(recallV, 3, 1);
-        quality.add(recallEva, 5, 1);
+        quality.add(recallV, 2, 1);
+        quality.add(recallEva, 3, 1);
+
         quality.add(errorN,1,2);
-        quality.add(errorV, 3, 2);
+        quality.add(errorV, 2, 2);
+
         quality.add(accuracy,1,3);
-        quality.add(accuracyV, 3, 3);
+        quality.add(accuracyV, 2, 3);
 
         alert.getDialogPane().setContent(quality);
         alert.setTitle("Medidas de Qualidade");
