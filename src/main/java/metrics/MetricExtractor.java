@@ -3,6 +3,8 @@ package metrics;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.CallableDeclaration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
+import gui.GuiController;
+import javafx.scene.control.Alert;
 import jdk.nashorn.internal.codegen.CompilerConstants;
 import rules.Metric;
 import com.github.javaparser.StaticJavaParser;
@@ -39,7 +41,7 @@ public class MetricExtractor {
         if (optionalPath.isPresent()) {
             srcpath = optionalPath.get();
         } else {
-            throw new IOException("src folder not found!!");
+            GuiController.showInformationMessage("Erro","Não existe um src folder", Alert.AlertType.ERROR);
         }
 
     }
