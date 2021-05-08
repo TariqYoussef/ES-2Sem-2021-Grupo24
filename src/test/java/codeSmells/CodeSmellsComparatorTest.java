@@ -17,7 +17,7 @@ class CodeSmellsComparatorTest {
     @BeforeAll
     static void setUpBeforeClass() throws IOException {
         File excelOriginal = new File("src/test/java/resources/ES-2Sem-2021-Grupo24_metrics.xlsx");
-        File excelToCompare = new File("src/test/java/resources/ES-2Sem-2021-Grupo24_compare_metrics.xlsx");
+        File excelToCompare = new File("src/test/java/resources/ES-2Sem-2021-Grupo24_metrics_-_Copy.xlsx");
         codeSmellsComparator = new CodeSmellsComparator(excelOriginal,excelToCompare);
     }
 
@@ -39,7 +39,7 @@ class CodeSmellsComparatorTest {
     @Test
     void getExcelToCompare() {
         File actual = codeSmellsComparator.getExcelToCompare();
-        File expected = new File("src/test/java/resources/ES-2Sem-2021-Grupo24_compare_metrics.xlsx");
+        File expected = new File("src/test/java/resources/ES-2Sem-2021-Grupo24_metrics_-_Copy.xlsx");
         assertEquals(expected, actual);
     }
 
