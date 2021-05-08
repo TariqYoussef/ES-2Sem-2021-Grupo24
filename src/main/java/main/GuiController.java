@@ -263,7 +263,11 @@ public class GuiController {
         fnnumberIsGodClass.setText(String.valueOf(codeSmellsComparator.getFalseNegativeNumberIsGodClass()));
         totalnumberIsGodClass.setText("Total: " + calculateTotal(codeSmellsComparator.getTruePositiveNumberIsGodClass(), codeSmellsComparator.getTrueNegativeNumberIsGodClass(),
                 codeSmellsComparator.getFalsePositiveNumberIsGodClass(), codeSmellsComparator.getFalseNegativeNumberIsGodClass()));
-        invalidComparisonsNumberIsGodClass.setText("Invalid Comparisons: "+ codeSmellsComparator.getInvalidComparisonsNumberIsGodClass());
+        if(codeSmellsComparator.getInvalidComparisonsNumberIsGodClass()!=0) {
+            invalidComparisonsNumberIsGodClass.setDisable(false);
+            invalidComparisonsNumberIsGodClass.setVisible(true);
+            invalidComparisonsNumberIsGodClass.setText("Invalid Comparisons: "+ codeSmellsComparator.getInvalidComparisonsNumberIsGodClass());
+        }
 
         tpnumberIsLongMethod.setText(String.valueOf(codeSmellsComparator.getTruePositiveNumberIsLongMethod()));
         tnnumberIsLongMethod.setText(String.valueOf(codeSmellsComparator.getTrueNegativeNumberIsLongMethod()));
@@ -271,7 +275,11 @@ public class GuiController {
         fnnumberIsLongMethod.setText(String.valueOf(codeSmellsComparator.getFalseNegativeNumberIsLongMethod()));
         totalnumberIsLongMethod.setText("Total: " + calculateTotal(codeSmellsComparator.getTruePositiveNumberIsLongMethod(), codeSmellsComparator.getTrueNegativeNumberIsLongMethod(),
                 codeSmellsComparator.getFalsePositiveNumberIsLongMethod(), codeSmellsComparator.getFalseNegativeNumberIsLongMethod()));
-        invalidComparisonsNumberIsLongMethod.setText("Invalid Comparisons: "+ codeSmellsComparator.getInvalidComparisonsNumberIsLongMethod());
+        if(codeSmellsComparator.getInvalidComparisonsNumberIsLongMethod()!=0) {
+            invalidComparisonsNumberIsLongMethod.setDisable(false);
+            invalidComparisonsNumberIsLongMethod.setVisible(true);
+            invalidComparisonsNumberIsLongMethod.setText("Invalid Comparisons: "+ codeSmellsComparator.getInvalidComparisonsNumberIsLongMethod());
+        }
     }
 
     /**

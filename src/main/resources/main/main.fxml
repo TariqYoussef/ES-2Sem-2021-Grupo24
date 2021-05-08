@@ -6,7 +6,7 @@
 <?import javafx.scene.text.*?>
 <?import util.*?>
 
-<TabPane minHeight="500.0" minWidth="1000.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.GuiController">
+<TabPane minHeight="500.0" minWidth="1000.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.GuiController">
     <tabs>
         <Tab fx:id="tab1" closable="false" text="Painel De Utilização">
             <content>
@@ -411,9 +411,9 @@
                                                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                     </rowConstraints>
                                                     <children>
-                                                        <Label fx:id="invalidComparisonsNumberIsGodClass" text="Invalid Comparisons: -" textAlignment="CENTER" GridPane.rowIndex="1">
+                                                        <Label fx:id="invalidComparisonsNumberIsGodClass" disable="true" text="Invalid Comparisons: -" textAlignment="CENTER" visible="false" GridPane.rowIndex="1">
                                                             <font>
-                                                                <Font size="14.0" />
+                                                                <Font size="12.0" />
                                                             </font>
                                                             <GridPane.margin>
                                                                 <Insets />
@@ -461,10 +461,22 @@
                                                         <Insets top="10.0" />
                                                     </GridPane.margin>
                                                 </Label>
-                                                <Label fx:id="fnnumberIsGodClass" text="-" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
-                                                <Label fx:id="tnnumberIsGodClass" text="-" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
-                                                <Label fx:id="fpnumberIsGodClass" text="-" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
-                                                <Label fx:id="tpnumberIsGodClass" text="-" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                                                <Label fx:id="fnnumberIsGodClass" text="-" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                                       <GridPane.margin>
+                                          <Insets top="15.0" />
+                                       </GridPane.margin></Label>
+                                                <Label fx:id="tnnumberIsGodClass" text="-" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                                       <GridPane.margin>
+                                          <Insets top="15.0" />
+                                       </GridPane.margin></Label>
+                                                <Label fx:id="fpnumberIsGodClass" text="-" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                                       <GridPane.margin>
+                                          <Insets top="15.0" />
+                                       </GridPane.margin></Label>
+                                                <Label fx:id="tpnumberIsGodClass" text="-" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                                       <GridPane.margin>
+                                          <Insets top="15.0" />
+                                       </GridPane.margin></Label>
                                             </children>
                                         </GridPane>
                                         <BorderPane GridPane.rowIndex="1">
@@ -527,9 +539,9 @@
                                                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                     </rowConstraints>
                                                     <children>
-                                                        <Label fx:id="invalidComparisonsNumberIsLongMethod" text="Invalid Comparisons: -" textAlignment="CENTER" GridPane.rowIndex="1">
+                                                        <Label fx:id="invalidComparisonsNumberIsLongMethod" disable="true" text="Invalid Comparisons: -" textAlignment="CENTER" visible="false" GridPane.rowIndex="1">
                                                             <font>
-                                                                <Font size="14.0" />
+                                                                <Font size="12.0" />
                                                             </font>
                                                             <GridPane.margin>
                                                                 <Insets />
@@ -577,10 +589,22 @@
                                                         <Insets top="10.0" />
                                                     </GridPane.margin>
                                                 </Label>
-                                                <Label fx:id="fnnumberIsLongMethod" text="-" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
-                                                <Label fx:id="tnnumberIsLongMethod" text="-" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
-                                                <Label fx:id="fpnumberIsLongMethod" text="-" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
-                                                <Label fx:id="tpnumberIsLongMethod" text="-" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                                                <Label fx:id="fnnumberIsLongMethod" text="-" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                                       <GridPane.margin>
+                                          <Insets top="15.0" />
+                                       </GridPane.margin></Label>
+                                                <Label fx:id="tnnumberIsLongMethod" text="-" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                                       <GridPane.margin>
+                                          <Insets top="15.0" />
+                                       </GridPane.margin></Label>
+                                                <Label fx:id="fpnumberIsLongMethod" text="-" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                                       <GridPane.margin>
+                                          <Insets top="15.0" />
+                                       </GridPane.margin></Label>
+                                                <Label fx:id="tpnumberIsLongMethod" text="-" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                                       <GridPane.margin>
+                                          <Insets top="15.0" />
+                                       </GridPane.margin></Label>
                                             </children>
                                         </GridPane>
                                         <BorderPane GridPane.rowIndex="1">
