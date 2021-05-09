@@ -29,11 +29,6 @@ public class Quadruple <A, B, C, D>{
         this.d = d;
     }
 
-//  TODO abstract Quadruple and make a child that is specific for PackageDeclaration, ClassOrInterfaceDeclaration, MethodDeclaration, Integer
-    // dont know if this is a good idea
-    /**
-     *
-     */
     @Override
     public String toString() {
         return "Quadruple{" +
