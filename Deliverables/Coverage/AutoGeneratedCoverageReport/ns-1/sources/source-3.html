@@ -1,0 +1,173 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > GodClassStats</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+    @import "../../.css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../.js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">codeSmells</a>
+</div>
+
+<h1>Coverage Summary for Class: GodClassStats (codeSmells)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GodClassStats</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (7/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (8/8)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package codeSmells;
+<i class="no-highlight">2</i>&nbsp;
+<b class="fc"><i class="no-highlight">3</i>&nbsp;public class GodClassStats {</b>
+<i class="no-highlight">4</i>&nbsp;	/**
+<i class="no-highlight">5</i>&nbsp;	 * &lt;p&gt;The comparisons arrays store all the values resulting from the execution of the methods in this class. Their positions are:&lt;/p&gt;
+<i class="no-highlight">6</i>&nbsp;	 * &lt;ul&gt;
+<i class="no-highlight">7</i>&nbsp;	 *     &lt;li&gt;[0] = truePositiveNumber&lt;/li&gt;
+<i class="no-highlight">8</i>&nbsp;	 *     &lt;li&gt;[1] = trueNegativeNumber&lt;/li&gt;
+<i class="no-highlight">9</i>&nbsp;	 *     &lt;li&gt;[2] = falsePositiveNumber&lt;/li&gt;
+<i class="no-highlight">10</i>&nbsp;	 *     &lt;li&gt;[3] = falseNegativeNumber&lt;/li&gt;
+<i class="no-highlight">11</i>&nbsp;	 *     &lt;li&gt;[4] = invalidComparisonsNumber&lt;/li&gt;
+<i class="no-highlight">12</i>&nbsp;	 * &lt;/ul&gt;
+<i class="no-highlight">13</i>&nbsp;	 */
+<b class="fc"><i class="no-highlight">14</i>&nbsp;	private int[] comparisonsIsGodClass = {0, 0, 0, 0, 0};</b>
+<i class="no-highlight">15</i>&nbsp;
+<i class="no-highlight">16</i>&nbsp;	public int[] getComparisonsIsGodClass() {
+<b class="fc"><i class="no-highlight">17</i>&nbsp;		return comparisonsIsGodClass;</b>
+<i class="no-highlight">18</i>&nbsp;	}
+<i class="no-highlight">19</i>&nbsp;
+<i class="no-highlight">20</i>&nbsp;	/**
+<i class="no-highlight">21</i>&nbsp;	 * &lt;p&gt;Method used to get the true positive number parameter encapsulating the parameter of the class corresponding to the IsGodClass metric.&lt;/p&gt;
+<i class="no-highlight">22</i>&nbsp;	 *
+<i class="no-highlight">23</i>&nbsp;	 * @return true positive number int.
+<i class="no-highlight">24</i>&nbsp;	 */
+<i class="no-highlight">25</i>&nbsp;	public int getTruePositiveNumberIsGodClass() {
+<i class="no-highlight">26</i>&nbsp;
+<b class="fc"><i class="no-highlight">27</i>&nbsp;		return comparisonsIsGodClass[0];</b>
+<i class="no-highlight">28</i>&nbsp;	}
+<i class="no-highlight">29</i>&nbsp;
+<i class="no-highlight">30</i>&nbsp;	/**
+<i class="no-highlight">31</i>&nbsp;	 * &lt;p&gt;Method used to get the true negative number parameter encapsulating the parameter of the class corresponding to the IsGodClass metric.&lt;/p&gt;
+<i class="no-highlight">32</i>&nbsp;	 *
+<i class="no-highlight">33</i>&nbsp;	 * @return true negative number int.
+<i class="no-highlight">34</i>&nbsp;	 */
+<i class="no-highlight">35</i>&nbsp;	public int getTrueNegativeNumberIsGodClass() {
+<i class="no-highlight">36</i>&nbsp;
+<b class="fc"><i class="no-highlight">37</i>&nbsp;		return comparisonsIsGodClass[1];</b>
+<i class="no-highlight">38</i>&nbsp;	}
+<i class="no-highlight">39</i>&nbsp;
+<i class="no-highlight">40</i>&nbsp;	/**
+<i class="no-highlight">41</i>&nbsp;	 * &lt;p&gt;Method used to get the false positive number parameter encapsulating the parameter of the class corresponding to the IsGodClass metric.&lt;/p&gt;
+<i class="no-highlight">42</i>&nbsp;	 *
+<i class="no-highlight">43</i>&nbsp;	 * @return false positive number int.
+<i class="no-highlight">44</i>&nbsp;	 */
+<i class="no-highlight">45</i>&nbsp;	public int getFalsePositiveNumberIsGodClass() {
+<i class="no-highlight">46</i>&nbsp;
+<b class="fc"><i class="no-highlight">47</i>&nbsp;		return comparisonsIsGodClass[2];</b>
+<i class="no-highlight">48</i>&nbsp;	}
+<i class="no-highlight">49</i>&nbsp;
+<i class="no-highlight">50</i>&nbsp;	/**
+<i class="no-highlight">51</i>&nbsp;	 * &lt;p&gt;Method used to get the false negative number parameter encapsulating the parameter of the class corresponding to the IsGodClass metric.&lt;/p&gt;
+<i class="no-highlight">52</i>&nbsp;	 *
+<i class="no-highlight">53</i>&nbsp;	 * @return false negative number int.
+<i class="no-highlight">54</i>&nbsp;	 */
+<i class="no-highlight">55</i>&nbsp;	public int getFalseNegativeNumberIsGodClass() {
+<i class="no-highlight">56</i>&nbsp;
+<b class="fc"><i class="no-highlight">57</i>&nbsp;		return comparisonsIsGodClass[3];</b>
+<i class="no-highlight">58</i>&nbsp;	}
+<i class="no-highlight">59</i>&nbsp;
+<i class="no-highlight">60</i>&nbsp;	/**
+<i class="no-highlight">61</i>&nbsp;	 * &lt;p&gt;Method used to get the number of comparisons where at least one of the values in nonexistent or invalid corresponding to the IsGodClass metric.&lt;/p&gt;
+<i class="no-highlight">62</i>&nbsp;	 *
+<i class="no-highlight">63</i>&nbsp;	 * @return false negative number int.
+<i class="no-highlight">64</i>&nbsp;	 */
+<i class="no-highlight">65</i>&nbsp;	public int getInvalidComparisonsNumberIsGodClass() {
+<b class="fc"><i class="no-highlight">66</i>&nbsp;		return comparisonsIsGodClass[4];</b>
+<i class="no-highlight">67</i>&nbsp;	}
+<i class="no-highlight">68</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2021-05-09 00:48</div>
+</div>
+</body>
+</html>

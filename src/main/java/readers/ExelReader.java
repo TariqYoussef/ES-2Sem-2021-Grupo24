@@ -22,7 +22,7 @@ public class ExelReader {
 
     /**
      * @return return the exel file as a list of string
-     * @param file
+     * @param file {@link File} file to read from
      */
     public static ArrayList<String> read(File file){
         ArrayList<String> lines = new ArrayList<>();

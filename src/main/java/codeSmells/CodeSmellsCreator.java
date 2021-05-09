@@ -1,6 +1,5 @@
 package codeSmells;
 
-import rules.Metric;
 import metrics.MethodMetrics;
 import metrics.MetricExtractor;
 import rules.Rule;
@@ -43,7 +42,7 @@ public class CodeSmellsCreator {
      * <p>This method creates an empty excel file in which will be written the code smells and metrics.</p>
      * <p>This method should only be executed whenever the file doesn't exist.</p>
      * @param dir dir where the excel file will be placed
-     * @throws IOException
+     * @throws IOException when there is a problem with the input file
      */
     public void createCodeSmellsXlsxFile(File dir) throws IOException {
         FileOutputStream fileOut = new FileOutputStream(dir.getAbsolutePath()+"/"+name);
@@ -53,7 +52,7 @@ public class CodeSmellsCreator {
     /**
      * <p>This method is used to add/replace the content of the code smells excel file.</p>
      * @param dir dir where the excel file is placed
-     * @throws IOException
+     * @throws IOException when there is a problem with the input file
      */
     public void addCodeSmellsToXlsx(File dir) throws IOException {
 
@@ -77,7 +76,7 @@ public class CodeSmellsCreator {
         wb.close();
         fileOut.close();
 
-        System.out.println("Code smells escritos");
+        //System.out.println("Code smells escritos");
 
     }
 
@@ -108,10 +107,8 @@ public class CodeSmellsCreator {
         row.createCell(0).setCellValue(method.getId());
         row.createCell(1).setCellValue(method.getPackageOfMethod().getNameAsString());
         row.createCell(2).setCellValue(method.getClassOfMethod().getNameAsString());
-        String declaration = method.getMethod().getDeclarationAsString(false,false,false);
-        if(declaration.indexOf(' ') < declaration.indexOf('(') && declaration.indexOf(' ') != -1){
-            declaration = declaration.substring(declaration.indexOf(' ')).trim();
-        }
+        String declaration = getMethodDeclaration(method);
+
         row.createCell(3).setCellValue(declaration);
         row.createCell(4).setCellValue(method.getNom_class());//getNom_class());
         row.createCell(5).setCellValue(method.getLoc_class());//getLoc_class());
@@ -120,6 +117,15 @@ public class CodeSmellsCreator {
         row.createCell(8).setCellValue(method.getLoc_method());//getLoc_method());
         row.createCell(9).setCellValue(method.getCyclo_method());//getCyclo_method());
         row.createCell(10).setCellValue(method.verifyRuleset(longRules).toUpperCase(Locale.ROOT));
+    }
+
+    private String getMethodDeclaration(MethodMetrics method) {
+        String declaration = method.getMethod().getDeclarationAsString(false,false,false);
+
+        if(declaration.indexOf(' ') < declaration.indexOf('(') && declaration.indexOf(' ') != -1){
+            declaration = declaration.substring(declaration.indexOf(' ')).trim();
+        }
+        return declaration;
     }
 
 

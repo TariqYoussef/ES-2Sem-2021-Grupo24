@@ -4,7 +4,6 @@ import metrics.MethodMetrics;
 import metrics.MetricExtractor;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -198,6 +197,12 @@ class RuleTest {
     @Test
     void deleteRuleTest() throws IOException, ClassNotFoundException {
         String testRuleSer = "src/test/java/resources/ruleTest.ser";
+        ArrayList<Rule> rulesToWriteInitial = new ArrayList<>();
+        rulesToWriteInitial.add(rule1);
+        rulesToWriteInitial.add(rule2);
+        rulesToWriteInitial.add(rule3);
+        Rule.serializeRule(rulesToWriteInitial,testRuleSer);
+
         Rule.deleteRule(rule1,testRuleSer);
         assertEquals(false,Rule.doesRuleExist(rule1,testRuleSer));
 
@@ -216,6 +221,13 @@ class RuleTest {
     @Test
     void changeRuleTest() throws IOException, ClassNotFoundException {
         String testRuleSer = "src/test/java/resources/ruleTest.ser";
+
+        ArrayList<Rule> rulesToWriteInitial = new ArrayList<>();
+        rulesToWriteInitial.add(rule1);
+        rulesToWriteInitial.add(rule2);
+        rulesToWriteInitial.add(rule3);
+        Rule.serializeRule(rulesToWriteInitial,testRuleSer);
+
         Rule.changeRule(rule1,ruleChanged,testRuleSer);
         assertEquals(false,Rule.doesRuleExist(rule1,testRuleSer));
         assertEquals(true,Rule.doesRuleExist(ruleChanged,testRuleSer));

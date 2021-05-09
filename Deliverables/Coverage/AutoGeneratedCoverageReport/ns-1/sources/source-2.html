@@ -1,0 +1,237 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > CodeSmellsCreator</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+    @import "../../.css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../.js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">codeSmells</a>
+</div>
+
+<h1>Coverage Summary for Class: CodeSmellsCreator (codeSmells)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CodeSmellsCreator</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/54)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package codeSmells;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;import metrics.MethodMetrics;
+<i class="no-highlight">4</i>&nbsp;import metrics.MetricExtractor;
+<i class="no-highlight">5</i>&nbsp;import rules.Rule;
+<i class="no-highlight">6</i>&nbsp;import org.apache.poi.xssf.usermodel.XSSFRow;
+<i class="no-highlight">7</i>&nbsp;import org.apache.poi.xssf.usermodel.XSSFSheet;
+<i class="no-highlight">8</i>&nbsp;import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+<i class="no-highlight">9</i>&nbsp;
+<i class="no-highlight">10</i>&nbsp;import java.io.*;
+<i class="no-highlight">11</i>&nbsp;import java.util.ArrayList;
+<i class="no-highlight">12</i>&nbsp;import java.util.List;
+<i class="no-highlight">13</i>&nbsp;import java.util.Locale;
+<i class="no-highlight">14</i>&nbsp;import java.util.function.Predicate;
+<i class="no-highlight">15</i>&nbsp;
+<i class="no-highlight">16</i>&nbsp;/**
+<i class="no-highlight">17</i>&nbsp; *
+<i class="no-highlight">18</i>&nbsp; */
+<i class="no-highlight">19</i>&nbsp;public class CodeSmellsCreator {
+<i class="no-highlight">20</i>&nbsp;
+<i class="no-highlight">21</i>&nbsp;    private MetricExtractor metrics;
+<i class="no-highlight">22</i>&nbsp;    private String name;
+<i class="no-highlight">23</i>&nbsp;
+<i class="no-highlight">24</i>&nbsp;    private List&lt;Rule&gt; godRules;
+<i class="no-highlight">25</i>&nbsp;    private List&lt;Rule&gt; longRules;
+<i class="no-highlight">26</i>&nbsp;
+<i class="no-highlight">27</i>&nbsp;    /**
+<i class="no-highlight">28</i>&nbsp;     * @param metrics MetricExtractor object that will be used to get the metrics
+<i class="no-highlight">29</i>&nbsp;     * @param name name of the excel file
+<i class="no-highlight">30</i>&nbsp;     * @param godRules List of God rules to verify and write in the excel file
+<i class="no-highlight">31</i>&nbsp;     * @param longRules ist of Long rules to verify and write in the excel file
+<i class="no-highlight">32</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">33</i>&nbsp;    public CodeSmellsCreator(MetricExtractor metrics, String name, List&lt;Rule&gt; godRules, List&lt;Rule&gt; longRules){</b>
+<i class="no-highlight">34</i>&nbsp;
+<b class="nc"><i class="no-highlight">35</i>&nbsp;        this.metrics = metrics;</b>
+<b class="nc"><i class="no-highlight">36</i>&nbsp;        this.name = name + &quot;_metrics.xlsx&quot;;</b>
+<b class="nc"><i class="no-highlight">37</i>&nbsp;        this.godRules = godRules;</b>
+<b class="nc"><i class="no-highlight">38</i>&nbsp;        this.longRules = longRules;</b>
+<b class="nc"><i class="no-highlight">39</i>&nbsp;    }</b>
+<i class="no-highlight">40</i>&nbsp;
+<i class="no-highlight">41</i>&nbsp;    /**
+<i class="no-highlight">42</i>&nbsp;     * &lt;p&gt;This method creates an empty excel file in which will be written the code smells and metrics.&lt;/p&gt;
+<i class="no-highlight">43</i>&nbsp;     * &lt;p&gt;This method should only be executed whenever the file doesn&#39;t exist.&lt;/p&gt;
+<i class="no-highlight">44</i>&nbsp;     * @param dir dir where the excel file will be placed
+<i class="no-highlight">45</i>&nbsp;     * @throws IOException when there is a problem with the input file
+<i class="no-highlight">46</i>&nbsp;     */
+<i class="no-highlight">47</i>&nbsp;    public void createCodeSmellsXlsxFile(File dir) throws IOException {
+<b class="nc"><i class="no-highlight">48</i>&nbsp;        FileOutputStream fileOut = new FileOutputStream(dir.getAbsolutePath()+&quot;/&quot;+name);</b>
+<b class="nc"><i class="no-highlight">49</i>&nbsp;        fileOut.close();</b>
+<b class="nc"><i class="no-highlight">50</i>&nbsp;    }</b>
+<i class="no-highlight">51</i>&nbsp;
+<i class="no-highlight">52</i>&nbsp;    /**
+<i class="no-highlight">53</i>&nbsp;     * &lt;p&gt;This method is used to add/replace the content of the code smells excel file.&lt;/p&gt;
+<i class="no-highlight">54</i>&nbsp;     * @param dir dir where the excel file is placed
+<i class="no-highlight">55</i>&nbsp;     * @throws IOException when there is a problem with the input file
+<i class="no-highlight">56</i>&nbsp;     */
+<i class="no-highlight">57</i>&nbsp;    public void addCodeSmellsToXlsx(File dir) throws IOException {
+<i class="no-highlight">58</i>&nbsp;
+<b class="nc"><i class="no-highlight">59</i>&nbsp;        XSSFWorkbook wb = new XSSFWorkbook();</b>
+<b class="nc"><i class="no-highlight">60</i>&nbsp;        XSSFSheet sheet= wb.createSheet();</b>
+<b class="nc"><i class="no-highlight">61</i>&nbsp;        XSSFRow rowhead = sheet.createRow((short)0);</b>
+<i class="no-highlight">62</i>&nbsp;
+<b class="nc"><i class="no-highlight">63</i>&nbsp;        createHeaderCodeSmellsXlsx(rowhead);</b>
+<i class="no-highlight">64</i>&nbsp;
+<b class="nc"><i class="no-highlight">65</i>&nbsp;        List&lt;MethodMetrics&gt; methodMetrics = metrics.ExtractMetrics();</b>
+<i class="no-highlight">66</i>&nbsp;
+<b class="nc"><i class="no-highlight">67</i>&nbsp;        int rowNumber = 1;</b>
+<b class="nc"><i class="no-highlight">68</i>&nbsp;        for (MethodMetrics method: methodMetrics) {</b>
+<b class="nc"><i class="no-highlight">69</i>&nbsp;            XSSFRow row = sheet.createRow((short)rowNumber);</b>
+<b class="nc"><i class="no-highlight">70</i>&nbsp;            addRowCodeSmellsXlsx(row, method);</b>
+<b class="nc"><i class="no-highlight">71</i>&nbsp;            rowNumber++;</b>
+<b class="nc"><i class="no-highlight">72</i>&nbsp;        }</b>
+<i class="no-highlight">73</i>&nbsp;
+<b class="nc"><i class="no-highlight">74</i>&nbsp;        FileOutputStream fileOut = new FileOutputStream(dir.getAbsolutePath()+&quot;/&quot;+name);</b>
+<b class="nc"><i class="no-highlight">75</i>&nbsp;        wb.write(fileOut);</b>
+<b class="nc"><i class="no-highlight">76</i>&nbsp;        wb.close();</b>
+<b class="nc"><i class="no-highlight">77</i>&nbsp;        fileOut.close();</b>
+<i class="no-highlight">78</i>&nbsp;
+<i class="no-highlight">79</i>&nbsp;        //System.out.println(&quot;Code smells escritos&quot;);
+<i class="no-highlight">80</i>&nbsp;
+<b class="nc"><i class="no-highlight">81</i>&nbsp;    }</b>
+<i class="no-highlight">82</i>&nbsp;
+<i class="no-highlight">83</i>&nbsp;    /**
+<i class="no-highlight">84</i>&nbsp;     * &lt;p&gt;This method is used to create the header of the table in the excel file.&lt;/p&gt;
+<i class="no-highlight">85</i>&nbsp;     * @param rowHead object that specifies in which row of the excel file the header will be written
+<i class="no-highlight">86</i>&nbsp;     */
+<i class="no-highlight">87</i>&nbsp;    private void createHeaderCodeSmellsXlsx(XSSFRow rowHead){
+<b class="nc"><i class="no-highlight">88</i>&nbsp;        rowHead.createCell(0).setCellValue(&quot;MethodID&quot;);</b>
+<b class="nc"><i class="no-highlight">89</i>&nbsp;        rowHead.createCell(1).setCellValue(&quot;package&quot;);</b>
+<b class="nc"><i class="no-highlight">90</i>&nbsp;        rowHead.createCell(2).setCellValue(&quot;class&quot;);</b>
+<b class="nc"><i class="no-highlight">91</i>&nbsp;        rowHead.createCell(3).setCellValue(&quot;method&quot;);</b>
+<b class="nc"><i class="no-highlight">92</i>&nbsp;        rowHead.createCell(4).setCellValue(&quot;NOM_class&quot;);</b>
+<b class="nc"><i class="no-highlight">93</i>&nbsp;        rowHead.createCell(5).setCellValue(&quot;LOC_class&quot;);</b>
+<b class="nc"><i class="no-highlight">94</i>&nbsp;        rowHead.createCell(6).setCellValue(&quot;WMC_class&quot;);</b>
+<b class="nc"><i class="no-highlight">95</i>&nbsp;        rowHead.createCell(7).setCellValue(&quot;is_God_Class&quot;);</b>
+<b class="nc"><i class="no-highlight">96</i>&nbsp;        rowHead.createCell(8).setCellValue(&quot;LOC_method&quot;);</b>
+<b class="nc"><i class="no-highlight">97</i>&nbsp;        rowHead.createCell(9).setCellValue(&quot;CYCLO_method&quot;);</b>
+<b class="nc"><i class="no-highlight">98</i>&nbsp;        rowHead.createCell(10).setCellValue(&quot;is_Long_Method&quot;);</b>
+<b class="nc"><i class="no-highlight">99</i>&nbsp;    }</b>
+<i class="no-highlight">100</i>&nbsp;
+<i class="no-highlight">101</i>&nbsp;    /**
+<i class="no-highlight">102</i>&nbsp;     * &lt;p&gt;This method is used to write in the excel file the metrics and code smells of a given method.&lt;/p&gt;
+<i class="no-highlight">103</i>&nbsp;     * @param row object that specifies in which row of the excel file the line will be written
+<i class="no-highlight">104</i>&nbsp;     * @param method object that will be used to get the values of the cells
+<i class="no-highlight">105</i>&nbsp;     */
+<i class="no-highlight">106</i>&nbsp;    private void addRowCodeSmellsXlsx(XSSFRow row, MethodMetrics method){
+<b class="nc"><i class="no-highlight">107</i>&nbsp;        row.createCell(0).setCellValue(method.getId());</b>
+<b class="nc"><i class="no-highlight">108</i>&nbsp;        row.createCell(1).setCellValue(method.getPackageOfMethod().getNameAsString());</b>
+<b class="nc"><i class="no-highlight">109</i>&nbsp;        row.createCell(2).setCellValue(method.getClassOfMethod().getNameAsString());</b>
+<b class="nc"><i class="no-highlight">110</i>&nbsp;        String declaration = getMethodDeclaration(method);</b>
+<i class="no-highlight">111</i>&nbsp;
+<b class="nc"><i class="no-highlight">112</i>&nbsp;        row.createCell(3).setCellValue(declaration);</b>
+<b class="nc"><i class="no-highlight">113</i>&nbsp;        row.createCell(4).setCellValue(method.getNom_class());//getNom_class());</b>
+<b class="nc"><i class="no-highlight">114</i>&nbsp;        row.createCell(5).setCellValue(method.getLoc_class());//getLoc_class());</b>
+<b class="nc"><i class="no-highlight">115</i>&nbsp;        row.createCell(6).setCellValue(method.getWmc_class());//getWmc_class());</b>
+<b class="nc"><i class="no-highlight">116</i>&nbsp;        row.createCell(7).setCellValue(method.verifyRuleset(godRules).toUpperCase(Locale.ROOT));</b>
+<b class="nc"><i class="no-highlight">117</i>&nbsp;        row.createCell(8).setCellValue(method.getLoc_method());//getLoc_method());</b>
+<b class="nc"><i class="no-highlight">118</i>&nbsp;        row.createCell(9).setCellValue(method.getCyclo_method());//getCyclo_method());</b>
+<b class="nc"><i class="no-highlight">119</i>&nbsp;        row.createCell(10).setCellValue(method.verifyRuleset(longRules).toUpperCase(Locale.ROOT));</b>
+<b class="nc"><i class="no-highlight">120</i>&nbsp;    }</b>
+<i class="no-highlight">121</i>&nbsp;
+<i class="no-highlight">122</i>&nbsp;    private String getMethodDeclaration(MethodMetrics method) {
+<b class="nc"><i class="no-highlight">123</i>&nbsp;        String declaration = method.getMethod().getDeclarationAsString(false,false,false);</b>
+<i class="no-highlight">124</i>&nbsp;
+<b class="nc"><i class="no-highlight">125</i>&nbsp;        if(declaration.indexOf(&#39; &#39;) &lt; declaration.indexOf(&#39;(&#39;) &amp;&amp; declaration.indexOf(&#39; &#39;) != -1){</b>
+<b class="nc"><i class="no-highlight">126</i>&nbsp;            declaration = declaration.substring(declaration.indexOf(&#39; &#39;)).trim();</b>
+<i class="no-highlight">127</i>&nbsp;        }
+<b class="nc"><i class="no-highlight">128</i>&nbsp;        return declaration;</b>
+<i class="no-highlight">129</i>&nbsp;    }
+<i class="no-highlight">130</i>&nbsp;
+<i class="no-highlight">131</i>&nbsp;
+<i class="no-highlight">132</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2021-05-09 00:48</div>
+</div>
+</body>
+</html>

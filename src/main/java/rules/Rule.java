@@ -204,7 +204,7 @@ public class Rule implements java.io.Serializable {
      *
      * @param method {@link MethodMetrics}
      * @return boolean
-     * @throws NoSuchElementException
+     * @throws NoSuchElementException throws error when a Non existent Logical Operation is input
      *
      * @see Metric
      * @see MethodMetrics

@@ -4,27 +4,31 @@ import com.github.javaparser.ast.body.CallableDeclaration;
 import rules.Metric;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
-import rules.Rule;
 
-import java.util.ArrayList;
+import rules.Rule;
 import java.util.List;
 import java.util.NoSuchElementException;
 
 /**
- *
+ *<p>MethodMetrics is a class to encapsulate all the following variables relating </p>
+ * <ul>
+ *     <li>Methoid              </li>
+ *     <li>packageOfMethod      </li>
+ *     <li>classOfMethod        </li>
+ *     <li>method               </li>
+ *     <li>nom_class            </li>
+ *     <li>loc_class            </li>
+ *     <li>wmc_class            </li>
+ *     <li>loc_method           </li>
+ *     <li>cyclo_method         </li>
+ * </ul>
  */
 public class MethodMetrics {
     private final int id;
-    private PackageDeclaration packageOfMethod;
-    private ClassOrInterfaceDeclaration classOfMethod;
-    private CallableDeclaration method;
+    private final PackageDeclaration packageOfMethod;
+    private final ClassOrInterfaceDeclaration classOfMethod;
+    private final CallableDeclaration method;
 
-/*
- TODO maybe alterar comportamento das metricas para usarem herança, haver uma class abstrata Metric que estas implementavam
-        MethodMetrics armazenaria uma lista de Metrics que dps poderia ser iterada
-        problema: como temos a certeza que cada objeto tem todas as metyricas calculadas?
-*/
     private int nom_class;
     private int loc_class;
     private int wmc_class;
@@ -33,10 +37,10 @@ public class MethodMetrics {
     private int cyclo_method;
 
     /**
-     * @param id
-     * @param packageOfMethod
-     * @param classOfMethod
-     * @param method
+     * @param id int
+     * @param packageOfMethod PackageDeclaration
+     * @param classOfMethod ClassOrInterfaceDeclaration
+     * @param method CallableDeclaration
      */
     public MethodMetrics(int id, PackageDeclaration packageOfMethod, ClassOrInterfaceDeclaration classOfMethod, CallableDeclaration method) {
         this.id = id;
@@ -46,30 +50,38 @@ public class MethodMetrics {
     }
 
     /**
-     * @return
+     * @return ClassOrInterfaceDeclaration
      */
     public ClassOrInterfaceDeclaration getClassOfMethod() {
         return classOfMethod;
     }
-
+    /**
+     * @return int id of the MethodMetric
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * @return PackageDeclaration package of the MethodMetric
+     */
     public PackageDeclaration getPackageOfMethod() {
         return packageOfMethod;
     }
-
+    /**
+     * @return CallableDeclaration method or Constructor of the MethodMetric
+     */
     public CallableDeclaration getMethod() {
         return method;
     }
 
     /**
-     * @param metric
-     * @param value
-     * @throws NoSuchElementException
+     * @param metric {@link Metric}
+     * @param value int
+     * @throws NoSuchElementException  when a non existant metric enum is input
+     * @see Metric
      */
-    public void setMetric(Metric metric, int value)throws NoSuchElementException{
+    public void setMetric(Metric metric, int value) throws NoSuchElementException{
         switch(metric)
         {
             case NOM_class:
@@ -93,9 +105,9 @@ public class MethodMetrics {
     }
 
     /**
-     * @param metric
-     * @return
-     * @throws NoSuchElementException
+     * @param metric {@link Metric}
+     * @return int
+     * @throws NoSuchElementException when a non existant metric enum is input
      */
     public int getMetric(Metric metric) throws NoSuchElementException{
         switch(metric)
@@ -116,10 +128,10 @@ public class MethodMetrics {
     }
 
     /**
-     * <p>Recieves a {@link List<Rule>} and checks if if is an empty list first (returning "NA"), then if the object fails any of the rules (returning "False").
+     * <p>Receives a {@link List} and checks if if is an empty list first (returning "NA"), then if the object fails any of the rules (returning "False").
      * If the object doesn't fail any rule, then "True" is returned.</p>
      *
-     * @param rules {@link List<Rule>} Set of rules to be verified
+     * @param rules {@link List} Set of rules to be verified
      * @return string
      *
      */
@@ -137,7 +149,6 @@ public class MethodMetrics {
 
     /**
      * <p>Returns {@link int} corresponding to the nom_class method</p>
-     *
      * @return int
      *
      */
@@ -148,6 +159,7 @@ public class MethodMetrics {
     /**
      * <p>Sets {@link int} corresponding to the nom_class method</p>
      *
+     * @param nom_class integer value of the metric
      */
     public void setNom_class(int nom_class) {
         this.nom_class = nom_class;
@@ -155,7 +167,6 @@ public class MethodMetrics {
 
     /**
      * <p>Returns {@link int} corresponding to the loc_class method</p>
-     *
      * @return int
      *
      */
@@ -166,6 +177,7 @@ public class MethodMetrics {
     /**
      * <p>Sets {@link int} corresponding to the loc_class method</p>
      *
+     * @param loc_class integer value of the metric
      */
     public void setLoc_class(int loc_class) {
         this.loc_class = loc_class;
@@ -173,7 +185,6 @@ public class MethodMetrics {
 
     /**
      * <p>Returns {@link int} corresponding to the wmc_class method</p>
-     *
      * @return int
      *
      */
@@ -183,7 +194,7 @@ public class MethodMetrics {
 
     /**
      * <p>Sets {@link int} corresponding to the wmc_class method</p>
-     *
+     * @param wmc_class integer value of the metric
      */
     public void setWmc_class(int wmc_class) {
         this.wmc_class = wmc_class;
@@ -191,7 +202,6 @@ public class MethodMetrics {
 
     /**
      * <p>Returns {@link int} corresponding to the loc_method method</p>
-     *
      * @return int
      *
      */
@@ -201,7 +211,7 @@ public class MethodMetrics {
 
     /**
      * <p>Sets {@link int} corresponding to the loc_method method</p>
-     *
+     * @param loc_method integer value of the metric
      */
     public void setLoc_method(int loc_method) {
         this.loc_method = loc_method;
@@ -209,9 +219,7 @@ public class MethodMetrics {
 
     /**
      * <p>Returns {@link int} corresponding to the cyclo_method method</p>
-     *
      * @return int
-     *
      */
     public int getCyclo_method() {
         return cyclo_method;
@@ -219,7 +227,7 @@ public class MethodMetrics {
 
     /**
      * <p>Sets {@link int} corresponding to the cyclo_method method</p>
-     *
+     * @param cyclo_method integer value of the metric
      */
     public void setCyclo_method(int cyclo_method) {
         this.cyclo_method = cyclo_method;

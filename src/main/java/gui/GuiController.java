@@ -4,12 +4,11 @@ import codeSmells.CodeSmellsComparator;
 import codeSmells.CodeSmellsCreator;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -20,6 +19,7 @@ import metrics.MetricExtractor;
 import readers.ExelReader;
 import rules.Metric;
 import rules.Rule;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
@@ -116,36 +116,32 @@ public class GuiController {
         metric2op.getItems().setAll(Rule.Operation.values());
         rulelogic.getItems().setAll(Rule.LogicOp.values());
         rulesmell.getItems().setAll(Rule.Smell.values());
-
         try {
             listrules.setItems(FXCollections.observableArrayList(Rule.deserializedRule()));
 
-                listrules.setOnMouseClicked(mouseEvent -> {
-                    if(listrules.getSelectionModel().getSelectedItem()!=null){
-                        Rule ruleSelected = listrules.getSelectionModel().getSelectedItem();
-                        metric1.setValue(ruleSelected.getRule1().getMetric());
-                        metric1op.setValue(ruleSelected.getRule1().getOperation());
-                        metric1value.setText(ruleSelected.getRule1().getValue().toString());
-                        metric2.setValue(ruleSelected.getRule2().getMetric());
-                        metric2op.setValue(ruleSelected.getRule2().getOperation());
-                        metric2value.setText(ruleSelected.getRule2().getValue().toString());
-
-                        rulelogic.setValue(ruleSelected.getOperation());
-                        rulesmell.setValue(ruleSelected.getSmell());
-                    }
-                });
-        } catch (IOException e) {
-            e.printStackTrace();
-
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-
-        } catch (Exception e){
-            e.printStackTrace();
-
+                listrules.setOnMouseClicked(this::listSelector);
+                listrules.setOnScrollTo(this::listSelector);
+                listrules.setOnKeyPressed(this::listSelector);
+        } catch (Exception e) {
+            GuiController.showInformationMessage("Erro","Erro a ler regras armazenadas", Alert.AlertType.ERROR);
         }
-
     }
+
+    private void listSelector(Event event) {
+        if (listrules.getSelectionModel().getSelectedItem() != null) {
+            Rule ruleSelected = listrules.getSelectionModel().getSelectedItem();
+            metric1.setValue(ruleSelected.getRule1().getMetric());
+            metric1op.setValue(ruleSelected.getRule1().getOperation());
+            metric1value.setText(ruleSelected.getRule1().getValue().toString());
+            metric2.setValue(ruleSelected.getRule2().getMetric());
+            metric2op.setValue(ruleSelected.getRule2().getOperation());
+            metric2value.setText(ruleSelected.getRule2().getValue().toString());
+
+            rulelogic.setValue(ruleSelected.getOperation());
+            rulesmell.setValue(ruleSelected.getSmell());
+        }
+    }
+
 
     /**
      *  <p>This method starts when select project button is clicked.</p>
@@ -164,7 +160,7 @@ public class GuiController {
             //If there is code smells in project
             String pathCodeSmell = projectDir.getAbsolutePath() + "/" + projectDir.getName() + "_metrics/" + projectDir.getName() + "_metrics.xlsx";
             File projectCodeSmell = new File(pathCodeSmell);
-            if(Files.exists(projectCodeSmell.toPath()) ){;
+            if(Files.exists(projectCodeSmell.toPath()) ){
                 setExcelOriginal(projectCodeSmell);
                 updateGUIElements(pathCodeSmell);
             }else{
@@ -176,30 +172,29 @@ public class GuiController {
     }
 
     /**
-     * @param pathCodeSmell {@link File} file for the OriginalExcel
+     * <p>Gui method  to set the original excel file</p>
+     *
+     * @param filePath {@link File} file for the OriginalExcel
      */
-    private void setExcelOriginal(File pathCodeSmell) {
-        projectCodeSmell = pathCodeSmell;
-        labelExcelOriginalCompareTab.setText(pathCodeSmell.getName());
-        //updateGUIElements(pathCodeSmell);
+    private void setExcelOriginal(File filePath) {
+        projectCodeSmell = filePath;
+        labelExcelOriginalCompareTab.setText(projectCodeSmell.getName());
     }
 
     /**
-     * @param pathCodeSmell {@link File} file for the Comparing Excel
+     * <p>Gui method  to set the second excel file</p>
+     * @param filePath {@link File} file for the Comparing Excel
      */
-    private void setExcelToCompare(File pathCodeSmell) {
-        excelToCompare = pathCodeSmell;
-        labelExcelCompareCompareTab.setText(pathCodeSmell.getName());
+    private void setExcelToCompare(File filePath) {
+        excelToCompare = filePath;
+        labelExcelCompareCompareTab.setText(filePath.getName());
     }
-    //TODO check if exists a codeSmells within
-    //TODO change behaviour: fazer com que o botao do selecionar excel simplesmente guarde a path do file
-
     /**
      * <p>Method used for choosing the Comparing Excel that will be compared to another one </p>
      */
     @FXML private void chooseExcelToCompare(){
         try {
-            File exceltoCompare = getFile("Escolher ficheiro excel para comparar");
+            File exceltoCompare = getExcelFile("Escolher ficheiro excel para comparar");
             setExcelToCompare(exceltoCompare);
         } catch (NullPointerException e) {
             showInformationMessage("Informação", "Nenhum ficheiro excel selecionado.", Alert.AlertType.INFORMATION);
@@ -208,12 +203,11 @@ public class GuiController {
     }
 
     /**
-     *
      *<p>Method used for choosing the Original Excel that will be compared to another one </p>
      */
     @FXML private void chooseExcelOriginal(){
         try {
-            File exceloriginal = getFile("Escolher ficheiro excel original");
+            File exceloriginal = getExcelFile("Escolher ficheiro excel original");
             setExcelOriginal(exceloriginal);
         } catch (NullPointerException e) {
             showInformationMessage("Informação", "Nenhum ficheiro excel selecionado.", Alert.AlertType.INFORMATION);
@@ -222,7 +216,8 @@ public class GuiController {
     }
 
     /**
-     * @param s {@link String}   message shown in the {@link FileChooser}
+     * <p>Method to encapsulate opening a filechooser with a .xlsx ExtensionFilter</p>
+     * @param message {@link String}   message shown in the {@link FileChooser}
      * @return {@link File} file that the user chose with the {@link FileChooser}
      *
      * @see FileChooser
@@ -230,10 +225,10 @@ public class GuiController {
      * @see String
      *
      */
-    private File getFile(String s) {
+    private File getExcelFile(String message) {
         FileChooser fileChooser = new FileChooser();
         Stage stage = new Stage();
-        fileChooser.setTitle(s);
+        fileChooser.setTitle(message);
         fileChooser.getExtensionFilters().add(EXTENSION_FILTER);
         return fileChooser.showOpenDialog(stage);
     }
@@ -383,8 +378,9 @@ public class GuiController {
     /**
      * <p>Private Method for encapsulating showInformationMessage with the specific "Erro inesperado." content</p>
      *
+     * @param exception {@link Exception} exception used to print its stack Trace for easy debugging
      */
-    private void throwErroInesperado(Exception exception) {
+    public static void throwErroInesperado(Exception exception) {
         exception.printStackTrace();
         showInformationMessage("Erro", "Erro inesperado.", Alert.AlertType.ERROR);
     }
@@ -420,7 +416,7 @@ public class GuiController {
                 Files.createDirectory(Paths.get(pathSave));
                 codeSmellsCreator.createCodeSmellsXlsxFile(new File(pathSave));
             }catch (FileAlreadyExistsException e){
-                System.out.println("A pasta já existe");
+                //System.out.println("A pasta já existe");
             }
 
             // guardar code smells
@@ -598,10 +594,7 @@ public class GuiController {
      */
     private void updateGUIElements(File pathCodeSmell){
         ArrayList<String> lines = ExelReader.read(pathCodeSmell);
-        /*
-         * TODO
-         *   -Usar o ArrayList lines num método separado para obter as caracteristicas
-         */
+
         writeCharacteristicsGUI(lines);
         writeCodeSmellsGUI(lines);
 
@@ -612,7 +605,6 @@ public class GuiController {
      * <p>Method that creates the characteristics GUI </p>
      * @param lines {@link ArrayList} lines
      */
-    //TODO se o ficheiro excel nao for o correto isto manda erro
     private void writeCharacteristicsGUI(ArrayList<String> lines) {
         int packNum = 0, classNum = 0, methodNum = 0, locNum = 0;
         ArrayList<String> packNames = new ArrayList<String>();
@@ -684,4 +676,5 @@ public class GuiController {
         alert.setContentText(content);
         alert.showAndWait();
     }
+
 }
