@@ -10,6 +10,13 @@
   <li>  Rafael Rêgo nº87497       </li>
 </ul>
 
+<p>Boards trello do grupo</p>
+<ul>
+  <li>  <a href="https://trello.com/b/oWLEBVkI/sprints">Board Sprints</a></li>
+  <li>  <a href="https://trello.com/b/0DQlwCGC/metings">Board Meetings</a></li>
+</ul>
+
+
 <p>Erros</p>
 <ul>
   <li>X</li>

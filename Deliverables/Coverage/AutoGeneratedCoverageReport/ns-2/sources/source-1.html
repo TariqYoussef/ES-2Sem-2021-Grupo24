@@ -1,0 +1,789 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > GuiController</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+    @import "../../.css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../.js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">gui</a>
+</div>
+
+<h1>Coverage Summary for Class: GuiController (gui)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GuiController</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/29)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/303)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package gui;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;import codeSmells.CodeSmellsComparator;
+<i class="no-highlight">4</i>&nbsp;import codeSmells.CodeSmellsCreator;
+<i class="no-highlight">5</i>&nbsp;import javafx.collections.FXCollections;
+<i class="no-highlight">6</i>&nbsp;import javafx.collections.ObservableList;
+<i class="no-highlight">7</i>&nbsp;import javafx.event.Event;
+<i class="no-highlight">8</i>&nbsp;import javafx.fxml.FXML;
+<i class="no-highlight">9</i>&nbsp;import javafx.scene.control.*;
+<i class="no-highlight">10</i>&nbsp;import javafx.scene.input.MouseEvent;
+<i class="no-highlight">11</i>&nbsp;import javafx.scene.layout.GridPane;
+<i class="no-highlight">12</i>&nbsp;import javafx.scene.layout.Region;
+<i class="no-highlight">13</i>&nbsp;import javafx.scene.text.Font;
+<i class="no-highlight">14</i>&nbsp;import javafx.scene.text.Text;
+<i class="no-highlight">15</i>&nbsp;import javafx.stage.DirectoryChooser;
+<i class="no-highlight">16</i>&nbsp;import javafx.stage.FileChooser;
+<i class="no-highlight">17</i>&nbsp;import javafx.stage.Stage;
+<i class="no-highlight">18</i>&nbsp;import metrics.MetricExtractor;
+<i class="no-highlight">19</i>&nbsp;import readers.ExelReader;
+<i class="no-highlight">20</i>&nbsp;import rules.Metric;
+<i class="no-highlight">21</i>&nbsp;import rules.Rule;
+<i class="no-highlight">22</i>&nbsp;
+<i class="no-highlight">23</i>&nbsp;import java.io.File;
+<i class="no-highlight">24</i>&nbsp;import java.io.IOException;
+<i class="no-highlight">25</i>&nbsp;import java.nio.file.FileAlreadyExistsException;
+<i class="no-highlight">26</i>&nbsp;import java.nio.file.Files;
+<i class="no-highlight">27</i>&nbsp;import java.nio.file.Paths;
+<i class="no-highlight">28</i>&nbsp;import java.text.DecimalFormat;
+<i class="no-highlight">29</i>&nbsp;import java.util.ArrayList;
+<i class="no-highlight">30</i>&nbsp;import java.util.List;
+<i class="no-highlight">31</i>&nbsp;import java.util.function.Predicate;
+<i class="no-highlight">32</i>&nbsp;
+<i class="no-highlight">33</i>&nbsp;import static util.Math.*;
+<i class="no-highlight">34</i>&nbsp;
+<i class="no-highlight">35</i>&nbsp;/**
+<i class="no-highlight">36</i>&nbsp; *
+<i class="no-highlight">37</i>&nbsp; */
+<b class="nc"><i class="no-highlight">38</i>&nbsp;public class GuiController {</b>
+<b class="nc"><i class="no-highlight">39</i>&nbsp;    public static final FileChooser.ExtensionFilter EXTENSION_FILTER = new FileChooser.ExtensionFilter(&quot;ExcelFiles (.xlsx)&quot;, &quot;*.xlsx&quot;);</b>
+<i class="no-highlight">40</i>&nbsp;
+<i class="no-highlight">41</i>&nbsp;    private File projectDir; // Pasta do projeto java
+<i class="no-highlight">42</i>&nbsp;    private File projectCodeSmell; // Path para o excel de codeSmells do projeto
+<i class="no-highlight">43</i>&nbsp;    private CodeSmellsComparator codeSmellsComparator;
+<i class="no-highlight">44</i>&nbsp;
+<i class="no-highlight">45</i>&nbsp;    @FXML private Text labelProjectMainTab; // Path que aparece o GUI após a seleção da pasta
+<i class="no-highlight">46</i>&nbsp;    @FXML private Button createButton;
+<i class="no-highlight">47</i>&nbsp;    @FXML private GridPane excelBox;
+<i class="no-highlight">48</i>&nbsp;
+<i class="no-highlight">49</i>&nbsp;    @FXML private Text packNum;
+<i class="no-highlight">50</i>&nbsp;    @FXML private Text classNum;
+<i class="no-highlight">51</i>&nbsp;    @FXML private Text methodNum;
+<i class="no-highlight">52</i>&nbsp;    @FXML private Text locNum;
+<i class="no-highlight">53</i>&nbsp;
+<i class="no-highlight">54</i>&nbsp;    //Rules Tab
+<i class="no-highlight">55</i>&nbsp;    @FXML private ChoiceBox&lt;Metric&gt; metric1;
+<i class="no-highlight">56</i>&nbsp;    @FXML private ChoiceBox&lt;Rule.Operation&gt; metric1op;
+<i class="no-highlight">57</i>&nbsp;    @FXML private TextField metric1value;
+<i class="no-highlight">58</i>&nbsp;
+<i class="no-highlight">59</i>&nbsp;    @FXML private ChoiceBox&lt;Metric&gt; metric2;
+<i class="no-highlight">60</i>&nbsp;    @FXML private ChoiceBox&lt;Rule.Operation&gt; metric2op;
+<i class="no-highlight">61</i>&nbsp;    @FXML private TextField metric2value;
+<i class="no-highlight">62</i>&nbsp;
+<i class="no-highlight">63</i>&nbsp;    @FXML private ChoiceBox&lt;Rule.LogicOp&gt; rulelogic;
+<i class="no-highlight">64</i>&nbsp;    @FXML private ChoiceBox&lt;Rule.Smell&gt; rulesmell;
+<i class="no-highlight">65</i>&nbsp;
+<i class="no-highlight">66</i>&nbsp;    @FXML private ListView&lt;Rule&gt; listrules;
+<i class="no-highlight">67</i>&nbsp;
+<i class="no-highlight">68</i>&nbsp;    @FXML private Button addrule;
+<i class="no-highlight">69</i>&nbsp;    @FXML private Button removerule;
+<i class="no-highlight">70</i>&nbsp;    @FXML private Button changerule;
+<i class="no-highlight">71</i>&nbsp;    @FXML private Button donerulebtn;
+<i class="no-highlight">72</i>&nbsp;
+<i class="no-highlight">73</i>&nbsp;    //Confusion matrix
+<i class="no-highlight">74</i>&nbsp;    //Compare Tab
+<i class="no-highlight">75</i>&nbsp;    private File excelToCompare; //Excel for confusion matrix
+<i class="no-highlight">76</i>&nbsp;
+<i class="no-highlight">77</i>&nbsp;    @FXML private Text labelExcelOriginalCompareTab;
+<i class="no-highlight">78</i>&nbsp;    @FXML private Text labelExcelCompareCompareTab;
+<i class="no-highlight">79</i>&nbsp;    @FXML private Label totalnumberIsGodClass;
+<i class="no-highlight">80</i>&nbsp;    @FXML private Label invalidComparisonsNumberIsGodClass;
+<i class="no-highlight">81</i>&nbsp;    @FXML private Label tpnumberIsGodClass;
+<i class="no-highlight">82</i>&nbsp;    @FXML private Label fpnumberIsGodClass;
+<i class="no-highlight">83</i>&nbsp;    @FXML private Label fnnumberIsGodClass;
+<i class="no-highlight">84</i>&nbsp;    @FXML private Label tnnumberIsGodClass;
+<i class="no-highlight">85</i>&nbsp;    @FXML private Label totalnumberIsLongMethod;
+<i class="no-highlight">86</i>&nbsp;    @FXML private Label invalidComparisonsNumberIsLongMethod;
+<i class="no-highlight">87</i>&nbsp;    @FXML private Label tpnumberIsLongMethod;
+<i class="no-highlight">88</i>&nbsp;    @FXML private Label fpnumberIsLongMethod;
+<i class="no-highlight">89</i>&nbsp;    @FXML private Label fnnumberIsLongMethod;
+<i class="no-highlight">90</i>&nbsp;    @FXML private Label tnnumberIsLongMethod;
+<i class="no-highlight">91</i>&nbsp;
+<i class="no-highlight">92</i>&nbsp;
+<i class="no-highlight">93</i>&nbsp;    @FXML private Button qualityMeasuresIsGodClass;
+<i class="no-highlight">94</i>&nbsp;    @FXML private Button qualityMeasuresIsLongMethod;
+<i class="no-highlight">95</i>&nbsp;
+<i class="no-highlight">96</i>&nbsp;
+<i class="no-highlight">97</i>&nbsp;    private Rule oldRule;
+<i class="no-highlight">98</i>&nbsp;
+<i class="no-highlight">99</i>&nbsp;    public ObservableList&lt;Rule&gt; getRegras() {
+<b class="nc"><i class="no-highlight">100</i>&nbsp;        return listrules.getItems();</b>
+<i class="no-highlight">101</i>&nbsp;    }
+<i class="no-highlight">102</i>&nbsp;
+<i class="no-highlight">103</i>&nbsp;    /**
+<i class="no-highlight">104</i>&nbsp;     * &lt;p&gt;The FXML when initializing fills the choiceboxes with the corresponding values&lt;/p&gt;
+<i class="no-highlight">105</i>&nbsp;     * &lt;p&gt;Once started the FXML will be observing the clicks the user does&lt;/p&gt;
+<i class="no-highlight">106</i>&nbsp;     * &lt;p&gt;Once the user clicks in a rule from the rule history table the choiceboxes will fill with the values from the rule clicked&lt;/p&gt;
+<i class="no-highlight">107</i>&nbsp;     */
+<i class="no-highlight">108</i>&nbsp;    @FXML private void initialize(){
+<i class="no-highlight">109</i>&nbsp;        //Para quando o programa inicia
+<b class="nc"><i class="no-highlight">110</i>&nbsp;        clearGUIElements();</b>
+<i class="no-highlight">111</i>&nbsp;
+<i class="no-highlight">112</i>&nbsp;        //For Rules Tab
+<b class="nc"><i class="no-highlight">113</i>&nbsp;        metric1.getItems().setAll(Metric.values());</b>
+<b class="nc"><i class="no-highlight">114</i>&nbsp;        metric1op.getItems().setAll(Rule.Operation.values());</b>
+<b class="nc"><i class="no-highlight">115</i>&nbsp;        metric2.getItems().setAll(Metric.values());</b>
+<b class="nc"><i class="no-highlight">116</i>&nbsp;        metric2op.getItems().setAll(Rule.Operation.values());</b>
+<b class="nc"><i class="no-highlight">117</i>&nbsp;        rulelogic.getItems().setAll(Rule.LogicOp.values());</b>
+<b class="nc"><i class="no-highlight">118</i>&nbsp;        rulesmell.getItems().setAll(Rule.Smell.values());</b>
+<i class="no-highlight">119</i>&nbsp;        try {
+<b class="nc"><i class="no-highlight">120</i>&nbsp;            listrules.setItems(FXCollections.observableArrayList(Rule.deserializedRule()));</b>
+<i class="no-highlight">121</i>&nbsp;
+<b class="nc"><i class="no-highlight">122</i>&nbsp;                listrules.setOnMouseClicked(this::listSelector);</b>
+<b class="nc"><i class="no-highlight">123</i>&nbsp;                listrules.setOnScrollTo(this::listSelector);</b>
+<b class="nc"><i class="no-highlight">124</i>&nbsp;                listrules.setOnKeyPressed(this::listSelector);</b>
+<b class="nc"><i class="no-highlight">125</i>&nbsp;        } catch (Exception e) {</b>
+<b class="nc"><i class="no-highlight">126</i>&nbsp;            GuiController.showInformationMessage(&quot;Erro&quot;,&quot;Erro a ler regras armazenadas&quot;, Alert.AlertType.ERROR);</b>
+<b class="nc"><i class="no-highlight">127</i>&nbsp;        }</b>
+<b class="nc"><i class="no-highlight">128</i>&nbsp;    }</b>
+<i class="no-highlight">129</i>&nbsp;
+<i class="no-highlight">130</i>&nbsp;    private void listSelector(Event event) {
+<b class="nc"><i class="no-highlight">131</i>&nbsp;        if (listrules.getSelectionModel().getSelectedItem() != null) {</b>
+<b class="nc"><i class="no-highlight">132</i>&nbsp;            Rule ruleSelected = listrules.getSelectionModel().getSelectedItem();</b>
+<b class="nc"><i class="no-highlight">133</i>&nbsp;            metric1.setValue(ruleSelected.getRule1().getMetric());</b>
+<b class="nc"><i class="no-highlight">134</i>&nbsp;            metric1op.setValue(ruleSelected.getRule1().getOperation());</b>
+<b class="nc"><i class="no-highlight">135</i>&nbsp;            metric1value.setText(ruleSelected.getRule1().getValue().toString());</b>
+<b class="nc"><i class="no-highlight">136</i>&nbsp;            metric2.setValue(ruleSelected.getRule2().getMetric());</b>
+<b class="nc"><i class="no-highlight">137</i>&nbsp;            metric2op.setValue(ruleSelected.getRule2().getOperation());</b>
+<b class="nc"><i class="no-highlight">138</i>&nbsp;            metric2value.setText(ruleSelected.getRule2().getValue().toString());</b>
+<i class="no-highlight">139</i>&nbsp;
+<b class="nc"><i class="no-highlight">140</i>&nbsp;            rulelogic.setValue(ruleSelected.getOperation());</b>
+<b class="nc"><i class="no-highlight">141</i>&nbsp;            rulesmell.setValue(ruleSelected.getSmell());</b>
+<i class="no-highlight">142</i>&nbsp;        }
+<b class="nc"><i class="no-highlight">143</i>&nbsp;    }</b>
+<i class="no-highlight">144</i>&nbsp;
+<i class="no-highlight">145</i>&nbsp;
+<i class="no-highlight">146</i>&nbsp;    /**
+<i class="no-highlight">147</i>&nbsp;     *  &lt;p&gt;This method starts when select project button is clicked.&lt;/p&gt;
+<i class="no-highlight">148</i>&nbsp;     *  &lt;p&gt;It checks if a code smells file exists in the selected project to update GUI.&lt;/p&gt;
+<i class="no-highlight">149</i>&nbsp;     */
+<i class="no-highlight">150</i>&nbsp;    @FXML private void openProject(){
+<i class="no-highlight">151</i>&nbsp;        try {
+<b class="nc"><i class="no-highlight">152</i>&nbsp;            DirectoryChooser directoryChooser = new DirectoryChooser();</b>
+<b class="nc"><i class="no-highlight">153</i>&nbsp;            Stage stage = new Stage();</b>
+<b class="nc"><i class="no-highlight">154</i>&nbsp;            directoryChooser.setTitle(&quot;Escolher pasta do projeto&quot;);</b>
+<b class="nc"><i class="no-highlight">155</i>&nbsp;            File dir = directoryChooser.showDialog(stage);</b>
+<i class="no-highlight">156</i>&nbsp;
+<b class="nc"><i class="no-highlight">157</i>&nbsp;            projectDir = dir;</b>
+<b class="nc"><i class="no-highlight">158</i>&nbsp;            labelProjectMainTab.setText(dir.getAbsolutePath());</b>
+<i class="no-highlight">159</i>&nbsp;
+<i class="no-highlight">160</i>&nbsp;            //If there is code smells in project
+<b class="nc"><i class="no-highlight">161</i>&nbsp;            String pathCodeSmell = projectDir.getAbsolutePath() + &quot;/&quot; + projectDir.getName() + &quot;_metrics/&quot; + projectDir.getName() + &quot;_metrics.xlsx&quot;;</b>
+<b class="nc"><i class="no-highlight">162</i>&nbsp;            File projectCodeSmell = new File(pathCodeSmell);</b>
+<b class="nc"><i class="no-highlight">163</i>&nbsp;            if(Files.exists(projectCodeSmell.toPath()) ){</b>
+<b class="nc"><i class="no-highlight">164</i>&nbsp;                setExcelOriginal(projectCodeSmell);</b>
+<b class="nc"><i class="no-highlight">165</i>&nbsp;                updateGUIElements(pathCodeSmell);</b>
+<i class="no-highlight">166</i>&nbsp;            }else{
+<b class="nc"><i class="no-highlight">167</i>&nbsp;                clearGUIElements();</b>
+<i class="no-highlight">168</i>&nbsp;            }
+<b class="nc"><i class="no-highlight">169</i>&nbsp;        } catch (NullPointerException e) {</b>
+<b class="nc"><i class="no-highlight">170</i>&nbsp;            showInformationMessage(&quot;Informação&quot;, &quot;Nenhum ficheiro selecionado.&quot;, Alert.AlertType.INFORMATION);</b>
+<b class="nc"><i class="no-highlight">171</i>&nbsp;        }</b>
+<b class="nc"><i class="no-highlight">172</i>&nbsp;    }</b>
+<i class="no-highlight">173</i>&nbsp;
+<i class="no-highlight">174</i>&nbsp;    /**
+<i class="no-highlight">175</i>&nbsp;     * &lt;p&gt;Gui method  to set the original excel file&lt;/p&gt;
+<i class="no-highlight">176</i>&nbsp;     *
+<i class="no-highlight">177</i>&nbsp;     * @param filePath {@link File} file for the OriginalExcel
+<i class="no-highlight">178</i>&nbsp;     */
+<i class="no-highlight">179</i>&nbsp;    private void setExcelOriginal(File filePath) {
+<b class="nc"><i class="no-highlight">180</i>&nbsp;        projectCodeSmell = filePath;</b>
+<b class="nc"><i class="no-highlight">181</i>&nbsp;        labelExcelOriginalCompareTab.setText(projectCodeSmell.getName());</b>
+<b class="nc"><i class="no-highlight">182</i>&nbsp;    }</b>
+<i class="no-highlight">183</i>&nbsp;
+<i class="no-highlight">184</i>&nbsp;    /**
+<i class="no-highlight">185</i>&nbsp;     * &lt;p&gt;Gui method  to set the second excel file&lt;/p&gt;
+<i class="no-highlight">186</i>&nbsp;     * @param filePath {@link File} file for the Comparing Excel
+<i class="no-highlight">187</i>&nbsp;     */
+<i class="no-highlight">188</i>&nbsp;    private void setExcelToCompare(File filePath) {
+<b class="nc"><i class="no-highlight">189</i>&nbsp;        excelToCompare = filePath;</b>
+<b class="nc"><i class="no-highlight">190</i>&nbsp;        labelExcelCompareCompareTab.setText(filePath.getName());</b>
+<b class="nc"><i class="no-highlight">191</i>&nbsp;    }</b>
+<i class="no-highlight">192</i>&nbsp;    /**
+<i class="no-highlight">193</i>&nbsp;     * &lt;p&gt;Method used for choosing the Comparing Excel that will be compared to another one &lt;/p&gt;
+<i class="no-highlight">194</i>&nbsp;     */
+<i class="no-highlight">195</i>&nbsp;    @FXML private void chooseExcelToCompare(){
+<i class="no-highlight">196</i>&nbsp;        try {
+<b class="nc"><i class="no-highlight">197</i>&nbsp;            File exceltoCompare = getExcelFile(&quot;Escolher ficheiro excel para comparar&quot;);</b>
+<b class="nc"><i class="no-highlight">198</i>&nbsp;            setExcelToCompare(exceltoCompare);</b>
+<b class="nc"><i class="no-highlight">199</i>&nbsp;        } catch (NullPointerException e) {</b>
+<b class="nc"><i class="no-highlight">200</i>&nbsp;            showInformationMessage(&quot;Informação&quot;, &quot;Nenhum ficheiro excel selecionado.&quot;, Alert.AlertType.INFORMATION);</b>
+<i class="no-highlight">201</i>&nbsp;
+<b class="nc"><i class="no-highlight">202</i>&nbsp;        }</b>
+<b class="nc"><i class="no-highlight">203</i>&nbsp;    }</b>
+<i class="no-highlight">204</i>&nbsp;
+<i class="no-highlight">205</i>&nbsp;    /**
+<i class="no-highlight">206</i>&nbsp;     *&lt;p&gt;Method used for choosing the Original Excel that will be compared to another one &lt;/p&gt;
+<i class="no-highlight">207</i>&nbsp;     */
+<i class="no-highlight">208</i>&nbsp;    @FXML private void chooseExcelOriginal(){
+<i class="no-highlight">209</i>&nbsp;        try {
+<b class="nc"><i class="no-highlight">210</i>&nbsp;            File exceloriginal = getExcelFile(&quot;Escolher ficheiro excel original&quot;);</b>
+<b class="nc"><i class="no-highlight">211</i>&nbsp;            setExcelOriginal(exceloriginal);</b>
+<b class="nc"><i class="no-highlight">212</i>&nbsp;        } catch (NullPointerException e) {</b>
+<b class="nc"><i class="no-highlight">213</i>&nbsp;            showInformationMessage(&quot;Informação&quot;, &quot;Nenhum ficheiro excel selecionado.&quot;, Alert.AlertType.INFORMATION);</b>
+<b class="nc"><i class="no-highlight">214</i>&nbsp;        }</b>
+<i class="no-highlight">215</i>&nbsp;
+<b class="nc"><i class="no-highlight">216</i>&nbsp;    }</b>
+<i class="no-highlight">217</i>&nbsp;
+<i class="no-highlight">218</i>&nbsp;    /**
+<i class="no-highlight">219</i>&nbsp;     * &lt;p&gt;Method to encapsulate opening a filechooser with a .xlsx ExtensionFilter&lt;/p&gt;
+<i class="no-highlight">220</i>&nbsp;     * @param message {@link String}   message shown in the {@link FileChooser}
+<i class="no-highlight">221</i>&nbsp;     * @return {@link File} file that the user chose with the {@link FileChooser}
+<i class="no-highlight">222</i>&nbsp;     *
+<i class="no-highlight">223</i>&nbsp;     * @see FileChooser
+<i class="no-highlight">224</i>&nbsp;     * @see File
+<i class="no-highlight">225</i>&nbsp;     * @see String
+<i class="no-highlight">226</i>&nbsp;     *
+<i class="no-highlight">227</i>&nbsp;     */
+<i class="no-highlight">228</i>&nbsp;    private File getExcelFile(String message) {
+<b class="nc"><i class="no-highlight">229</i>&nbsp;        FileChooser fileChooser = new FileChooser();</b>
+<b class="nc"><i class="no-highlight">230</i>&nbsp;        Stage stage = new Stage();</b>
+<b class="nc"><i class="no-highlight">231</i>&nbsp;        fileChooser.setTitle(message);</b>
+<b class="nc"><i class="no-highlight">232</i>&nbsp;        fileChooser.getExtensionFilters().add(EXTENSION_FILTER);</b>
+<b class="nc"><i class="no-highlight">233</i>&nbsp;        return fileChooser.showOpenDialog(stage);</b>
+<i class="no-highlight">234</i>&nbsp;    }
+<i class="no-highlight">235</i>&nbsp;
+<i class="no-highlight">236</i>&nbsp;    /**
+<i class="no-highlight">237</i>&nbsp;     * &lt;p&gt;Method used when the user click the CompareCodeSmells button on the Compare Tab &lt;/p&gt;
+<i class="no-highlight">238</i>&nbsp;     *
+<i class="no-highlight">239</i>&nbsp;     */
+<i class="no-highlight">240</i>&nbsp;    @FXML private void compareExcels(){
+<i class="no-highlight">241</i>&nbsp;        // if (checkCodeSmellsOriginal() || checkCodeSmellsToCompare()  ) return;
+<i class="no-highlight">242</i>&nbsp;
+<i class="no-highlight">243</i>&nbsp;        try {
+<b class="nc"><i class="no-highlight">244</i>&nbsp;            codeSmellsComparator = new CodeSmellsComparator(projectCodeSmell,excelToCompare);</b>
+<b class="nc"><i class="no-highlight">245</i>&nbsp;            invalidComparisonsNumberIsLongMethod.setDisable(true);</b>
+<b class="nc"><i class="no-highlight">246</i>&nbsp;            invalidComparisonsNumberIsLongMethod.setVisible(false);</b>
+<b class="nc"><i class="no-highlight">247</i>&nbsp;            invalidComparisonsNumberIsGodClass.setDisable(true);</b>
+<b class="nc"><i class="no-highlight">248</i>&nbsp;            invalidComparisonsNumberIsGodClass.setVisible(false);</b>
+<i class="no-highlight">249</i>&nbsp;
+<b class="nc"><i class="no-highlight">250</i>&nbsp;            setLabels(codeSmellsComparator);</b>
+<i class="no-highlight">251</i>&nbsp;
+<b class="nc"><i class="no-highlight">252</i>&nbsp;            qualityMeasuresIsGodClass.setDisable(false);</b>
+<b class="nc"><i class="no-highlight">253</i>&nbsp;            qualityMeasuresIsGodClass.setVisible(true);</b>
+<b class="nc"><i class="no-highlight">254</i>&nbsp;            qualityMeasuresIsLongMethod.setDisable(false);</b>
+<b class="nc"><i class="no-highlight">255</i>&nbsp;            qualityMeasuresIsLongMethod.setVisible(true);</b>
+<b class="nc"><i class="no-highlight">256</i>&nbsp;        } catch (NullPointerException nullPointerException) {</b>
+<b class="nc"><i class="no-highlight">257</i>&nbsp;            showInformationMessage(&quot;Erro&quot;, &quot;Selecione os Ficheiros excel a comparar&quot;, Alert.AlertType.ERROR);</b>
+<i class="no-highlight">258</i>&nbsp;            //nullPointerException.printStackTrace();
+<b class="nc"><i class="no-highlight">259</i>&nbsp;        }catch (Exception e){</b>
+<b class="nc"><i class="no-highlight">260</i>&nbsp;            throwErroInesperado(e);</b>
+<b class="nc"><i class="no-highlight">261</i>&nbsp;        }</b>
+<i class="no-highlight">262</i>&nbsp;
+<b class="nc"><i class="no-highlight">263</i>&nbsp;    }</b>
+<i class="no-highlight">264</i>&nbsp;
+<i class="no-highlight">265</i>&nbsp;    private void setLabels(CodeSmellsComparator codeSmellsComparator) {
+<b class="nc"><i class="no-highlight">266</i>&nbsp;        tpnumberIsGodClass.setText(String.valueOf(codeSmellsComparator.getTruePositiveNumberIsGodClass()));</b>
+<b class="nc"><i class="no-highlight">267</i>&nbsp;        tnnumberIsGodClass.setText(String.valueOf(codeSmellsComparator.getTrueNegativeNumberIsGodClass()));</b>
+<b class="nc"><i class="no-highlight">268</i>&nbsp;        fpnumberIsGodClass.setText(String.valueOf(codeSmellsComparator.getFalsePositiveNumberIsGodClass()));</b>
+<b class="nc"><i class="no-highlight">269</i>&nbsp;        fnnumberIsGodClass.setText(String.valueOf(codeSmellsComparator.getFalseNegativeNumberIsGodClass()));</b>
+<b class="nc"><i class="no-highlight">270</i>&nbsp;        totalnumberIsGodClass.setText(&quot;Total: &quot; + calculateTotal(codeSmellsComparator.getTruePositiveNumberIsGodClass(), codeSmellsComparator.getTrueNegativeNumberIsGodClass(),</b>
+<b class="nc"><i class="no-highlight">271</i>&nbsp;                codeSmellsComparator.getFalsePositiveNumberIsGodClass(), codeSmellsComparator.getFalseNegativeNumberIsGodClass()));</b>
+<b class="nc"><i class="no-highlight">272</i>&nbsp;        if(codeSmellsComparator.getInvalidComparisonsNumberIsGodClass()!=0) {</b>
+<b class="nc"><i class="no-highlight">273</i>&nbsp;            invalidComparisonsNumberIsGodClass.setDisable(false);</b>
+<b class="nc"><i class="no-highlight">274</i>&nbsp;            invalidComparisonsNumberIsGodClass.setVisible(true);</b>
+<b class="nc"><i class="no-highlight">275</i>&nbsp;            invalidComparisonsNumberIsGodClass.setText(&quot;Invalid Comparisons: &quot;+ codeSmellsComparator.getInvalidComparisonsNumberIsGodClass());</b>
+<i class="no-highlight">276</i>&nbsp;        }
+<i class="no-highlight">277</i>&nbsp;
+<b class="nc"><i class="no-highlight">278</i>&nbsp;        tpnumberIsLongMethod.setText(String.valueOf(codeSmellsComparator.getTruePositiveNumberIsLongMethod()));</b>
+<b class="nc"><i class="no-highlight">279</i>&nbsp;        tnnumberIsLongMethod.setText(String.valueOf(codeSmellsComparator.getTrueNegativeNumberIsLongMethod()));</b>
+<b class="nc"><i class="no-highlight">280</i>&nbsp;        fpnumberIsLongMethod.setText(String.valueOf(codeSmellsComparator.getFalsePositiveNumberIsLongMethod()));</b>
+<b class="nc"><i class="no-highlight">281</i>&nbsp;        fnnumberIsLongMethod.setText(String.valueOf(codeSmellsComparator.getFalseNegativeNumberIsLongMethod()));</b>
+<b class="nc"><i class="no-highlight">282</i>&nbsp;        totalnumberIsLongMethod.setText(&quot;Total: &quot; + calculateTotal(codeSmellsComparator.getTruePositiveNumberIsLongMethod(), codeSmellsComparator.getTrueNegativeNumberIsLongMethod(),</b>
+<b class="nc"><i class="no-highlight">283</i>&nbsp;                codeSmellsComparator.getFalsePositiveNumberIsLongMethod(), codeSmellsComparator.getFalseNegativeNumberIsLongMethod()));</b>
+<b class="nc"><i class="no-highlight">284</i>&nbsp;        if(codeSmellsComparator.getInvalidComparisonsNumberIsLongMethod()!=0) {</b>
+<b class="nc"><i class="no-highlight">285</i>&nbsp;            invalidComparisonsNumberIsLongMethod.setDisable(false);</b>
+<b class="nc"><i class="no-highlight">286</i>&nbsp;            invalidComparisonsNumberIsLongMethod.setVisible(true);</b>
+<b class="nc"><i class="no-highlight">287</i>&nbsp;            invalidComparisonsNumberIsLongMethod.setText(&quot;Invalid Comparisons: &quot;+ codeSmellsComparator.getInvalidComparisonsNumberIsLongMethod());</b>
+<i class="no-highlight">288</i>&nbsp;        }
+<b class="nc"><i class="no-highlight">289</i>&nbsp;    }</b>
+<i class="no-highlight">290</i>&nbsp;
+<i class="no-highlight">291</i>&nbsp;    /**
+<i class="no-highlight">292</i>&nbsp;     * &lt;p&gt;Method used when the user click the qualityMeasures button on the Compare Tab relative to the God Class metric &lt;/p&gt;
+<i class="no-highlight">293</i>&nbsp;     *
+<i class="no-highlight">294</i>&nbsp;     */
+<i class="no-highlight">295</i>&nbsp;    @FXML private void setQualityMeasuresIsGodClass(){
+<i class="no-highlight">296</i>&nbsp;        try {
+<i class="no-highlight">297</i>&nbsp;
+<b class="nc"><i class="no-highlight">298</i>&nbsp;            createAlert(codeSmellsComparator.getTruePositiveNumberIsGodClass(), codeSmellsComparator.getTrueNegativeNumberIsGodClass(),</b>
+<b class="nc"><i class="no-highlight">299</i>&nbsp;                    codeSmellsComparator.getFalsePositiveNumberIsGodClass(), codeSmellsComparator.getFalseNegativeNumberIsGodClass());</b>
+<i class="no-highlight">300</i>&nbsp;
+<b class="nc"><i class="no-highlight">301</i>&nbsp;        } catch (NullPointerException nullPointerException) {</b>
+<b class="nc"><i class="no-highlight">302</i>&nbsp;            showInformationMessage(&quot;Erro&quot;, &quot;Ainda não foi criada a Matriz de Confusão&quot;, Alert.AlertType.ERROR);</b>
+<b class="nc"><i class="no-highlight">303</i>&nbsp;        }catch (Exception e){</b>
+<b class="nc"><i class="no-highlight">304</i>&nbsp;            throwErroInesperado(e);</b>
+<b class="nc"><i class="no-highlight">305</i>&nbsp;        }</b>
+<b class="nc"><i class="no-highlight">306</i>&nbsp;    }</b>
+<i class="no-highlight">307</i>&nbsp;    /**
+<i class="no-highlight">308</i>&nbsp;     * &lt;p&gt;Method used when the user click the qualityMeasures button on the Compare Tab relative to the Long Method metric&lt;/p&gt;
+<i class="no-highlight">309</i>&nbsp;     *
+<i class="no-highlight">310</i>&nbsp;     */
+<i class="no-highlight">311</i>&nbsp;    @FXML private void setQualityMeasuresIsLongMethod(){
+<i class="no-highlight">312</i>&nbsp;        try {
+<i class="no-highlight">313</i>&nbsp;
+<b class="nc"><i class="no-highlight">314</i>&nbsp;            createAlert(codeSmellsComparator.getTruePositiveNumberIsLongMethod(), codeSmellsComparator.getTrueNegativeNumberIsLongMethod(),</b>
+<b class="nc"><i class="no-highlight">315</i>&nbsp;                    codeSmellsComparator.getFalsePositiveNumberIsLongMethod(), codeSmellsComparator.getFalseNegativeNumberIsLongMethod());</b>
+<i class="no-highlight">316</i>&nbsp;
+<b class="nc"><i class="no-highlight">317</i>&nbsp;        } catch (NullPointerException nullPointerException) {</b>
+<b class="nc"><i class="no-highlight">318</i>&nbsp;            showInformationMessage(&quot;Erro&quot;, &quot;Ainda não foi criada a Matriz de Confusão&quot;, Alert.AlertType.ERROR);</b>
+<b class="nc"><i class="no-highlight">319</i>&nbsp;        }catch (Exception e){</b>
+<b class="nc"><i class="no-highlight">320</i>&nbsp;            throwErroInesperado(e);</b>
+<b class="nc"><i class="no-highlight">321</i>&nbsp;        }</b>
+<b class="nc"><i class="no-highlight">322</i>&nbsp;    }</b>
+<i class="no-highlight">323</i>&nbsp;
+<i class="no-highlight">324</i>&nbsp;    /**
+<i class="no-highlight">325</i>&nbsp;     * &lt;p&gt;Method used to create a popup info window with all the quality measures generated from the Confusion Matrix&lt;/p&gt;
+<i class="no-highlight">326</i>&nbsp;     *
+<i class="no-highlight">327</i>&nbsp;     */
+<i class="no-highlight">328</i>&nbsp;    private void createAlert(double tp, double tn, double fp, double fn){
+<b class="nc"><i class="no-highlight">329</i>&nbsp;        DecimalFormat df = new DecimalFormat(&quot;###.##&quot;);</b>
+<i class="no-highlight">330</i>&nbsp;
+<b class="nc"><i class="no-highlight">331</i>&nbsp;        Alert alert = new Alert(Alert.AlertType.INFORMATION);</b>
+<b class="nc"><i class="no-highlight">332</i>&nbsp;        Label precisionN = new Label(&quot;Precision: &quot;);</b>
+<b class="nc"><i class="no-highlight">333</i>&nbsp;        Double precision = calculatePrecision(tp, fp);</b>
+<b class="nc"><i class="no-highlight">334</i>&nbsp;        Double recall = calculateRecall(tp,fn);</b>
+<i class="no-highlight">335</i>&nbsp;
+<b class="nc"><i class="no-highlight">336</i>&nbsp;        Label precisionV = new Label(df.format(precision));</b>
+<b class="nc"><i class="no-highlight">337</i>&nbsp;        Label recallN = new Label(&quot;Recall: &quot;);</b>
+<b class="nc"><i class="no-highlight">338</i>&nbsp;        Label recallV = new Label(df.format(recall));</b>
+<b class="nc"><i class="no-highlight">339</i>&nbsp;        Label errorN = new Label(&quot;Error: &quot;);</b>
+<b class="nc"><i class="no-highlight">340</i>&nbsp;        Label errorV = new Label(df.format(calculateError(tp,tn,fp,fn)));</b>
+<b class="nc"><i class="no-highlight">341</i>&nbsp;        Label accuracy = new Label(&quot;Accuracy: &quot;);</b>
+<b class="nc"><i class="no-highlight">342</i>&nbsp;        Label accuracyV = new Label(df.format(calculateAccuracy(tp,tn,fp,fn)));</b>
+<b class="nc"><i class="no-highlight">343</i>&nbsp;        Label precisionEva = new Label(evaluateMeasure(precision));</b>
+<b class="nc"><i class="no-highlight">344</i>&nbsp;        Label recallEva = new Label(evaluateMeasure(recall));</b>
+<i class="no-highlight">345</i>&nbsp;
+<b class="nc"><i class="no-highlight">346</i>&nbsp;        GridPane quality = new GridPane();</b>
+<b class="nc"><i class="no-highlight">347</i>&nbsp;        quality.setMinHeight(Region.USE_COMPUTED_SIZE);</b>
+<b class="nc"><i class="no-highlight">348</i>&nbsp;        quality.setMinWidth(300);</b>
+<b class="nc"><i class="no-highlight">349</i>&nbsp;        quality.setMaxHeight(Region.USE_COMPUTED_SIZE);</b>
+<b class="nc"><i class="no-highlight">350</i>&nbsp;        quality.setMaxWidth(Region.USE_COMPUTED_SIZE);</b>
+<i class="no-highlight">351</i>&nbsp;        //quality.setAlignment(Pos.CENTER_LEFT);
+<b class="nc"><i class="no-highlight">352</i>&nbsp;        quality.setHgap(10);</b>
+<b class="nc"><i class="no-highlight">353</i>&nbsp;        quality.setVgap(5);</b>
+<i class="no-highlight">354</i>&nbsp;
+<b class="nc"><i class="no-highlight">355</i>&nbsp;        quality.add(precisionN, 1, 0);</b>
+<b class="nc"><i class="no-highlight">356</i>&nbsp;        quality.add(precisionV, 2, 0);</b>
+<b class="nc"><i class="no-highlight">357</i>&nbsp;        quality.add(precisionEva, 3, 0);</b>
+<i class="no-highlight">358</i>&nbsp;
+<b class="nc"><i class="no-highlight">359</i>&nbsp;        quality.add(recallN,1, 1);</b>
+<b class="nc"><i class="no-highlight">360</i>&nbsp;        quality.add(recallV, 2, 1);</b>
+<b class="nc"><i class="no-highlight">361</i>&nbsp;        quality.add(recallEva, 3, 1);</b>
+<i class="no-highlight">362</i>&nbsp;
+<b class="nc"><i class="no-highlight">363</i>&nbsp;        quality.add(errorN,1,2);</b>
+<b class="nc"><i class="no-highlight">364</i>&nbsp;        quality.add(errorV, 2, 2);</b>
+<i class="no-highlight">365</i>&nbsp;
+<b class="nc"><i class="no-highlight">366</i>&nbsp;        quality.add(accuracy,1,3);</b>
+<b class="nc"><i class="no-highlight">367</i>&nbsp;        quality.add(accuracyV, 2, 3);</b>
+<i class="no-highlight">368</i>&nbsp;
+<b class="nc"><i class="no-highlight">369</i>&nbsp;        alert.getDialogPane().setContent(quality);</b>
+<b class="nc"><i class="no-highlight">370</i>&nbsp;        alert.setTitle(&quot;Medidas de Qualidade&quot;);</b>
+<b class="nc"><i class="no-highlight">371</i>&nbsp;        alert.setContentText(&quot;As medidas calculadas foram as seguintes&quot;);</b>
+<b class="nc"><i class="no-highlight">372</i>&nbsp;        alert.showAndWait();</b>
+<b class="nc"><i class="no-highlight">373</i>&nbsp;    }</b>
+<i class="no-highlight">374</i>&nbsp;
+<i class="no-highlight">375</i>&nbsp;
+<i class="no-highlight">376</i>&nbsp;
+<i class="no-highlight">377</i>&nbsp;
+<i class="no-highlight">378</i>&nbsp;    /**
+<i class="no-highlight">379</i>&nbsp;     * &lt;p&gt;Private Method for encapsulating showInformationMessage with the specific &quot;Erro inesperado.&quot; content&lt;/p&gt;
+<i class="no-highlight">380</i>&nbsp;     *
+<i class="no-highlight">381</i>&nbsp;     * @param exception {@link Exception} exception used to print its stack Trace for easy debugging
+<i class="no-highlight">382</i>&nbsp;     */
+<i class="no-highlight">383</i>&nbsp;    public static void throwErroInesperado(Exception exception) {
+<b class="nc"><i class="no-highlight">384</i>&nbsp;        exception.printStackTrace();</b>
+<b class="nc"><i class="no-highlight">385</i>&nbsp;        showInformationMessage(&quot;Erro&quot;, &quot;Erro inesperado.&quot;, Alert.AlertType.ERROR);</b>
+<b class="nc"><i class="no-highlight">386</i>&nbsp;    }</b>
+<i class="no-highlight">387</i>&nbsp;
+<i class="no-highlight">388</i>&nbsp;    /**
+<i class="no-highlight">389</i>&nbsp;     * &lt;p&gt;Used to launch the creation of the code smells excel file.&lt;/p&gt;
+<i class="no-highlight">390</i>&nbsp;     * &lt;p&gt;This method starts when create code smells button is clicked.&lt;/p&gt;
+<i class="no-highlight">391</i>&nbsp;     * &lt;p&gt;It creates a MetricExtractor object that will be used to extract the metrics needed to create the code smells file
+<i class="no-highlight">392</i>&nbsp;     * then it filters the rules.&lt;/p&gt;
+<i class="no-highlight">393</i>&nbsp;     * &lt;p&gt;After this, it creates a codeSmellsCreator object that will be responsible to create the excel file. This object will
+<i class="no-highlight">394</i>&nbsp;     * be used to call different functions responsible of the creation of the excel file.&lt;/p&gt;
+<i class="no-highlight">395</i>&nbsp;     */
+<i class="no-highlight">396</i>&nbsp;    // Função que será executada para criar o code smell excutada através do botão para tal
+<i class="no-highlight">397</i>&nbsp;    @FXML private void createCodeSmell(){
+<i class="no-highlight">398</i>&nbsp;        try {
+<b class="nc"><i class="no-highlight">399</i>&nbsp;            String pathSave = projectDir.getAbsolutePath() + &quot;/&quot; + projectDir.getName() + &quot;_metrics/&quot;;</b>
+<b class="nc"><i class="no-highlight">400</i>&nbsp;            String pathCodeSmell = pathSave + projectDir.getName() + &quot;_metrics.xlsx&quot;;</b>
+<i class="no-highlight">401</i>&nbsp;
+<i class="no-highlight">402</i>&nbsp;            // retirar criar um objeto para retirar as métricas
+<b class="nc"><i class="no-highlight">403</i>&nbsp;            MetricExtractor metrics = new MetricExtractor(projectDir.toPath());</b>
+<i class="no-highlight">404</i>&nbsp;
+<i class="no-highlight">405</i>&nbsp;            // filtrar as rules
+<b class="nc"><i class="no-highlight">406</i>&nbsp;            Predicate&lt;Rule&gt; rulePredicateGodClass = (Rule r) -&gt; (r.getSmell().equals(Rule.Smell.God_Class));</b>
+<b class="nc"><i class="no-highlight">407</i>&nbsp;            List&lt;Rule&gt; godRules = getRegras().filtered(rulePredicateGodClass);</b>
+<b class="nc"><i class="no-highlight">408</i>&nbsp;            Predicate&lt;Rule&gt; rulePredicateLongMethod = (Rule r) -&gt; (r.getSmell().equals(Rule.Smell.Long_Method));</b>
+<b class="nc"><i class="no-highlight">409</i>&nbsp;            List&lt;Rule&gt; longRules = getRegras().filtered(rulePredicateLongMethod);</b>
+<i class="no-highlight">410</i>&nbsp;
+<i class="no-highlight">411</i>&nbsp;            // criar code smells
+<b class="nc"><i class="no-highlight">412</i>&nbsp;            CodeSmellsCreator codeSmellsCreator = new CodeSmellsCreator(metrics, projectDir.getName(), godRules, longRules);</b>
+<i class="no-highlight">413</i>&nbsp;
+<i class="no-highlight">414</i>&nbsp;            // criar a pasta onde se vai guardar o ficheiro xlsx
+<i class="no-highlight">415</i>&nbsp;            try{
+<b class="nc"><i class="no-highlight">416</i>&nbsp;                Files.createDirectory(Paths.get(pathSave));</b>
+<b class="nc"><i class="no-highlight">417</i>&nbsp;                codeSmellsCreator.createCodeSmellsXlsxFile(new File(pathSave));</b>
+<b class="nc"><i class="no-highlight">418</i>&nbsp;            }catch (FileAlreadyExistsException e){</b>
+<i class="no-highlight">419</i>&nbsp;                //System.out.println(&quot;A pasta já existe&quot;);
+<b class="nc"><i class="no-highlight">420</i>&nbsp;            }</b>
+<i class="no-highlight">421</i>&nbsp;
+<i class="no-highlight">422</i>&nbsp;            // guardar code smells
+<b class="nc"><i class="no-highlight">423</i>&nbsp;            codeSmellsCreator.addCodeSmellsToXlsx(new File(pathSave));</b>
+<i class="no-highlight">424</i>&nbsp;
+<b class="nc"><i class="no-highlight">425</i>&nbsp;            updateGUIElements(pathCodeSmell);</b>
+<i class="no-highlight">426</i>&nbsp;
+<b class="nc"><i class="no-highlight">427</i>&nbsp;            if(!createButton.getText().equals(&quot;Atualizar Code Smells&quot;)) createButton.setText(&quot;Atualizar Code Smells&quot;);</b>
+<i class="no-highlight">428</i>&nbsp;
+<b class="nc"><i class="no-highlight">429</i>&nbsp;            showInformationMessage(&quot;Informação&quot;,&quot;Os code smells foram criados com sucesso.&quot;, Alert.AlertType.INFORMATION);</b>
+<i class="no-highlight">430</i>&nbsp;
+<b class="nc"><i class="no-highlight">431</i>&nbsp;        }catch (NullPointerException e){</b>
+<b class="nc"><i class="no-highlight">432</i>&nbsp;            showInformationMessage(&quot;Informação&quot;,&quot;Por favor selecione a pasta do projeto.&quot;, Alert.AlertType.INFORMATION);</b>
+<b class="nc"><i class="no-highlight">433</i>&nbsp;        }catch (Exception e){</b>
+<b class="nc"><i class="no-highlight">434</i>&nbsp;            throwErroInesperado(e);</b>
+<b class="nc"><i class="no-highlight">435</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i class="no-highlight">436</i>&nbsp;        }</b>
+<i class="no-highlight">437</i>&nbsp;
+<b class="nc"><i class="no-highlight">438</i>&nbsp;    }</b>
+<i class="no-highlight">439</i>&nbsp;
+<i class="no-highlight">440</i>&nbsp;    /**
+<i class="no-highlight">441</i>&nbsp;     *  &lt;p&gt;Once all the values from the choiceboxes are filled a new rule with those values is created&lt;/p&gt;
+<i class="no-highlight">442</i>&nbsp;     *  &lt;p&gt;The program checks if the rule created already exists in the set of rules, if it doesn&#39;t exist then it proceeds&lt;/p&gt;
+<i class="no-highlight">443</i>&nbsp;     *  &lt;p&gt;That rule is then added to the current set of rules and sent back to the serialized file with the serializeRule method&lt;/p&gt;
+<i class="no-highlight">444</i>&nbsp;     * @throws IOException IO operation failed
+<i class="no-highlight">445</i>&nbsp;     * @throws ClassNotFoundException Class Rule doesn&#39;t exist
+<i class="no-highlight">446</i>&nbsp;     */
+<i class="no-highlight">447</i>&nbsp;    @FXML private void addRuleToHistory() throws IOException, ClassNotFoundException {
+<b class="nc"><i class="no-highlight">448</i>&nbsp;        Rule rule = getRule();</b>
+<b class="nc"><i class="no-highlight">449</i>&nbsp;        if(rule==null)</b>
+<b class="nc"><i class="no-highlight">450</i>&nbsp;            return;</b>
+<i class="no-highlight">451</i>&nbsp;
+<b class="nc"><i class="no-highlight">452</i>&nbsp;        boolean addRule = Rule.doesRuleExist(rule);</b>
+<b class="nc"><i class="no-highlight">453</i>&nbsp;        ArrayList&lt;Rule&gt; rules2add = new ArrayList&lt;&gt;(getRegras());</b>
+<i class="no-highlight">454</i>&nbsp;
+<b class="nc"><i class="no-highlight">455</i>&nbsp;        if(!addRule) {</b>
+<b class="nc"><i class="no-highlight">456</i>&nbsp;            rules2add.add(rule);</b>
+<b class="nc"><i class="no-highlight">457</i>&nbsp;            Rule.serializeRule(rules2add);</b>
+<b class="nc"><i class="no-highlight">458</i>&nbsp;            ObservableList&lt;Rule&gt; regras = FXCollections.observableArrayList(rules2add);</b>
+<b class="nc"><i class="no-highlight">459</i>&nbsp;            listrules.setItems(regras);</b>
+<b class="nc"><i class="no-highlight">460</i>&nbsp;            showInformationMessage(&quot;Informação&quot;, &quot;A regra foi adicionada com sucesso.&quot;, Alert.AlertType.INFORMATION);</b>
+<b class="nc"><i class="no-highlight">461</i>&nbsp;        } else {</b>
+<b class="nc"><i class="no-highlight">462</i>&nbsp;            showInformationMessage(&quot;Informação&quot;, &quot;Já existe essa regra.&quot;, Alert.AlertType.INFORMATION);</b>
+<i class="no-highlight">463</i>&nbsp;        }
+<b class="nc"><i class="no-highlight">464</i>&nbsp;    }</b>
+<i class="no-highlight">465</i>&nbsp;
+<i class="no-highlight">466</i>&nbsp;    /**
+<i class="no-highlight">467</i>&nbsp;     * &lt;p&gt; The program calls the static method from Rule class to delete the rule selected by the user&lt;/p&gt;
+<i class="no-highlight">468</i>&nbsp;     * @throws IOException IO operation failed
+<i class="no-highlight">469</i>&nbsp;     * @throws ClassNotFoundException Class Rule doesn&#39;t exist
+<i class="no-highlight">470</i>&nbsp;     */
+<i class="no-highlight">471</i>&nbsp;    @FXML private void removeRuleFromHistory() throws IOException, ClassNotFoundException {
+<b class="nc"><i class="no-highlight">472</i>&nbsp;        if(listrules.getSelectionModel().getSelectedItems().isEmpty())</b>
+<b class="nc"><i class="no-highlight">473</i>&nbsp;            showInformationMessage(&quot;Informação&quot;, &quot;Nenhuma regra selecionada.&quot;, Alert.AlertType.INFORMATION);</b>
+<i class="no-highlight">474</i>&nbsp;        else {
+<b class="nc"><i class="no-highlight">475</i>&nbsp;            Rule.deleteRule(listrules.getSelectionModel().getSelectedItem());</b>
+<b class="nc"><i class="no-highlight">476</i>&nbsp;            ObservableList&lt;Rule&gt; regras = FXCollections.observableArrayList(Rule.deserializedRule());</b>
+<b class="nc"><i class="no-highlight">477</i>&nbsp;            listrules.setItems(regras);</b>
+<b class="nc"><i class="no-highlight">478</i>&nbsp;            showInformationMessage(&quot;Informação&quot;, &quot;A regra foi eliminada com sucesso.&quot;, Alert.AlertType.INFORMATION);</b>
+<i class="no-highlight">479</i>&nbsp;        }
+<b class="nc"><i class="no-highlight">480</i>&nbsp;    }</b>
+<i class="no-highlight">481</i>&nbsp;
+<i class="no-highlight">482</i>&nbsp;    /**
+<i class="no-highlight">483</i>&nbsp;     * &lt;p&gt;The user chooses the rule he wants to edit&lt;/p&gt;
+<i class="no-highlight">484</i>&nbsp;     * &lt;p&gt;The program hides the remove and edit button and swaps for a done button&lt;/p&gt;
+<i class="no-highlight">485</i>&nbsp;     * &lt;p&gt;The follow up to this method is finishChangeRuleFromHistory().&lt;/p&gt;
+<i class="no-highlight">486</i>&nbsp;     */
+<i class="no-highlight">487</i>&nbsp;    @FXML private void changeRuleFromHistory(){
+<b class="nc"><i class="no-highlight">488</i>&nbsp;        if(listrules.getSelectionModel().getSelectedItems().isEmpty())</b>
+<b class="nc"><i class="no-highlight">489</i>&nbsp;            showInformationMessage(&quot;Informação&quot;, &quot;Nenhuma regra selecionada.&quot;, Alert.AlertType.INFORMATION);</b>
+<i class="no-highlight">490</i>&nbsp;        else {
+<b class="nc"><i class="no-highlight">491</i>&nbsp;            this.oldRule =listrules.getSelectionModel().getSelectedItem();</b>
+<b class="nc"><i class="no-highlight">492</i>&nbsp;            removerule.setVisible(false);</b>
+<b class="nc"><i class="no-highlight">493</i>&nbsp;            removerule.setDisable(true);</b>
+<i class="no-highlight">494</i>&nbsp;
+<b class="nc"><i class="no-highlight">495</i>&nbsp;            changerule.setVisible(false);</b>
+<b class="nc"><i class="no-highlight">496</i>&nbsp;            changerule.setDisable(true);</b>
+<i class="no-highlight">497</i>&nbsp;
+<b class="nc"><i class="no-highlight">498</i>&nbsp;            addrule.setVisible(false);</b>
+<b class="nc"><i class="no-highlight">499</i>&nbsp;            addrule.setDisable(true);</b>
+<i class="no-highlight">500</i>&nbsp;
+<b class="nc"><i class="no-highlight">501</i>&nbsp;            donerulebtn.setVisible(true);</b>
+<b class="nc"><i class="no-highlight">502</i>&nbsp;            donerulebtn.setDisable(false);</b>
+<i class="no-highlight">503</i>&nbsp;
+<b class="nc"><i class="no-highlight">504</i>&nbsp;            showInformationMessage(&quot;Informação&quot;, &quot;Preencha com os valores que deseja alterar&quot;, Alert.AlertType.INFORMATION);</b>
+<i class="no-highlight">505</i>&nbsp;        }
+<b class="nc"><i class="no-highlight">506</i>&nbsp;    }</b>
+<i class="no-highlight">507</i>&nbsp;
+<i class="no-highlight">508</i>&nbsp;    /**
+<i class="no-highlight">509</i>&nbsp;     * &lt;p&gt;After selecting the rule to be edited and changing the button layout from changeRuleFromHistory()&lt;/p&gt;
+<i class="no-highlight">510</i>&nbsp;     * &lt;p&gt;The program checks if the updated rule already exists and if not it updates the rule set&lt;/p&gt;
+<i class="no-highlight">511</i>&nbsp;     * &lt;p&gt;Once it updates the remove and edit button reappear and the done button goes hidden again&lt;/p&gt;
+<i class="no-highlight">512</i>&nbsp;     */
+<i class="no-highlight">513</i>&nbsp;    @FXML private void finishChangeRuleFromHistory() {
+<b class="nc"><i class="no-highlight">514</i>&nbsp;        Rule newRule = getRule();</b>
+<b class="nc"><i class="no-highlight">515</i>&nbsp;        if(newRule==null)</b>
+<b class="nc"><i class="no-highlight">516</i>&nbsp;            return;</b>
+<i class="no-highlight">517</i>&nbsp;
+<i class="no-highlight">518</i>&nbsp;        try {
+<b class="nc"><i class="no-highlight">519</i>&nbsp;            boolean addRule = Rule.doesRuleExist(newRule);</b>
+<b class="nc"><i class="no-highlight">520</i>&nbsp;            if(!addRule) {</b>
+<b class="nc"><i class="no-highlight">521</i>&nbsp;                Rule.changeRule(this.oldRule,newRule);</b>
+<b class="nc"><i class="no-highlight">522</i>&nbsp;                ObservableList&lt;Rule&gt; regras = FXCollections.observableArrayList(Rule.deserializedRule());</b>
+<b class="nc"><i class="no-highlight">523</i>&nbsp;                listrules.setItems(regras);</b>
+<b class="nc"><i class="no-highlight">524</i>&nbsp;                showInformationMessage(&quot;Informação&quot;, &quot;A regra foi alterada com sucesso.&quot;, Alert.AlertType.INFORMATION);</b>
+<b class="nc"><i class="no-highlight">525</i>&nbsp;            } else {</b>
+<b class="nc"><i class="no-highlight">526</i>&nbsp;                showInformationMessage(&quot;Informação&quot;, &quot;Já existe essa regra.&quot;, Alert.AlertType.INFORMATION);</b>
+<i class="no-highlight">527</i>&nbsp;            }
+<b class="nc"><i class="no-highlight">528</i>&nbsp;        } catch (IOException | ClassNotFoundException ioException) {</b>
+<b class="nc"><i class="no-highlight">529</i>&nbsp;            ioException.printStackTrace();</b>
+<b class="nc"><i class="no-highlight">530</i>&nbsp;        }</b>
+<b class="nc"><i class="no-highlight">531</i>&nbsp;        donerulebtn.setDisable(true);</b>
+<b class="nc"><i class="no-highlight">532</i>&nbsp;        donerulebtn.setVisible(false);</b>
+<i class="no-highlight">533</i>&nbsp;
+<b class="nc"><i class="no-highlight">534</i>&nbsp;        removerule.setDisable(false);</b>
+<b class="nc"><i class="no-highlight">535</i>&nbsp;        removerule.setVisible(true);</b>
+<i class="no-highlight">536</i>&nbsp;
+<b class="nc"><i class="no-highlight">537</i>&nbsp;        changerule.setDisable(false);</b>
+<b class="nc"><i class="no-highlight">538</i>&nbsp;        changerule.setVisible(true);</b>
+<i class="no-highlight">539</i>&nbsp;
+<b class="nc"><i class="no-highlight">540</i>&nbsp;        addrule.setDisable(false);</b>
+<b class="nc"><i class="no-highlight">541</i>&nbsp;        addrule.setVisible(true);</b>
+<b class="nc"><i class="no-highlight">542</i>&nbsp;        this.oldRule=null;</b>
+<b class="nc"><i class="no-highlight">543</i>&nbsp;    }</b>
+<i class="no-highlight">544</i>&nbsp;
+<i class="no-highlight">545</i>&nbsp;    /**
+<i class="no-highlight">546</i>&nbsp;     * &lt;p&gt;The program gets the values selected from header and creates a new rule with those values&lt;/p&gt;
+<i class="no-highlight">547</i>&nbsp;     * @return Rule selected for removal or editing
+<i class="no-highlight">548</i>&nbsp;     */
+<i class="no-highlight">549</i>&nbsp;    private Rule getRule(){
+<b class="nc"><i class="no-highlight">550</i>&nbsp;        if(metric1.getValue() == null || metric1op.getValue() == null || metric1value.getText().isEmpty() ||</b>
+<b class="nc"><i class="no-highlight">551</i>&nbsp;                metric2.getValue() == null || metric2op.getValue() == null || metric2value.getText().isEmpty() ||</b>
+<b class="nc"><i class="no-highlight">552</i>&nbsp;                rulelogic.getValue() == null || rulesmell.getValue() == null){</b>
+<i class="no-highlight">553</i>&nbsp;
+<b class="nc"><i class="no-highlight">554</i>&nbsp;            showInformationMessage(&quot;Informação&quot;, &quot;Certifique-se que todos os valores estão preenchidos.&quot;, Alert.AlertType.INFORMATION);</b>
+<b class="nc"><i class="no-highlight">555</i>&nbsp;            return null;</b>
+<i class="no-highlight">556</i>&nbsp;        }
+<b class="nc"><i class="no-highlight">557</i>&nbsp;        return new Rule(metric1.getValue(), metric1op.getValue(), Integer.parseInt(metric1value.getText()),</b>
+<b class="nc"><i class="no-highlight">558</i>&nbsp;                metric2.getValue(), metric2op.getValue(), Integer.parseInt(metric2value.getText()),</b>
+<b class="nc"><i class="no-highlight">559</i>&nbsp;                rulelogic.getValue(), rulesmell.getValue());</b>
+<i class="no-highlight">560</i>&nbsp;    }
+<i class="no-highlight">561</i>&nbsp;
+<i class="no-highlight">562</i>&nbsp;    /**
+<i class="no-highlight">563</i>&nbsp;     * &lt;p&gt;Method used to clear all GUI elements of a project in the program.&lt;/p&gt;
+<i class="no-highlight">564</i>&nbsp;     */
+<i class="no-highlight">565</i>&nbsp;    private void clearGUIElements(){
+<b class="nc"><i class="no-highlight">566</i>&nbsp;        excelBox.getChildren().clear();</b>
+<b class="nc"><i class="no-highlight">567</i>&nbsp;        packNum.setText(&quot;&quot;);</b>
+<b class="nc"><i class="no-highlight">568</i>&nbsp;        classNum.setText(&quot;&quot;);</b>
+<b class="nc"><i class="no-highlight">569</i>&nbsp;        methodNum.setText(&quot;&quot;);</b>
+<b class="nc"><i class="no-highlight">570</i>&nbsp;        locNum.setText(&quot;&quot;);</b>
+<b class="nc"><i class="no-highlight">571</i>&nbsp;    }</b>
+<i class="no-highlight">572</i>&nbsp;
+<i class="no-highlight">573</i>&nbsp;    /**
+<i class="no-highlight">574</i>&nbsp;     * &lt;p&gt;Method used to update GUI elements of a project in the program.&lt;/p&gt;
+<i class="no-highlight">575</i>&nbsp;     * &lt;p&gt;Updates&lt;/p&gt;
+<i class="no-highlight">576</i>&nbsp;     * &lt;ul&gt;
+<i class="no-highlight">577</i>&nbsp;     *     &lt;li&gt;CharacteristicsGUI&lt;/li&gt;
+<i class="no-highlight">578</i>&nbsp;     *     &lt;li&gt;CodeSmellsGUI&lt;/li&gt;
+<i class="no-highlight">579</i>&nbsp;     * &lt;/ul&gt;
+<i class="no-highlight">580</i>&nbsp;     * @param pathCodeSmell {@link String} path to code smells excel file
+<i class="no-highlight">581</i>&nbsp;     */
+<i class="no-highlight">582</i>&nbsp;    private void updateGUIElements(String pathCodeSmell){
+<b class="nc"><i class="no-highlight">583</i>&nbsp;        updateGUIElements(new File(pathCodeSmell));</b>
+<b class="nc"><i class="no-highlight">584</i>&nbsp;    }</b>
+<i class="no-highlight">585</i>&nbsp;
+<i class="no-highlight">586</i>&nbsp;    /**
+<i class="no-highlight">587</i>&nbsp;     * &lt;p&gt;Method used to update GUI elements of a project in the program.&lt;/p&gt;
+<i class="no-highlight">588</i>&nbsp;     * &lt;p&gt;Updates the following GUI elements:&lt;/p&gt;
+<i class="no-highlight">589</i>&nbsp;     * &lt;ul&gt;
+<i class="no-highlight">590</i>&nbsp;     *     &lt;li&gt;CharacteristicsGUI&lt;/li&gt;
+<i class="no-highlight">591</i>&nbsp;     *     &lt;li&gt;CodeSmellsGUI&lt;/li&gt;
+<i class="no-highlight">592</i>&nbsp;     * &lt;/ul&gt;
+<i class="no-highlight">593</i>&nbsp;     * @param pathCodeSmell {@link File} of the code Smells excel
+<i class="no-highlight">594</i>&nbsp;     */
+<i class="no-highlight">595</i>&nbsp;    private void updateGUIElements(File pathCodeSmell){
+<b class="nc"><i class="no-highlight">596</i>&nbsp;        ArrayList&lt;String&gt; lines = ExelReader.read(pathCodeSmell);</b>
+<i class="no-highlight">597</i>&nbsp;        /*
+<i class="no-highlight">598</i>&nbsp;         * TODO
+<i class="no-highlight">599</i>&nbsp;         *   -Usar o ArrayList lines num método separado para obter as caracteristicas
+<i class="no-highlight">600</i>&nbsp;         */
+<b class="nc"><i class="no-highlight">601</i>&nbsp;        writeCharacteristicsGUI(lines);</b>
+<b class="nc"><i class="no-highlight">602</i>&nbsp;        writeCodeSmellsGUI(lines);</b>
+<i class="no-highlight">603</i>&nbsp;
+<b class="nc"><i class="no-highlight">604</i>&nbsp;        createButton.setText(&quot;Atualizar Code Smells&quot;);</b>
+<b class="nc"><i class="no-highlight">605</i>&nbsp;    }</b>
+<i class="no-highlight">606</i>&nbsp;
+<i class="no-highlight">607</i>&nbsp;    /**
+<i class="no-highlight">608</i>&nbsp;     * &lt;p&gt;Method that creates the characteristics GUI &lt;/p&gt;
+<i class="no-highlight">609</i>&nbsp;     * @param lines {@link ArrayList} lines
+<i class="no-highlight">610</i>&nbsp;     */
+<i class="no-highlight">611</i>&nbsp;    //TODO se o ficheiro excel nao for o correto isto manda erro
+<i class="no-highlight">612</i>&nbsp;    private void writeCharacteristicsGUI(ArrayList&lt;String&gt; lines) {
+<b class="nc"><i class="no-highlight">613</i>&nbsp;        int packNum = 0, classNum = 0, methodNum = 0, locNum = 0;</b>
+<b class="nc"><i class="no-highlight">614</i>&nbsp;        ArrayList&lt;String&gt; packNames = new ArrayList&lt;String&gt;();</b>
+<b class="nc"><i class="no-highlight">615</i>&nbsp;        String className = &quot;&quot;;</b>
+<i class="no-highlight">616</i>&nbsp;
+<b class="nc"><i class="no-highlight">617</i>&nbsp;        for(String l : lines){</b>
+<i class="no-highlight">618</i>&nbsp;
+<b class="nc"><i class="no-highlight">619</i>&nbsp;            String[] line = l.split(&quot;;&quot;);</b>
+<i class="no-highlight">620</i>&nbsp;
+<b class="nc"><i class="no-highlight">621</i>&nbsp;            if(!line[0].equals(&quot;MethodID&quot;)){</b>
+<i class="no-highlight">622</i>&nbsp;
+<b class="nc"><i class="no-highlight">623</i>&nbsp;                methodNum++; //Adiciona sempre</b>
+<i class="no-highlight">624</i>&nbsp;
+<b class="nc"><i class="no-highlight">625</i>&nbsp;                if(!packNames.contains(line[1]) &amp;&amp; !line[1].equals(&quot;none&quot;)){ //Se for um package novo e não for o &#39;none&#39;</b>
+<b class="nc"><i class="no-highlight">626</i>&nbsp;                    packNum++;</b>
+<b class="nc"><i class="no-highlight">627</i>&nbsp;                    packNames.add(line[1]);</b>
+<i class="no-highlight">628</i>&nbsp;
+<i class="no-highlight">629</i>&nbsp;                }
+<i class="no-highlight">630</i>&nbsp;
+<b class="nc"><i class="no-highlight">631</i>&nbsp;                if(!line[2].equals(className)) {//Se for uma classe nova</b>
+<b class="nc"><i class="no-highlight">632</i>&nbsp;                    classNum++;</b>
+<b class="nc"><i class="no-highlight">633</i>&nbsp;                    className = line[2];</b>
+<b class="nc"><i class="no-highlight">634</i>&nbsp;                    locNum += Integer.parseInt(line[5]); //Vai buscar o valor do LOC_class</b>
+<i class="no-highlight">635</i>&nbsp;                }
+<i class="no-highlight">636</i>&nbsp;            }
+<b class="nc"><i class="no-highlight">637</i>&nbsp;        }</b>
+<b class="nc"><i class="no-highlight">638</i>&nbsp;        this.packNum.setText(packNum+&quot; Packages&quot;);</b>
+<b class="nc"><i class="no-highlight">639</i>&nbsp;        this.classNum.setText(classNum + &quot; Classes&quot;);</b>
+<b class="nc"><i class="no-highlight">640</i>&nbsp;        this.methodNum.setText(methodNum+ &quot; Métodos&quot;);</b>
+<b class="nc"><i class="no-highlight">641</i>&nbsp;        this.locNum.setText(locNum+ &quot; Linhas de Código&quot;);</b>
+<b class="nc"><i class="no-highlight">642</i>&nbsp;    }</b>
+<i class="no-highlight">643</i>&nbsp;
+<i class="no-highlight">644</i>&nbsp;
+<i class="no-highlight">645</i>&nbsp;    /**
+<i class="no-highlight">646</i>&nbsp;     * &lt;p&gt;This method is used to display the code smells excel file in the GUI of the program&lt;/p&gt;
+<i class="no-highlight">647</i>&nbsp;     * @param lines each line represents a row in the excel file
+<i class="no-highlight">648</i>&nbsp;     */
+<i class="no-highlight">649</i>&nbsp;    private void writeCodeSmellsGUI(ArrayList&lt;String&gt; lines){
+<b class="nc"><i class="no-highlight">650</i>&nbsp;        excelBox.getChildren().clear();</b>
+<i class="no-highlight">651</i>&nbsp;
+<b class="nc"><i class="no-highlight">652</i>&nbsp;        int rowIndex = 0;</b>
+<b class="nc"><i class="no-highlight">653</i>&nbsp;        for(String line: lines){</b>
+<b class="nc"><i class="no-highlight">654</i>&nbsp;            excelBox.addRow(rowIndex);</b>
+<b class="nc"><i class="no-highlight">655</i>&nbsp;            int columnIndex = 0;</b>
+<b class="nc"><i class="no-highlight">656</i>&nbsp;            for(String metric : line.split(&quot;;&quot;)){</b>
+<b class="nc"><i class="no-highlight">657</i>&nbsp;                Text t = new Text();</b>
+<b class="nc"><i class="no-highlight">658</i>&nbsp;                t.setText(metric);</b>
+<b class="nc"><i class="no-highlight">659</i>&nbsp;                if(rowIndex == 0) {</b>
+<b class="nc"><i class="no-highlight">660</i>&nbsp;                    t.setFont(Font.font(15));</b>
+<i class="no-highlight">661</i>&nbsp;                }
+<b class="nc"><i class="no-highlight">662</i>&nbsp;                excelBox.add(t,columnIndex,rowIndex);</b>
+<b class="nc"><i class="no-highlight">663</i>&nbsp;                columnIndex++;</b>
+<i class="no-highlight">664</i>&nbsp;            }
+<b class="nc"><i class="no-highlight">665</i>&nbsp;            rowIndex++;</b>
+<b class="nc"><i class="no-highlight">666</i>&nbsp;        }</b>
+<i class="no-highlight">667</i>&nbsp;
+<b class="nc"><i class="no-highlight">668</i>&nbsp;    }</b>
+<i class="no-highlight">669</i>&nbsp;
+<i class="no-highlight">670</i>&nbsp;    /**
+<i class="no-highlight">671</i>&nbsp;     * &lt;p&gt;This method is used to show a informative popup message.&lt;/p&gt;
+<i class="no-highlight">672</i>&nbsp;     * @param title title of the window
+<i class="no-highlight">673</i>&nbsp;     * @param content content of the message
+<i class="no-highlight">674</i>&nbsp;     * @param alertType alert type EX: ERROR, INFORMATION, etc
+<i class="no-highlight">675</i>&nbsp;     */
+<i class="no-highlight">676</i>&nbsp;    public static void showInformationMessage(String title, String content, Alert.AlertType alertType){
+<b class="nc"><i class="no-highlight">677</i>&nbsp;        Alert alert = new Alert(alertType);</b>
+<b class="nc"><i class="no-highlight">678</i>&nbsp;        alert.setTitle(title);</b>
+<b class="nc"><i class="no-highlight">679</i>&nbsp;        alert.setHeaderText(null);</b>
+<b class="nc"><i class="no-highlight">680</i>&nbsp;        alert.setContentText(content);</b>
+<b class="nc"><i class="no-highlight">681</i>&nbsp;        alert.showAndWait();</b>
+<b class="nc"><i class="no-highlight">682</i>&nbsp;    }</b>
+<i class="no-highlight">683</i>&nbsp;
+<i class="no-highlight">684</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2021-05-09 00:48</div>
+</div>
+</body>
+</html>
