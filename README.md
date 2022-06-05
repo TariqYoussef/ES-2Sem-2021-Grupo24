@@ -1,5 +1,9 @@
 # ES-2Sem-2021-Grupo24
 
+![Screenshot-ES](https://user-images.githubusercontent.com/24848457/172066435-2361daf9-5b91-46e6-a68b-6cd7fa24bfbd.png)
+
+---
+
 <p>Membros</p>
 <ul>
   <li>  Afonso Vale nº87648       </li>
@@ -16,6 +20,7 @@
   <li>  <a href="https://trello.com/b/0DQlwCGC/metings">Board Meetings</a></li>
 </ul>
 
+---
 
 <p>Erros</p>
 <ul>
@@ -27,6 +32,7 @@
   <li>X</li>
 </ul>
 
+---
 <p>Funcionalidades implementadas</p>
 <ul>
   <li>  Gerar Ficheiro xlsx de CodeSmells de um projecto selecionado </li>
