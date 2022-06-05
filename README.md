@@ -1,5 +1,7 @@
 # ES-2Sem-2021-Grupo24
 
+Java academic project developed with a UI n FXML that uses a lot of reflexion to analyse code smells in other dev projects, you can create custom rules and compare results with a given excel/csv file to calculate a confusion matrix.
+
 ![Screenshot-ES](https://user-images.githubusercontent.com/24848457/172066435-2361daf9-5b91-46e6-a68b-6cd7fa24bfbd.png)
 
 ---
