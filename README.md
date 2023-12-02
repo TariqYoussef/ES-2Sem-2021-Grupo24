@@ -8,7 +8,7 @@ Java academic project developed with a UI n FXML that uses a lot of reflexion to
 
 <p>Membros</p>
 <ul>
-  <li>  Afonso Vale nº87648       </li>
+  <li>  Tariq Youssef nº87648       </li>
   <li>  Afonso Belard nº78145     </li>
   <li>  David Oliveira nº87494    </li>
   <li>  João Almeida nº87583      </li>
